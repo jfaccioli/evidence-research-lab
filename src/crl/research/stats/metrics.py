@@ -30,10 +30,6 @@ def max_drawdown(equity: pd.Series, *, initial_equity: float = 1.0) -> tuple[flo
     if equity.empty:
         return 0.0, 0.0
     # Prepend W_0 so first-bar losses count in DD
-    path = pd.concat(
-        [pd.Series([float(initial_equity)], index=[equity.index[0]]), equity]
-    )
-    # fix index uniqueness for first point
     path = pd.Series(
         [float(initial_equity)] + list(equity.astype(float).values),
         dtype=float,

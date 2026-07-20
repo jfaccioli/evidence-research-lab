@@ -220,7 +220,10 @@ def run_hypothesis_pipeline(
         block=int(stats_cfg.get("bootstrap_block_size", 5)),
         seed=seed,
     )
-    bh_term = float(bh_val.equity.iloc[-1] / bh_val.equity.iloc[0]) if len(bh_val.equity) else 1.0
+    bh_w0 = float(getattr(bh_val, "initial_equity", 1.0) or 1.0)
+    bh_term = (
+        float(bh_val.equity.iloc[-1] / bh_w0) if len(bh_val.equity) else 1.0
+    )
     mc = trade_sequence_mc(
         tr,
         n_sims=int(stats_cfg.get("mc_n", 500)),
@@ -234,17 +237,15 @@ def run_hypothesis_pipeline(
     family_id = spec.family_id or spec.id
     n_family = max(registry.count_family(family_id), 1)
     n_global = max(registry.count_all_hypotheses(), 1)
-    # Analytical trials: hyps in family + runs (reruns) + global hyps; explicit count
-    n_runs_family = max(registry.count_runs_for_family(family_id), 0)
-    n_all_runs = max(registry.count_all_runs(), 0)
-    n_analytical_trials = max(n_family, n_global, n_runs_family, n_all_runs, 1)
+    # Legacy programme: trial history not proven complete → fail closed (no fake N)
     mt = evaluate_multiple_testing(
         sharpe_point=float(val_m["sharpe_after_cost"]),
         n_obs=int(val_m["n_bars"]),
         n_family=n_family,
         n_global=n_global,
         ann_factor=ann,
-        n_analytical_trials=n_analytical_trials,
+        n_analytical_trials=None,
+        trial_history_complete=False,
         bar_returns=val_res.bar_returns.values,
     )
 
@@ -312,20 +313,14 @@ def run_hypothesis_pipeline(
                 seed=seed,
                 dd_limit=gates.max_drawdown,
             )
-            n_analytical_trials_t = max(
-                n_family,
-                n_global,
-                registry.count_runs_for_family(family_id),
-                registry.count_all_runs(),
-                1,
-            )
             mt_t = evaluate_multiple_testing(
                 sharpe_point=float(test_m["sharpe_after_cost"]),
                 n_obs=int(test_m["n_bars"]),
                 n_family=n_family,
                 n_global=n_global,
                 ann_factor=ann,
-                n_analytical_trials=n_analytical_trials_t,
+                n_analytical_trials=None,
+                trial_history_complete=False,  # legacy: fail closed
                 bar_returns=test_res.bar_returns.values,
             )
             reality_test = run_reality_checks(
@@ -460,15 +455,18 @@ def run_hypothesis_pipeline(
             "multiple_testing": {
                 "n_family": mt.n_family,
                 "n_global": mt.n_global,
-                "n_trials": getattr(mt, "n_trials", None),
+                "n_trials_display": getattr(mt, "n_trials_display", None),
                 "sharpe_period": getattr(mt, "sharpe_period", None),
-                "sharpe_annualized": getattr(mt, "sharpe_annualized", mt.deflated_sharpe),
+                "sharpe_annualized": getattr(mt, "sharpe_annualized", None),
                 "se_period": getattr(mt, "se_period", None),
                 "se_annualized": getattr(mt, "se_annualized", None),
                 "bonferroni_alpha": mt.bonferroni_alpha,
-                "deflated_sharpe": mt.deflated_sharpe,
+                "approx_null_selection_proxy": getattr(
+                    mt, "approx_null_selection_proxy", None
+                ),
                 "passes_hint": mt.passes_bonferroni_hint,
-                "trials_ambiguous": getattr(mt, "trials_ambiguous", None),
+                "trials_ambiguous": getattr(mt, "trials_ambiguous", True),
+                "trial_history_complete": getattr(mt, "trial_history_complete", False),
                 "definition": getattr(mt, "definition", ""),
                 "note": mt.note,
             },

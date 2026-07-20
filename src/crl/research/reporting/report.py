@@ -108,7 +108,11 @@ def render_markdown(p: dict[str, Any]) -> str:
     lines.append(f"- n_effective_hint: {st.get('n_effective_hint')}")
     mt = st.get("multiple_testing") or {}
     if mt:
-        lines.append(f"- multiple-testing: family={mt.get('n_family')} global={mt.get('n_global')} DSR={mt.get('deflated_sharpe')}")
+        lines.append(
+            f"- multiple-testing: family={mt.get('n_family')} global={mt.get('n_global')} "
+            f"proxy={mt.get('approx_null_selection_proxy')} "
+            f"(NOT BLP DSR; ambiguous={mt.get('trials_ambiguous')})"
+        )
         lines.append(f"  - {mt.get('note')}")
     mc = st.get("monte_carlo") or {}
     if mc:

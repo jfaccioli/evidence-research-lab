@@ -234,16 +234,24 @@ def run_hypothesis_pipeline(
     family_id = spec.family_id or spec.id
     n_family = max(registry.count_family(family_id), 1)
     n_global = max(registry.count_all_hypotheses(), 1)
+    # Analytical trials: hyps in family + runs (reruns) + global hyps; explicit count
+    n_runs_family = max(registry.count_runs_for_family(family_id), 0)
+    n_all_runs = max(registry.count_all_runs(), 0)
+    n_analytical_trials = max(n_family, n_global, n_runs_family, n_all_runs, 1)
     mt = evaluate_multiple_testing(
         sharpe_point=float(val_m["sharpe_after_cost"]),
         n_obs=int(val_m["n_bars"]),
         n_family=n_family,
         n_global=n_global,
+        ann_factor=ann,
+        n_analytical_trials=n_analytical_trials,
+        bar_returns=val_res.bar_returns.values,
     )
 
-    # Stress costs on val
+    # Stress costs on val (pre-test requirement)
     stress_res = run_backtest(holdout.val, spec, costs, stress=True)
     stress_m = compute_metrics(stress_res, timeframe=spec.timeframe, ann=stats_cfg)
+    stress_sharpe_for_gate = stress_m.sharpe_after_cost
 
     # Regime concentration from val trades
     reg = regime_concentration(
@@ -271,7 +279,7 @@ def run_hypothesis_pipeline(
         skeptical_p=boot.p_mean_gt_0_skeptical,
         mc_dd_breach_frac=mc.frac_dd_breach,
         fragility_pass_frac=sens.pass_frac if sens.pass_frac is not None else None,
-        stress_sharpe=stress_m.sharpe_after_cost,
+        stress_sharpe=stress_sharpe_for_gate,
         trust_score=trust,
         min_trust=float(cfg.get("data", {}).get("min_trust_score", 0.7)),
         regime_max_share=reg.get("max_pos_share"),
@@ -304,11 +312,21 @@ def run_hypothesis_pipeline(
                 seed=seed,
                 dd_limit=gates.max_drawdown,
             )
+            n_analytical_trials_t = max(
+                n_family,
+                n_global,
+                registry.count_runs_for_family(family_id),
+                registry.count_all_runs(),
+                1,
+            )
             mt_t = evaluate_multiple_testing(
                 sharpe_point=float(test_m["sharpe_after_cost"]),
                 n_obs=int(test_m["n_bars"]),
                 n_family=n_family,
                 n_global=n_global,
+                ann_factor=ann,
+                n_analytical_trials=n_analytical_trials_t,
+                bar_returns=test_res.bar_returns.values,
             )
             reality_test = run_reality_checks(
                 spec,
@@ -319,6 +337,11 @@ def run_hypothesis_pipeline(
                 cfg=cfg,
                 capital_aud=float(cfg.get("reality", {}).get("capital_aud", 50.0)),
             )
+            # B3: separate 2×-cost stress on the confirmatory test slice
+            stress_test_res = run_backtest(holdout.test, spec, costs, stress=True)
+            stress_test_m = compute_metrics(
+                stress_test_res, timeframe=spec.timeframe, ann=stats_cfg
+            )
             gate_final = evaluate_gates(
                 Metrics(**test_m),
                 gates,
@@ -328,7 +351,7 @@ def run_hypothesis_pipeline(
                 skeptical_p=boot_t.p_mean_gt_0_skeptical,
                 mc_dd_breach_frac=mc_t.frac_dd_breach,
                 fragility_pass_frac=sens.pass_frac if sens.pass_frac is not None else None,
-                stress_sharpe=stress_m.sharpe_after_cost,
+                stress_sharpe=stress_test_m.sharpe_after_cost,
                 trust_score=trust,
                 min_trust=float(cfg.get("data", {}).get("min_trust_score", 0.7)),
                 regime_max_share=reg.get("max_pos_share"),
@@ -343,6 +366,7 @@ def run_hypothesis_pipeline(
             boot = boot_t
             mc = mc_t
             mt = mt_t
+            stress_sharpe_for_gate = stress_test_m.sharpe_after_cost
         else:
             gate_final = gate_val
 
@@ -436,12 +460,20 @@ def run_hypothesis_pipeline(
             "multiple_testing": {
                 "n_family": mt.n_family,
                 "n_global": mt.n_global,
+                "n_trials": getattr(mt, "n_trials", None),
+                "sharpe_period": getattr(mt, "sharpe_period", None),
+                "sharpe_annualized": getattr(mt, "sharpe_annualized", mt.deflated_sharpe),
+                "se_period": getattr(mt, "se_period", None),
+                "se_annualized": getattr(mt, "se_annualized", None),
                 "bonferroni_alpha": mt.bonferroni_alpha,
                 "deflated_sharpe": mt.deflated_sharpe,
                 "passes_hint": mt.passes_bonferroni_hint,
+                "trials_ambiguous": getattr(mt, "trials_ambiguous", None),
+                "definition": getattr(mt, "definition", ""),
                 "note": mt.note,
             },
-            "stress_sharpe": stress_m.sharpe_after_cost,
+            "stress_sharpe_val": stress_m.sharpe_after_cost,
+            "stress_sharpe": stress_sharpe_for_gate,
         },
         "gates": {
             "passed": gate_final.passed,

@@ -145,6 +145,7 @@ class Trade(BaseModel):
     return_net: float
     bars_held: int
     regime_at_entry: Optional[str] = None
+    is_open: bool = False  # True if no exit cost applied (terminal open or B&H hold)
 
 
 class Metrics(BaseModel):

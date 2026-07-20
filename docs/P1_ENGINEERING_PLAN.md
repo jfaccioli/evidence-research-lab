@@ -17,7 +17,16 @@
 | Execution | **No** paper/live work |
 | Gates | **No** promotion threshold changes |
 | Git | **No** remote creation or push |
-| Verification | Prefer focused unit/integration tests; temp roots only; no root-writing E2E against live paths |
+| Verification | **Every PR** runs **focused tests for that PR** and the **complete safe test suite** (temp roots only; exclude root-writing E2E against live paths) |
+
+### Schema / migration rules (all PRs that touch DB)
+
+| Rule | Detail |
+|------|--------|
+| Compatibility open | Opening a **legacy** database under **compatibility mode** must **not** automatically migrate or change its bytes |
+| Fail closed | **Unknown / newer** schema versions **fail closed** (no best-effort read/write) |
+| Explicit migrations only | Migrations are **explicit**, **transactional**, and **idempotent**; they **never** run merely because `HypothesisRegistry` (or equivalent) is instantiated, nor on import |
+| Downgrade | Unsupported downgrade **fails closed** |
 
 ### Cutover from P0 fail-closed multiple-testing (when)
 
@@ -25,7 +34,7 @@
 |-------|-----------|
 | **Today (post-P0, pre-P1 cutover)** | Legacy: `trial_history_complete=False` / fail-closed Bonferroni hygiene; no proven analytical-trial census |
 | **During PR1–PR6** | P0 fail-closed remains **default for promotable decisions** until cutover flag is flipped under human approval |
-| **Cutover (after PR7 + approval)** | Replace hard-coded legacy fail-closed with **derived completeness** (`COMPLETE` governed epoch + approved legacy N bound + anchor + off-machine backup). Until then, P1 ledgers may run in **shadow/parallel** mode without enabling promotion |
+| **Cutover (after PR7 + approval)** | Replace hard-coded legacy fail-closed with **derived completeness** (`COMPLETE` governed epoch + approved legacy N bound + anchor + off-machine backup). Until then, P1 ledgers may use **audit-only dual-write** (research-governance instrumentation that records trials for audit; **not** shadow trading and **not** enabling promotion) |
 | **Never** | Soften thresholds to “make up for” incomplete history |
 
 ---
@@ -50,21 +59,26 @@ Introduce lineage/epoch/split models, validators, and a schema-migration mechani
 
 ### Backward compatibility
 - Existing pipeline continues to use fractional splits and P0 fail-closed MT.
-- New models unused by default (`feature_flag` / import-only).
+- New models are **import-only** in PR1 — **not** wired into the live pipeline (no behaviour-changing feature flag).
 - Legacy hyp/run rows remain with null epoch / legacy labels — **never auto-COMPLETE**.
+- Opening a legacy DB in **compatibility mode** does not migrate or mutate bytes.
+- Unknown/newer schema versions fail closed.
 
 ### Failure/rollback
-- Migrations applied only to temp DBs in tests.
-- Rollback = drop temp DB; main branch code remains non-cutover.
+- Migrations applied only via **explicit** API to temp DBs in tests (never on Registry construction).
+- Failed migration transaction leaves DB and schema version unchanged.
+- Repeated migrate to same target is idempotent.
+- Rollback of a PR = drop temp DB / revert branch; main remains non-cutover.
 
 ### Acceptance tests
-- Manifest validates required calendar/timing fields (§9 design).
-- Invalid manifests rejected.
-- Migration up/down (or forward-only version chain) on empty temp DB.
-- Legacy null epoch records do not become COMPLETE under any default.
+- Manifest validates required calendar/timing fields (§9 design); deterministic content hash.
+- Invalid manifests rejected (each calendar/timing condition).
+- Explicit migration success on temp DB; rollback after injected failure; idempotent repeat.
+- Unknown newer version rejection; legacy null epoch never COMPLETE.
+- **Focused PR1 tests + complete safe suite** (exclude root-writing E2E).
 
 ### Commands permitted
-- `pytest` (temp DB fixtures)
+- `pytest` (temp DB fixtures); focused + full safe suite
 - `python -m compileall` optional
 - **Not:** `crl run`, `crl batch`, `crl learn`, live DB migrate
 
@@ -95,19 +109,20 @@ Programme-level cohort + holdout state machine with sealed membership and access
 - Confirmatory path **not** cut over until PR7 + approval (or explicit dual-path flag still fail-closed).
 
 ### Failure/rollback
-- Crash after RESERVED must leave ABORTED_BURNED (tested).
+- **Crash recovery** (a recovery path / next opener — **not** the crashed process itself) detects **stale RESERVED** records and records **ABORTED_BURNED** on recovery; the crashed process cannot be relied upon to do so.
 - No transition back to AVAILABLE.
 
 ### Acceptance tests
 - Concurrent reservation: one winner.
-- Crash after reservation burns holdout.
+- Crash after reservation: recovery records ABORTED_BURNED; never AVAILABLE.
 - Reopen burned holdout fails.
 - Append member after reservation fails.
 - Direct holdout dataframe access without handle fails.
 - No per-hypothesis “fresh lease” API for promotable confirmatory.
+- **Focused PR2 tests + complete safe suite.**
 
 ### Commands permitted
-- `pytest` only (temp DBs)
+- `pytest` only (temp DBs); focused + full safe suite
 
 ### Must not change
 - Live registry; thresholds; research results; funding; execution adapters.
@@ -132,7 +147,7 @@ Append-only event ledger with hash chain; policy-derived multiplicity; governed-
 
 ### Backward compatibility
 - P0 path remains default for promotion hygiene until cutover.
-- Ledger may record **shadow** trials if dual-write is enabled; shadow does not enable COMPLETE.
+- Ledger may record trials via **audit-only dual-write** when enabled (research-governance instrumentation, **not** shadow trading); dual-write does **not** enable COMPLETE or promotion.
 
 ### Failure/rollback
 - Failed txn rolls back trial **and** budget together.
@@ -147,7 +162,7 @@ Append-only event ledger with hash chain; policy-derived multiplicity; governed-
 - Global+cohort correction inputs present for MT caller (still fail-closed if epoch incomplete).
 
 ### Commands permitted
-- `pytest` (temp DB)
+- `pytest` (temp DB); focused + full safe suite
 
 ### Must not change
 - Gate numeric thresholds; live registry migration; research_kb conclusions.
@@ -174,16 +189,17 @@ Content-addressed bundles, full lineage, collision protection, consistent SQLite
 
 ### Failure/rollback
 - Bundle write failure aborts run completion event.
-- Snapshot must use backup API; live-file hash path rejected by tests.
+- Snapshot must use the **consistent SQLite backup API** (not a naive live-file copy under writers).
 
 ### Acceptance tests
 - Bundle collision/overwrite rejected.
-- Checkpoint `database_snapshot_hash` differs from naive live-file hash under concurrent write simulation where feasible.
+- Snapshot tests verify a **consistent, reopenable** snapshot and **expected contents**; do **not** require that the snapshot hash differ from a live-file hash.
 - Lineage fields present: config, spec, split, data, feature, dependency lock hash.
 - Supersede event required for corrections.
+- **Focused PR4 tests + complete safe suite.**
 
 ### Commands permitted
-- `pytest`; optional local temp filesystem inspection
+- `pytest`; optional local temp filesystem inspection; focused + full safe suite
 
 ### Must not change
 - Existing `reports/*` content; live scientific conclusions; thresholds.
@@ -210,16 +226,18 @@ Provider-neutral anchor interface; default UNANCHORED_PENDING; off-machine backu
 
 ### Failure/rollback
 - Anchor failure leaves UNANCHORED_PENDING; still counts as trial if exposed.
-- Later anchor = **new event**.
+- Anchoring **later** is represented by a **new append-only anchor event**; **never** by mutation of an earlier event.
 
 ### Acceptance tests
 - Unanchored cannot promote.
 - Unverified off-machine backup cannot promote.
 - No network calls required in default tests.
 - Interface accepts future private audit-branch provider without schema break.
+- Later anchor appends a new event; prior event rows remain unchanged.
+- **Focused PR5 tests + complete safe suite.**
 
 ### Commands permitted
-- `pytest` only
+- `pytest` only; focused + full safe suite
 
 ### Must not change
 - Create remotes; push; store secrets; enable promotion for unanchored events.
@@ -254,7 +272,7 @@ Synthetic/mock filtering; legacy_pre_p1 release workflow; Thesis Tree authoritat
 - Authoritative mode refused when epoch incomplete or unanchored.
 
 ### Commands permitted
-- `pytest`; optional dry-run of release packaging to **temp dir only**
+- `pytest`; optional dry-run of release packaging to **temp dir only**; focused + full safe suite
 
 ### Must not change
 - Live research_kb historical files without human release approval; no mass conclusion rewrite.
@@ -286,7 +304,7 @@ Full 18 design scenarios + direct-entrypoint bypass + reconciliation audit + saf
 - Migration rehearsal on temp copy only.
 
 ### Commands permitted
-- `pytest`
+- `pytest` (focused adversarial + complete safe suite)
 - Optional rehearsal script with explicit `--temp-dir` (fail if path looks like live registry)
 
 ### Must not change
@@ -297,7 +315,7 @@ Full 18 design scenarios + direct-entrypoint bypass + reconciliation audit + saf
 ## Cutover checklist (after PR7 + human approval)
 
 1. Read-only legacy census complete; legacy N upper bound approved.
-2. Governed epoch opened; P1 path dual-run validated on fixtures.
+2. Governed epoch opened; P1 path **audit-only dual-write** validated on fixtures (not shadow trading).
 3. Off-machine backup + anchor policy operational (or accept promotion remains blocked while unanchored).
 4. Explicit written approval to replace P0 hard-coded fail-closed with derived completeness for promotable decisions.
 5. Document cutover `governance_epoch_id` and time.

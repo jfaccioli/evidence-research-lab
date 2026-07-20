@@ -1,9 +1,9 @@
 # P1 Design Proposal — Holdout integrity, trial ledger, immutable lineage
 
-**Status:** **Approved in principle** (final documentation amendments incorporated).  
-**Implementation:** **Not authorized** until a separate engineering plan is approved.  
-**Revision:** Final review amendments — governed epoch vs legacy, sensitivity/citation policy resolution, power-based prospective endpoint, accrual isolation, SQLite consistent snapshot, resolved human decisions.  
-**Scope:** Scientific integrity after P0 (PnL identity, total-return accounting, annualization-consistent Bonferroni / non-DSR proxy, test-slice 2× stress).  
+**Status:** **Approved in principle** (final documentation amendments incorporated).
+**Implementation:** **Not authorized** until the separate engineering plan is approved and each PR passes independent review.
+**Revision:** Final review amendments — governed epoch vs legacy, sensitivity/citation policy resolution, power-based prospective endpoints, accrual isolation, consistent SQLite snapshots, resolved human decisions; documentation cleanup.
+**Scope:** Scientific integrity after P0 (PnL identity, total-return accounting, annualization-consistent Bonferroni / non-DSR proxy, test-slice 2× stress).
 **Out of scope:** Funding research implementation, paper/live trading, gate threshold changes, architecture rewrite, creating a Git remote without explicit authorization.
 
 Success metric remains: **knowledge per research-budget unit**, not candidate count.
@@ -12,17 +12,17 @@ Success metric remains: **knowledge per research-budget unit**, not candidate co
 
 ## Goals
 
-1. Make confirmatory holdouts **programme-level, cohort-based, and burnable** — not per-hypothesis peeks.  
-2. Make reservation **irreversible** (no return to AVAILABLE after RESERVED).  
-3. Make multiplicity **lineage-persistent** across renames, code changes, and programme versions when prior results influenced design.  
-4. Make trial classification **factual and policy-derived**, not agent-supplied.  
-5. Derive history completeness from **reconciliation**, not caller flags.  
-6. Separate a **governed epoch** (can become COMPLETE prospectively) from **legacy history** (never COMPLETE).  
-7. Combine **SQLite operational atomicity** with **hash-chain + external anchor** for tamper evidence.  
-8. Make run/cohort artifacts **immutable** with ledger digests and post-event checkpoints.  
-9. Treat all **currently available BTC history as burned** for genuine confirmatory promotion.  
-10. Freeze calendar/timing semantics in split manifests (warm-up, decision, execution timestamps).  
-11. Label existing curated KB documents as **legacy pre-P1 evidence**.  
+1. Make confirmatory holdouts **programme-level, cohort-based, and burnable** — not per-hypothesis peeks.
+2. Make reservation **irreversible** (no return to AVAILABLE after RESERVED).
+3. Make multiplicity **lineage-persistent** across renames, code changes, and programme versions when prior results influenced design.
+4. Make trial classification **factual and policy-derived**, not agent-supplied.
+5. Derive history completeness from **reconciliation**, not caller flags.
+6. Separate a **governed epoch** (can become COMPLETE prospectively) from **legacy history** (never COMPLETE).
+7. Combine **SQLite operational atomicity** with **hash-chain + external anchor** for tamper evidence.
+8. Make run/cohort artifacts **immutable** with ledger digests and post-event checkpoints.
+9. Treat all **currently available BTC history as burned** for genuine confirmatory promotion.
+10. Freeze calendar/timing semantics in split manifests (warm-up, decision, execution timestamps).
+11. Label existing curated KB documents as **legacy pre-P1 evidence**.
 12. Specify an adversarial **test plan** before any code lands.
 
 ---
@@ -33,9 +33,8 @@ Success metric remains: **knowledge per research-budget unit**, not candidate co
 
 | Identity | Role |
 |----------|------|
-| `research_lineage_id` | Continuous lab research history |
 | `governance_epoch_id` | Span of research under full P1 controls (ledger, holdout machine, checkpoints) |
-| `programme_lineage_id` / `programme_version_id` | Programme family and sealed version (§3) |
+| `programme_lineage_id` / `programme_version_id` | Programme family and sealed version (see §3 for full lineage set including `research_lineage_id`) |
 
 A **new governance epoch** begins only when P1 controls are live and sealed. All prior work is **legacy** relative to that epoch.
 
@@ -48,21 +47,24 @@ A **new governance epoch** begins only when P1 controls are live and sealed. All
 
 **Hard rules**
 
-- Legacy backfill **never** transitions to `COMPLETE`.  
-- Future **promotion** requires **both**:  
-  1. `COMPLETE` status for the **governed epoch** relevant to the cohort; **and**  
-  2. a **human-approved conservative upper bound** on legacy analytical trials, included in **N_global**.  
+- Legacy backfill **never** transitions to `COMPLETE`.
+- Future **promotion** requires **all** of:
+  1. `COMPLETE` status for the **governed epoch** relevant to the cohort; **and**
+  2. a **human-approved conservative upper bound** on legacy analytical trials, included in **N_global**; **and**
+  3. **anchoring complete** for the cohort/event (not merely marked with unanchored-handling rules); **and**
+  4. **required off-machine backup** verified for the corresponding checkpoint (§7.2).
+- Applying **`UNANCHORED_PENDING` rules does not permit promotion**. Unanchored events still count as trials when selection-capable/exposed, but **cannot** support promotion or authoritative Thesis Tree conclusions.
 - If no defensible legacy upper bound exists, **promotion remains blocked** indefinitely.
 
 ### 0.3 Separate read-only legacy census
 
 A **read-only legacy census** (no mutation of historical scientific conclusions) shall establish whether a defensible upper bound on pre-epoch selection-capable trials is possible. Outputs:
 
-- proposed bound and methodology;  
-- known gaps;  
+- proposed bound and methodology;
+- known gaps;
 - human approval or rejection of the bound.
 
-Until that census is approved, treat legacy as blocking for promotion via missing (b).
+Until that census is approved, treat legacy as blocking for promotion via missing prerequisite (2).
 
 ---
 
@@ -104,15 +106,15 @@ boundaries:
   train_start: "..."
   train_end:   "..."
   val_end:     "..."
-  holdout_start: "..."   # confirmatory / prospective — see §1.2, §8
-  holdout_end:   "..."   # frozen endpoint from power analysis when prospective
+  holdout_start: "..."
+  holdout_end:   "..."
 ```
 
 **Rules**
 
-- Splits are **calendar endpoints**, not fractions.  
-- Extending market data does **not** move past boundaries; new bars require a **new programme_version_id**.  
-- Runs must reference `programme_version_id` + `dataset_id` (+ `governance_epoch_id` when governed); mismatch → hard fail.  
+- Splits are **calendar endpoints**, not fractions.
+- Extending market data does **not** move past boundaries; new bars require a **new programme_version_id**.
+- Runs must reference `programme_version_id` + `dataset_id` (+ `governance_epoch_id` when governed); mismatch → hard fail.
 - Silent boundary edits are forbidden.
 
 ### 1.2 Programme-level holdout (replaces per-hypothesis test leases)
@@ -127,16 +129,16 @@ boundaries:
 
 **Before reservation, freeze (immutable):**
 
-- cohort membership (hypothesis versions / `spec_hash` list);  
-- specs, metrics definitions, cost model, gates;  
-- code/config hashes;  
-- multiplicity method and census scope;  
+- cohort membership (hypothesis versions / `spec_hash` list);
+- specs, metrics definitions, cost model, gates;
+- code/config hashes;
+- multiplicity method and census scope;
 - split manifest and dataset vintage.
 
 **After reservation:**
 
-- **No hypotheses may be appended** to the cohort.  
-- Holdout data must not enter ordinary feature caches or evaluation dataframes **before** reservation.  
+- **No hypotheses may be appended** to the cohort.
+- Holdout data must not enter ordinary feature caches or evaluation dataframes **before** reservation.
 - Once **any** cohort result may have been exposed (screen, log, partial report, interactive session), the holdout is **burned for all later adaptively derived hypotheses** under this research lineage (not only cohort members).
 
 ---
@@ -160,13 +162,13 @@ AVAILABLE → RESERVED → CONSUMED
 
 ### Crash policy
 
-- Absence of metrics **does not** prove absence of access.  
-- Any process that obtained RESERVED has potentially exposed holdout information → **ABORTED_BURNED**, not “retry clean.”  
+- Absence of metrics **does not** prove absence of access.
+- Any process that obtained RESERVED has potentially exposed holdout information → **ABORTED_BURNED**, not “retry clean.”
 - A new confirmatory attempt requires a **new holdout** (new calendar / prospective window / new programme_version with declared parent and `version_reason`).
 
 ### Data access
 
-- Holdout bars must not be loaded into default `load_or_build_features` paths or exploratory dataframes prior to RESERVED.  
+- Holdout bars must not be loaded into default `load_or_build_features` paths or exploratory dataframes prior to RESERVED.
 - Implementation sketch (later): `HoldoutDataHandle` obtainable only after RESERVED commit.
 
 ---
@@ -194,18 +196,18 @@ AVAILABLE → RESERVED → CONSUMED
 | **N_global** | Every **selection-capable** trial in the persistent `research_lineage_id` up to the decision time, **including** the human-approved conservative **legacy upper bound** (§0) when promoting |
 | **N_cohort** | Every preregistered candidate opened in the confirmatory cohort (and selection-capable sensitivity per §4) |
 
-**Require both** global and cohort-level correction.  
+**Require both** global and cohort-level correction.
 
 **Do not** reduce raw counts for correlation; default is **no correlation discount**.
 
 ### 3.3 Future programmes (e.g. funding)
 
-**Default:** same `research_lineage_id` as existing BTC research (H5 resolved).  
+**Default:** same `research_lineage_id` as existing BTC research (H5 resolved).
 
 A funding programme must still declare:
 
-- relationship / `parent_programme_version_id` where applicable;  
-- `prior_results_available_at_creation`;  
+- relationship / `parent_programme_version_id` where applicable;
+- `prior_results_available_at_creation`;
 - that it does **not** silently reset N_global.
 
 Any fork to a new lineage requires **later independent programme review** — not a silent tool default.
@@ -232,29 +234,29 @@ Any fork to a new lineage requires **later independent programme review** — no
 
 ### 4.3 Sensitivity policy (H6 resolved)
 
-1. **Every evaluated and researcher-visible neighbour** capable of affecting selection or promotion **counts**.  
-2. **Preregistration** defines the **permitted** sensitivity grid but **does not exempt** grid members from counting.  
+1. **Every evaluated and researcher-visible neighbour** capable of affecting selection or promotion **counts**.
+2. **Preregistration** defines the **permitted** sensitivity grid but **does not exempt** grid members from counting.
 3. An **ad-hoc unregistered neighbour** still **counts** and creates a **governance violation** that **blocks promotion** pending human review.
 
 ### 4.4 Count (selection-capable, non-excluded)
 
-- visible hypothesis, parameter, feature, threshold, horizon, interaction, aggregation variants;  
-- all sensitivity points under §4.3;  
-- **changed-input** reruns;  
+- visible hypothesis, parameter, feature, threshold, horizon, interaction, aggregation variants;
+- all sensitivity points under §4.3;
+- **changed-input** reruns;
 - aborted evaluations where a result **may** have been exposed (including RESERVED→ABORTED_BURNED).
 
 ### 4.5 Do **not** separately count (when verified)
 
-- verified **byte-identical** deterministic reproductions;  
-- **synthetic** unit/E2E fixtures;  
-- retries where reservation **never committed** and **no** result was exposed;  
-- predetermined **buy-and-hold**;  
+- verified **byte-identical** deterministic reproductions;
+- **synthetic** unit/E2E fixtures;
+- retries where reservation **never committed** and **no** result was exposed;
+- predetermined **buy-and-hold**;
 - mandatory preregistered **base and 2× cost** evaluations of the **same** sealed candidate (one selection unit, two cost diagnostics).
 
 ### 4.6 Citation / double-count policy (H9 resolved)
 
-- Every historical analytical trial is **counted once** in the ledger when it occurs.  
-- Later **citation or narrative reuse does not count it again**.  
+- Every historical analytical trial is **counted once** in the ledger when it occurs.
+- Later **citation or narrative reuse does not count it again**.
 - Any **new formulation** derived from that evidence **counts when evaluated**.
 
 ### 4.7 Post-hoc diagnostics
@@ -273,32 +275,36 @@ Authoritative caller-controlled `trial_history_complete=True` as a pass key.
 
 | Value | Meaning | Promotion? |
 |-------|---------|------------|
-| `COMPLETE` | All reconciliation invariants hold for a **governed epoch** | Eligible **only** for governed epoch (plus §0 legacy bound) |
+| `COMPLETE` | All reconciliation invariants hold for a **governed epoch** | Eligible **only** for governed epoch (plus §0 legacy bound, anchor, off-machine backup) |
 | `INCOMPLETE_KNOWN_GAPS` | Gaps enumerated | Fail closed |
 | `INCOMPLETE_UNBOUNDED` | Cannot bound missing peeks | Fail closed; legacy may remain here |
 | `LEGACY_RECONSTRUCTED_CONSERVATIVELY` | Pre-epoch backfill with upper-bound trial counts | **Never** COMPLETE; non-promotable era; bound feeds N_global only after human approval |
 
-### Promotion prerequisites (summary)
+### Promotion prerequisites (complete list)
 
-1. Governed epoch status = **COMPLETE**.  
-2. Human-approved **conservative legacy N upper bound** included in **N_global**.  
-3. Cohort holdout CONSUMED under valid protocol; artifacts anchored or rules in §7.3 applied.  
-4. No open governance violations (e.g. unregistered sensitivity).
+Promotion requires **all** of the following:
 
-If (2) is missing → **promotion blocked**.
+1. Governed epoch status = **COMPLETE**.
+2. Human-approved **conservative legacy N upper bound** included in **N_global** (or promotion remains blocked if no defensible bound).
+3. Cohort holdout **CONSUMED** under valid protocol; sealed membership/specs/gates/hashes frozen before reservation.
+4. **Anchoring complete** for the relevant events (not merely compliance with UNANCHORED_PENDING *handling*). **UNANCHORED_PENDING does not permit promotion.**
+5. **Required off-machine backup** of the consistent DB snapshot and required artifacts verified for the checkpoint (§7.2).
+6. No open governance violations (e.g. unregistered sensitivity neighbour).
+
+If any of (1)–(6) fail → **promotion blocked**.
 
 ### Reconciliation invariants (minimum)
 
 Across hypotheses, runs, ledger events, artifact bundles, datasets, split manifests, feature hashes, budgets, report paths, holdout reservations:
 
-1. Every completed selection-capable evaluation has trial registration **before** `execution_state=completed`.  
-2. Every `run_id` maps to exactly one artifact bundle digest (or explicit failure event).  
-3. Every RESERVED holdout ends in CONSUMED or ABORTED_BURNED.  
-4. Budget debits match billable registered trials.  
-5. No sealed report path without a ledger event (volatile `latest_*` excluded).  
-6. Feature matrix hash matches lineage at registration.  
-7. Event sequence contiguous; hash chain unbroken.  
-8. Synthetic trials never appear in promotable evidence sets.  
+1. Every completed selection-capable evaluation has trial registration **before** `execution_state=completed`.
+2. Every `run_id` maps to exactly one artifact bundle digest (or explicit failure event).
+3. Every RESERVED holdout ends in CONSUMED or ABORTED_BURNED.
+4. Budget debits match billable registered trials.
+5. No sealed report path without a ledger event (volatile `latest_*` excluded).
+6. Feature matrix hash matches lineage at registration.
+7. Event sequence contiguous; hash chain unbroken.
+8. Synthetic trials never appear in promotable evidence sets.
 9. Database snapshot hashes used in checkpoints come from **consistent backup/snapshot operations** (§7.2), not live-file hashes mid-WAL.
 
 Legacy remains **non-promotable** even after conservative backfill.
@@ -309,11 +315,11 @@ Legacy remains **non-promotable** even after conservative backfill.
 
 ### 6.1 Single SQLite database (operational atomicity)
 
-- foreign keys ON;  
-- strict state transitions;  
-- append-only `events`;  
-- triggers rejecting UPDATE/DELETE on events and sealed digest rows;  
-- `event_seq`, `prev_event_hash`, `event_hash`;  
+- foreign keys ON;
+- strict state transitions;
+- append-only `events`;
+- triggers rejecting UPDATE/DELETE on events and sealed digest rows;
+- `event_seq`, `prev_event_hash`, `event_hash`;
 - trial registration + research-budget reservation (+ holdout RESERVED when applicable) in **one transaction**.
 
 ### 6.2 SQLite is not the external trust anchor
@@ -326,9 +332,9 @@ Requires hash chain, artifact digests, checkpoints, and optional external anchor
 
 ### 7.1 Immutable bundles
 
-- content hash or Merkle root;  
-- digest in ledger;  
-- no normal update/delete;  
+- content hash or Merkle root;
+- digest in ledger;
+- no normal update/delete;
 - corrections = superseding events only.
 
 ### 7.2 Post-event checkpoint
@@ -343,15 +349,15 @@ After each scientific event:
 | `timestamp` | UTC |
 | `code_identity` | git_sha / package version / dirty flag |
 
-**Off-machine backup (H8):** An event is not **authoritative** for promotion or authoritative Thesis Tree conclusions until the corresponding consistent DB snapshot (and required artifacts) have been **copied off-machine** per operational policy. Local-only state remains operational but non-authoritative.
+**Off-machine backup (H8):** An event is not **authoritative** for promotion or authoritative Thesis Tree conclusions until the corresponding consistent DB snapshot (and required artifacts) have been **copied off-machine** and **verified**. Local-only state remains operational but non-authoritative. Applying unanchored-handling rules alone is insufficient for promotion.
 
 ### 7.3 External anchor unavailable
 
 If anchor provider is unset or unreachable (current default):
 
-1. Event still counts as a visible analytical trial when selection-capable / exposed.  
-2. Mark **`UNANCHORED_PENDING`**.  
-3. **Cannot** support promotion or authoritative Thesis Tree conclusions.  
+1. Event still counts as a visible analytical trial when selection-capable / exposed.
+2. Mark **`UNANCHORED_PENDING`**.
+3. **Cannot** support promotion or authoritative Thesis Tree conclusions. **UNANCHORED_PENDING is not a promotion pathway.**
 4. Later anchoring = **new event**, no rewrite.
 
 **H1/H2 (resolved for design intent):** External anchor **deferred**. Recommended future option after **explicit human authorization**: protected **private GitHub audit branch** (or equivalent) as anchor channel — **not** created or assumed now. No remote exists; none is authorized by this document.
@@ -372,37 +378,39 @@ Exploration, debugging, power estimation, negative evidence, non-promotable repl
 
 Must:
 
-1. Freeze candidate set, code, costs, gates, and **endpoint** before new data accrue;  
-2. Avoid inspecting **sealed cohort strategy performance** during accrual;  
-3. Evaluate **once** at the predetermined endpoint;  
+1. Freeze candidate set, code, costs, gates, and **endpoint** before new data accrue;
+2. Avoid inspecting **sealed cohort strategy performance** during accrual;
+3. Evaluate **once** at the predetermined endpoint;
 4. Remain **research-only** (no paper/live trading).
 
-### 8.4 Prospective endpoint (H3 resolved — no example day counts)
+### 8.4 Prospective endpoint and cohort isolation during accrual
+
+**Endpoint (H3 resolved — no example day counts)**
 
 Remove fixed example waits (e.g. 90/180 days) as design defaults.
 
 The **endpoint must be frozen** from a **documented pre-accrual power analysis** based on:
 
-- expected signal / trade frequency;  
-- minimum observations / trades;  
-- dependence assumptions;  
-- target power;  
+- expected signal / trade frequency;
+- minimum observations / trades;
+- dependence assumptions;
+- target power;
 - resulting **fixed calendar endpoint**.
 
 **Human-only authority** may unblind the cohort (not agents, not automated jobs).
 
-### 8.5 Cohort isolation during accrual
+**Cohort isolation during accrual**
 
-- Sealed cohort **membership, specs, code, costs, and gates cannot change** during accrual.  
-- Exploratory work may continue **only** if it **cannot modify** the sealed cohort (separate sandbox; no shared mutable candidate objects).  
-- Premature **strategy-performance calculation or exposure** for sealed members **burns** the holdout.  
+- Sealed cohort **membership, specs, code, costs, and gates cannot change** during accrual.
+- Exploratory work may continue **only** if it **cannot modify** the sealed cohort (separate sandbox; no shared mutable candidate objects).
+- Premature **strategy-performance calculation or exposure** for sealed members **burns** the holdout.
 - **Raw public market observation** (prices accruing in public) does **not** authorize computing the sealed cohort’s performance early.
 
 ---
 
 ## 9. Split manifest checklist
 
-Required: raw data start/end; feature warm-up; eligible decision start; signal availability rule; candle open/close semantics; decision timestamp; execution timestamp; dataset vintage/freeze time; lineage IDs including `governance_epoch_id`; holdout start/end (power-derived when prospective).
+Required: raw data start/end; feature warm-up; eligible decision start; signal availability rule; candle open/close semantics; decision timestamp; execution timestamp; dataset vintage/freeze time; lineage IDs including `governance_epoch_id` and `research_lineage_id`; holdout start/end (power-derived when prospective).
 
 ---
 
@@ -412,9 +420,9 @@ Required: raw data start/end; feature warm-up; eligible decision start; signal a
 
 Eligible for `research_kb/releases/legacy_pre_p1/` **with explicit banner** (not validated current truth):
 
-- META report;  
-- director reports;  
-- Thesis Tree snapshot;  
+- META report;
+- director reports;
+- Thesis Tree snapshot;
 - Learnings snapshot.
 
 **Excluded:** `latest_plan` (and other planner “latest” outputs) — remain **volatile**.
@@ -456,15 +464,9 @@ Still untracked at design time; must not be committed as validated post-P1 truth
 
 ## 12. Suggested later PR order (post engineering authorization only)
 
-1. Lineage + `governance_epoch_id` + split manifest schema.  
-2. Holdout state machine + cohort freeze.  
-3. Trial ledger + policy-derived multiplicity + derived completeness (incl. §0).  
-4. Immutable artifacts + consistent SQLite snapshot checkpoints.  
-5. Anchor adapter (default UNANCHORED_PENDING).  
-6. Evidence filters + legacy labels + non-authoritative Thesis Tree when incomplete/unanchored.  
-7. Full test plan.
+See **`docs/P1_ENGINEERING_PLAN.md`** for independently reviewable PRs, acceptance tests, and cutover from P0 fail-closed behaviour.
 
-No funding hyps/data in these PRs. No threshold weakening.
+No funding data/hyps in those PRs. No threshold weakening.
 
 ---
 
@@ -472,13 +474,13 @@ No funding hyps/data in these PRs. No threshold weakening.
 
 | ID | Resolution |
 |----|------------|
-| **H1 / H2** | External anchor **deferred**. Recommended later path after **explicit authorization**: protected **private GitHub audit branch** (or equivalent). **No remote now.** Until anchored + off-machine backup, promotion blocked by §7. |
+| **H1 / H2** | External anchor **deferred**. Recommended later path after **explicit authorization**: protected **private GitHub audit branch** (or equivalent). **No remote now.** Until anchored + off-machine backup, promotion blocked by §0/§7. **UNANCHORED_PENDING does not unlock promotion.** |
 | **H3** | Endpoint from **pre-accrual power analysis** (frequency, min N/trades, dependence, target power → fixed calendar end). **Human-only unblind.** No 90/180-day defaults. |
 | **H4** | META, director reports, Thesis Tree, Learnings → eligible for **`legacy_pre_p1`**. **`latest_plan` excluded** (volatile). |
 | **H5** | Funding defaults to **same `research_lineage_id`**, pending any later independent programme review for a fork. |
 | **H6** | **Resolved in §4.3** — all selection-capable visible neighbours count; preregistration defines permitted grid but does not exempt; ad-hoc unregistered neighbour counts **and** blocks promotion. |
 | **H7** | **Separate read-only legacy census** to propose a conservative N upper bound; human approval required; never upgrades legacy to COMPLETE (§0). |
-| **H8** | **Off-machine backup required** before an event is authoritative (§7.2). |
+| **H8** | **Off-machine backup required** before an event is authoritative (§7.2); required for promotion (§0). |
 | **H9** | **Resolved in §4.6** — count once at occurrence; citation does not re-count; new derived formulations count when evaluated. |
 
 ### Still deferred (not design blockers for documentation; blockers for promotion ops)
@@ -487,20 +489,21 @@ No funding hyps/data in these PRs. No threshold weakening.
 |------|--------|
 | Exact numeric legacy bound | Output of H7 census + human sign-off |
 | Anchor implementation choice | H1/H2 after authorization |
-| Prospective power-analysis template details | Method must be documented per cohort; not fixed in this proposal beyond required inputs |
+| Prospective power-analysis template details | Method must be documented per cohort; not fixed beyond required inputs |
 
 ---
 
 ## 14. Explicit non-goals
 
-- Implementing P1 code or funding-rate research in this amendment.  
-- Paper / shadow / live trading.  
-- Softening promotion thresholds.  
-- Resetting research history via rename.  
-- Treating SQLite alone as tamper-proof.  
-- Claiming BLP Deflated Sharpe without full paper method (P0 already uses non-DSR naming).  
+- Implementing P1 code or funding-rate research in this document.
+- Paper / shadow / live trading.
+- Softening promotion thresholds.
+- Resetting research history via rename.
+- Treating SQLite alone as tamper-proof.
+- Claiming BLP Deflated Sharpe without full paper method (P0 already uses non-DSR naming).
 - Creating or pushing to any Git remote without explicit authorization.
+- Treating UNANCHORED_PENDING or incomplete off-machine backup as sufficient for promotion.
 
 ---
 
-**End of final P1 design documentation. Implementation not authorized by this file alone.**
+**End of final P1 design documentation. Implementation follows only after `docs/P1_ENGINEERING_PLAN.md` review and per-PR independent approval.**

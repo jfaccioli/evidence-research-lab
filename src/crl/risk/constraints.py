@@ -1,0 +1,48 @@
+"""Deterministic risk constraints — not overridable by agents."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass(frozen=True)
+class RiskLimits:
+    max_position: float = 1.0
+    min_position: float = 0.0
+    max_leverage: float = 1.0
+    allow_short: bool = False
+    allow_derivatives: bool = False
+
+
+def clamp_position(pos: float, limits: RiskLimits) -> float:
+    if not limits.allow_short and pos < 0:
+        pos = 0.0
+    pos = min(pos, limits.max_position)
+    pos = max(pos, limits.min_position)
+    if abs(pos) > limits.max_leverage:
+        pos = limits.max_leverage if pos > 0 else -limits.max_leverage
+    return float(pos)
+
+
+def assert_phase1_universe(spec_dict: dict[str, Any]) -> None:
+    """Hard reject non-Phase-1 universes."""
+    asset = spec_dict.get("asset", "")
+    direction = spec_dict.get("direction", "")
+    if asset not in ("BTC/USDT", "BTCUSDT"):
+        raise ValueError(f"Phase 1 only allows BTC/USDT, got {asset}")
+    if direction not in ("long_only", "long"):
+        raise ValueError(f"Phase 1 long_only only, got {direction}")
+    if spec_dict.get("leverage", 1) not in (1, 1.0, None):
+        raise ValueError("Leverage not allowed in Phase 1")
+
+
+def risk_from_config(cfg: dict) -> RiskLimits:
+    r = cfg.get("risk", {})
+    return RiskLimits(
+        max_position=float(r.get("max_position", 1.0)),
+        min_position=float(r.get("min_position", 0.0)),
+        max_leverage=float(r.get("max_leverage", 1.0)),
+        allow_short=bool(r.get("allow_short", False)),
+        allow_derivatives=bool(r.get("allow_derivatives", False)),
+    )

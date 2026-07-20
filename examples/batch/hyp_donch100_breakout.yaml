@@ -1,0 +1,14 @@
+id: hyp_donch100_breakout
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: above_donch_100 > 0.5
+exit:
+  expression: below_donch_100 > 0.5
+rationale: 100-bar Donchian breakout.
+expected_outcome: Very few trades; min_trades risk.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_fade_up_extension_avoid
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mean_reversion
+entry:
+  expression: close > sma_200 and price_z_20 < 1.5
+exit:
+  expression: close < sma_200 or price_z_20 > 2.0
+rationale: Stay long in trend but step aside on extreme upside z.
+expected_outcome: Tests whether avoiding blow-off tops helps.
+feature_tags: []
+literature_refs: []

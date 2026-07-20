@@ -1,0 +1,14 @@
+id: hyp_risk_off_skip
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_proxy
+entry:
+  expression: close > sma_50 and rvol_20 < 0.8
+exit:
+  expression: rvol_20 > 1.0 or close < sma_50
+rationale: 'PROXY: avoid ''crowded leverage'' regimes via high rvol threshold.'
+expected_outcome: Arbitrary thresholds; fragility.
+feature_tags: []
+literature_refs: []

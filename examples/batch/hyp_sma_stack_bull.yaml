@@ -1,0 +1,14 @@
+id: hyp_sma_stack_bull
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: sma_20 > sma_50 and sma_50 > sma_200
+exit:
+  expression: sma_50 < sma_200
+rationale: Full SMA stack bullish.
+expected_outcome: Late entries; fewer trades.
+feature_tags: []
+literature_refs: []

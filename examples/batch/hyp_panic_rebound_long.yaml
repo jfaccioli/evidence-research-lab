@@ -1,0 +1,16 @@
+id: hyp_panic_rebound_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mean_reversion
+entry:
+  expression: ret_5 < -0.12 and close > sma_200
+exit:
+  expression: ret_5 > 0.02 or close < sma_200
+rationale: 'Liquidity panic then rebound: sharp short-window selloffs in a secular
+  uptrend can reflect temporary forced selling; mean reversion if long-term demand
+  remains. Crash risk if trend is ending.'
+expected_outcome: Few trades; often fails min_trades; knife-catch risk.
+feature_tags: []
+literature_refs: []

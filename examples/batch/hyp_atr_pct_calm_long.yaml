@@ -1,0 +1,14 @@
+id: hyp_atr_pct_calm_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_filter
+entry:
+  expression: atr_pct < 0.04 and close > sma_100
+exit:
+  expression: atr_pct > 0.07 or close < sma_100
+rationale: Calm ATR% + medium trend.
+expected_outcome: Threshold fragile.
+feature_tags: []
+literature_refs: []

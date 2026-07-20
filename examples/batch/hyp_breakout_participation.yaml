@@ -1,0 +1,16 @@
+id: hyp_breakout_participation
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: above_donch_55 > 0.5 and vol_z_20 > 0.5
+exit:
+  expression: below_donch_55 > 0.5
+rationale: 'Information incorporation / attention: channel breakouts with elevated
+  volume suggest broader participation, not thin prints. Classic market-structure
+  story; still crowded and cost-sensitive.'
+expected_outcome: Sparse signals; multiple-testing within breakout family.
+feature_tags: []
+literature_refs: []

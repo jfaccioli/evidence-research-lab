@@ -1,0 +1,14 @@
+id: hyp_price_above_sma100
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > sma_100
+exit:
+  expression: close < sma_100
+rationale: Intermediate 100d trend.
+expected_outcome: Between SMA50 and SMA200 behavior.
+feature_tags: []
+literature_refs: []

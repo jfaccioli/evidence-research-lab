@@ -1,0 +1,14 @@
+id: hyp_rsi_like_z_revert
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mean_reversion
+entry:
+  expression: price_z_60 < -2
+exit:
+  expression: price_z_60 > -0.5
+rationale: Deep 60d underextension reversion.
+expected_outcome: Rare signals; small N risk.
+feature_tags: []
+literature_refs: []

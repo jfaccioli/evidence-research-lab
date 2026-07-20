@@ -1,0 +1,14 @@
+id: hyp_fade_z20_m2
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mean_reversion
+entry:
+  expression: price_z_20 < -2.0 and close > sma_200
+exit:
+  expression: price_z_20 > -0.5 or close < sma_200
+rationale: Deep 20d underextension in long uptrend.
+expected_outcome: Rare; knife risk.
+feature_tags: []
+literature_refs: []

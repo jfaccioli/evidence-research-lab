@@ -1,0 +1,14 @@
+id: hyp_sma200_vol_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > sma_200 and rvol_below_median > 0.5 and ret_30 > 0
+exit:
+  expression: close < sma_200 or ret_30 < 0
+rationale: Trend + low vol + 30d mom.
+expected_outcome: Kitchen-sink; sample risk.
+feature_tags: []
+literature_refs: []

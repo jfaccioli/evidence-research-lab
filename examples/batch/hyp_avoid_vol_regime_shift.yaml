@@ -1,0 +1,16 @@
+id: hyp_avoid_vol_regime_shift
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_filter
+entry:
+  expression: close > sma_50 and rvol_20_chg < 0.05
+exit:
+  expression: rvol_20_chg > 0.2 or close < sma_50
+rationale: 'Regime-shift risk: rising realized vol often marks transition to stress;
+  reduce exposure when vol is accelerating even if price trend intact. Related to
+  risk management, not pure return forecast.'
+expected_outcome: May cut winners; test DD vs B&H tradeoff honestly.
+feature_tags: []
+literature_refs: []

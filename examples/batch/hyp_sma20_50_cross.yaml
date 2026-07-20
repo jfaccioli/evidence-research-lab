@@ -1,0 +1,14 @@
+id: hyp_sma20_50_cross
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: sma_20 > sma_50
+exit:
+  expression: sma_20 < sma_50
+rationale: Faster dual SMA cross.
+expected_outcome: Higher turnover; cost-sensitive.
+feature_tags: []
+literature_refs: []

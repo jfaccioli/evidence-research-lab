@@ -1,0 +1,26 @@
+# Example Phase-1 hypothesis — deliberately simple and falsifiable.
+# Not assumed alpha; used to prove the research pipeline.
+
+id: hyp_sma200_vol_filter
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_trend_vol_filter
+entry:
+  expression: "close > sma_200 and rvol_below_median > 0.5"
+exit:
+  expression: "close < sma_200"
+rationale: >
+  Classic trend filter: only hold BTC when price is above the 200-day SMA
+  and realized volatility is below its expanding (causal) median.
+  Intuition: avoid high-vol breakdown regimes while riding bullish trend.
+expected_outcome: >
+  May reduce drawdowns vs buy-and-hold at the cost of missing some upside;
+  after costs and OOS gates, likely rejected or regime-specific.
+  Pipeline success does not require this idea to pass.
+feature_tags:
+  - sma_200
+  - rvol_20
+  - rvol_below_median
+literature_refs: []

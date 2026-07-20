@@ -1,0 +1,14 @@
+id: hyp_mom_10_fast
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_momentum
+entry:
+  expression: ret_10 > 0
+exit:
+  expression: ret_10 < 0
+rationale: Fast 10-bar momentum.
+expected_outcome: High turnover; fee stress fails often.
+feature_tags: []
+literature_refs: []

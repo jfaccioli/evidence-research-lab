@@ -1,0 +1,14 @@
+id: hyp_sma100_mom60
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > sma_100 and ret_60 > 0
+exit:
+  expression: close < sma_100 or ret_60 < 0
+rationale: Medium trend + medium momentum.
+expected_outcome: Reasonable prior; still must clear gates.
+feature_tags: []
+literature_refs: []

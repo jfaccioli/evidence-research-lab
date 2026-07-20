@@ -1,0 +1,14 @@
+id: hyp_mom_20_pos
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_momentum
+entry:
+  expression: ret_20 > 0
+exit:
+  expression: ret_20 < 0
+rationale: 20-bar return sign momentum.
+expected_outcome: Classic TSMOM; costs and crypto regimes matter.
+feature_tags: []
+literature_refs: []

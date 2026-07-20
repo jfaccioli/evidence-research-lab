@@ -1,0 +1,16 @@
+id: hyp_momentum_underreaction
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_momentum
+entry:
+  expression: ret_90 > 0.1 and ret_20 > 0
+exit:
+  expression: ret_20 < 0
+rationale: 'Underreaction / gradual information diffusion: large intermediate moves
+  continue short-term if news is absorbed slowly. Behavioral finance prior; crypto
+  may overreact instead.'
+expected_outcome: Overlaps TSMOM family; selection bias high — confirmatory strict.
+feature_tags: []
+literature_refs: []

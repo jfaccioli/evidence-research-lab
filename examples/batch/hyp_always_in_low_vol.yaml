@@ -1,0 +1,14 @@
+id: hyp_always_in_low_vol
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_filter
+entry:
+  expression: rvol_below_median > 0.5
+exit:
+  expression: rvol_above_median > 0.5
+rationale: Long only in low-vol half of history (causal median).
+expected_outcome: Misses high-vol bulls; tests pure vol timing.
+feature_tags: []
+literature_refs: []

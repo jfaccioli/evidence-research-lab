@@ -1,0 +1,14 @@
+id: hyp_mom_with_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_momentum
+entry:
+  expression: ret_20 > 0 and close > sma_200
+exit:
+  expression: ret_20 < 0 or close < sma_200
+rationale: Momentum only with long-term uptrend.
+expected_outcome: Composite-ish; common quant stack.
+feature_tags: []
+literature_refs: []

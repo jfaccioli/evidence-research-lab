@@ -1,0 +1,14 @@
+id: hyp_mom_trend_vol
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: ret_20 > 0 and close > sma_200 and rvol_below_median > 0.5
+exit:
+  expression: ret_20 < 0 or close < sma_200
+rationale: Momentum + trend + vol filter stack.
+expected_outcome: Popular quant kitchen sink; may overfit narrative.
+feature_tags: []
+literature_refs: []

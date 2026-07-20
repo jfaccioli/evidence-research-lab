@@ -1,0 +1,14 @@
+id: hyp_activity_high_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: onchain_proxy
+family_id: family_onchain_proxy
+entry:
+  expression: vol_ratio_20 > 1.2 and close > sma_100
+exit:
+  expression: close < sma_100
+rationale: PROXY for network activity using relative volume (not true on-chain).
+expected_outcome: Honest proxy; should not be marketed as on-chain edge.
+feature_tags: []
+literature_refs: []

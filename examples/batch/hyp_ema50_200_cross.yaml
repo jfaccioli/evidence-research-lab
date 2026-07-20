@@ -1,0 +1,14 @@
+id: hyp_ema50_200_cross
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: ema_50 > ema_200
+exit:
+  expression: ema_50 < ema_200
+rationale: EMA 50/200 cross.
+expected_outcome: Few trades.
+feature_tags: []
+literature_refs: []

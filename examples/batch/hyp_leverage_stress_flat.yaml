@@ -1,0 +1,14 @@
+id: hyp_leverage_stress_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_proxy
+entry:
+  expression: mom_pos_20 > 0.5 and rvol_below_median > 0.5
+exit:
+  expression: rvol_above_median > 0.5 or mom_pos_20 < 0.5
+rationale: 'PROXY: hold momentum only when vol not stressed.'
+expected_outcome: Not true funding; meta-label for research ops.
+feature_tags: []
+literature_refs: []

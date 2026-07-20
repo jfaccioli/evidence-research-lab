@@ -1,0 +1,14 @@
+id: hyp_sma50_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > sma_50
+exit:
+  expression: close < sma_50
+rationale: Shorter SMA trend filter.
+expected_outcome: More trades, more costs; fragile.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_atr_compression_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_filter
+entry:
+  expression: close > sma_50 and atr_pct < 0.03
+exit:
+  expression: close < sma_50 or atr_pct > 0.06
+rationale: Enter calm ATR% regimes with intermediate trend.
+expected_outcome: Thresholds arbitrary; fragility likely.
+feature_tags: []
+literature_refs: []

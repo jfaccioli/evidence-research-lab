@@ -1,0 +1,14 @@
+id: hyp_donch55_lowvol
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: above_donch_55 > 0.5 and rvol_below_median > 0.5
+exit:
+  expression: below_donch_55 > 0.5
+rationale: Breakout + low vol filter.
+expected_outcome: May starve trades.
+feature_tags: []
+literature_refs: []

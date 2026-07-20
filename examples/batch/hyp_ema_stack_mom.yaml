@@ -1,0 +1,14 @@
+id: hyp_ema_stack_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > ema_50 and ret_10 > 0 and rvol_below_median > 0.5
+exit:
+  expression: close < ema_50 or ret_10 < 0
+rationale: EMA trend + fast mom + vol.
+expected_outcome: Complex; fragility likely.
+feature_tags: []
+literature_refs: []

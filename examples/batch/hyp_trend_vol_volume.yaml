@@ -1,0 +1,14 @@
+id: hyp_trend_vol_volume
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > sma_200 and rvol_below_median > 0.5 and vol_z_20 > 0
+exit:
+  expression: close < sma_200
+rationale: Trend + low vol + volume participation.
+expected_outcome: Over-constrained; sample risk.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_donch20_breakout
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: above_donch_20 > 0.5
+exit:
+  expression: below_donch_20 > 0.5
+rationale: 20-bar Donchian breakout (prior channel only).
+expected_outcome: Classic turtle-style; few signals; costs matter.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_sma200_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > sma_200
+exit:
+  expression: close < sma_200
+rationale: Classic price above 200d SMA trend filter.
+expected_outcome: Captures major bulls; large DD; may not beat B&H after costs.
+feature_tags: []
+literature_refs: []

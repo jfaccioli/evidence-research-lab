@@ -1,0 +1,105 @@
+# Crypto Research Lab — default Phase 1 config
+# Primary objective: after-cost Sharpe (no metric shopping)
+
+asset: BTC/USDT
+symbol_binance: BTCUSDT
+timeframes:
+  - 1d
+  - 4h
+
+data:
+  source: binance_public
+  base_url: https://api.binance.com
+  cache_dir: data/processed
+  raw_dir: data/raw
+  manifest_dir: data/manifests
+  min_trust_score: 0.70
+
+costs:
+  fee_bps_per_side: 10.0
+  half_spread_bps: 1.5
+  slippage_bps_per_side: 5.0
+  stress_multiplier: 2.0
+
+execution:
+  # Signal on closed bar t → fill at open of t+1
+  fill: next_open
+  position_mode: full_or_flat  # 0 or 1
+  allow_intrabar_stops: false
+
+splits:
+  train_frac: 0.50
+  val_frac: 0.25
+  test_frac: 0.25
+  # Walk-forward (in bars; tuned for daily by default)
+  wf_train_bars: 730
+  wf_val_bars: 180
+  wf_step_bars: 90
+
+gates:
+  primary_metric: sharpe_after_cost
+  min_trades: 30
+  sharpe_min: 0.20
+  max_drawdown: 0.55
+  overfit_gap_max: 1.0
+  wf_min_positive_fold_frac: 0.60
+  # Primary-metric bootstrap CI lower bound (bar after-cost Sharpe)
+  bootstrap_ci_lower_sharpe_min: 0.0
+  skeptical_p_mean_trade_gt0_min: 0.55
+  mc_max_dd_breach_frac: 0.50
+  fragility_min_pass_frac: 0.40
+  regime_concentration_warn: 0.80
+  research_budget_confirmatory_per_month: 10
+
+stats:
+  bootstrap_n: 500
+  bootstrap_block_size: 5
+  mc_n: 500
+  annualization_1d: 365
+  annualization_4h: 2190
+  risk_free: 0.0
+  seed: 42
+
+registry:
+  path: registry/crl.sqlite
+
+reporting:
+  dir: reports
+
+journal:
+  path: journal/RESEARCH_JOURNAL.md
+
+xai:
+  mode: mock  # mock | live (live requires API key; not used in Phase 1 core)
+  cache_dir: data/xai_cache
+  max_calls_per_day: 50
+
+risk:
+  max_position: 1.0
+  min_position: 0.0
+  max_leverage: 1.0
+  allow_short: false
+  allow_derivatives: false
+
+# Evidence-driven research planner (not trading)
+planner:
+  max_proposals: 5
+  min_information_gain: 0.35
+  budget:
+    units_total: 150.0
+    units_spent: 0.0
+    cost_per_exploratory: 1.0
+    cost_per_confirmatory: 5.0
+    max_proposals_per_plan: 5
+    max_same_mechanism_in_flight: 2
+
+# Economic / execution reality (not just statistics)
+reality:
+  capital_aud: 50.0
+  aud_usd: 0.65
+  min_avg_hold_bars: 1
+  min_edge_bps_vs_round_trip: 0.0
+  max_turnover_per_year: 200.0
+  min_trade_notional_usd: 5.0
+  require_human_executable: true
+  high_freq_warn_bar_hours: 4.0

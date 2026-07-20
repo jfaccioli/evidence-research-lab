@@ -1,0 +1,14 @@
+id: hyp_vol60_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: close > sma_100 and vol_z_60 > 0
+exit:
+  expression: close < sma_100
+rationale: Longer volume z confirmation.
+expected_outcome: Weaker filter; similar to bare trend.
+feature_tags: []
+literature_refs: []

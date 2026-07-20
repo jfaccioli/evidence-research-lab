@@ -1,0 +1,14 @@
+id: hyp_activity_thrust_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: onchain_proxy
+family_id: family_onchain_proxy
+entry:
+  expression: vol_z_60 > 1 and ret_20 > 0
+exit:
+  expression: ret_20 < 0
+rationale: PROXY sustained activity + momentum.
+expected_outcome: Overlaps volume+momentum meta family.
+feature_tags: []
+literature_refs: []

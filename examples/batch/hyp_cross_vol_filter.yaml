@@ -1,0 +1,14 @@
+id: hyp_cross_vol_filter
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: sma_50 > sma_200 and rvol_below_median > 0.5
+exit:
+  expression: sma_50 < sma_200
+rationale: Golden cross state with low vol.
+expected_outcome: Few trades.
+feature_tags: []
+literature_refs: []

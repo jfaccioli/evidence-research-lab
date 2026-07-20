@@ -1,0 +1,14 @@
+id: hyp_vol_confirm_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: close > sma_50 and vol_z_20 > 0.5
+exit:
+  expression: close < sma_50
+rationale: Trend entry requires elevated volume z-score.
+expected_outcome: Participation filter; mixed evidence historically.
+feature_tags: []
+literature_refs: []

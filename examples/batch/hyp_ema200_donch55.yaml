@@ -1,0 +1,14 @@
+id: hyp_ema200_donch55
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > ema_200 and above_donch_55 > 0.5
+exit:
+  expression: close < ema_200 or below_donch_55 > 0.5
+rationale: Long EMA trend + medium Donchian.
+expected_outcome: Sparse.
+feature_tags: []
+literature_refs: []

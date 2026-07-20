@@ -1,0 +1,17 @@
+id: hyp_risk_on_trend_capital_flow
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > sma_200 and ret_60 > 0
+exit:
+  expression: close < sma_200 or ret_60 < 0
+rationale: 'Risk-on capital and herding: investors chase established uptrends; price
+  above long SMA plus positive medium momentum proxies ongoing inflows. Economic story
+  is flow/herding, not magic SMA.'
+expected_outcome: May reduce cash drag vs pure SMA but still mostly beta; reject if
+  no excess vs B&H or fails after costs/OOS.
+feature_tags: []
+literature_refs: []

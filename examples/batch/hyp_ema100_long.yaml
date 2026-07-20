@@ -1,0 +1,14 @@
+id: hyp_ema100_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > ema_100
+exit:
+  expression: close < ema_100
+rationale: EMA100 trend filter.
+expected_outcome: Between 50 and 200 behavior.
+feature_tags: []
+literature_refs: []

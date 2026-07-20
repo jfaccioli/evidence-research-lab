@@ -1,0 +1,14 @@
+id: hyp_sma20_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > sma_20
+exit:
+  expression: close < sma_20
+rationale: Fast SMA20 trend.
+expected_outcome: Churn + fees.
+feature_tags: []
+literature_refs: []

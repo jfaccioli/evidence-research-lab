@@ -1,0 +1,14 @@
+id: hyp_avoid_month_end_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_month_end < 0.5 and ret_60 > 0
+exit:
+  expression: is_month_end > 0.5 or ret_60 < 0
+rationale: Medium mom avoiding month-end days.
+expected_outcome: Weak prior.
+feature_tags: []
+literature_refs: []

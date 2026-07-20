@@ -1,0 +1,14 @@
+id: hyp_vol60_mom60
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: vol_z_60 > 0.5 and ret_60 > 0
+exit:
+  expression: ret_60 < 0
+rationale: Sustained volume + medium momentum.
+expected_outcome: Composite volume-mom.
+feature_tags: []
+literature_refs: []

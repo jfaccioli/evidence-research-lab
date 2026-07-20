@@ -1,0 +1,14 @@
+id: hyp_vol_dryup_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: close > sma_200 and vol_z_20 < 0
+exit:
+  expression: close < sma_200
+rationale: Trend with quiet volume.
+expected_outcome: Unclear economic mechanism.
+feature_tags: []
+literature_refs: []

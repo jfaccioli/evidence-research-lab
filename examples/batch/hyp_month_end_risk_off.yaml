@@ -1,0 +1,14 @@
+id: hyp_month_end_risk_off
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_month_end < 0.5 and close > sma_200
+exit:
+  expression: is_month_end > 0.5 or close < sma_200
+rationale: Flat near month-end days.
+expected_outcome: Weak prior; multiple-testing risk.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_long_high_vol_breakout
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_filter
+entry:
+  expression: close > sma_50 and rvol_above_median > 0.5
+exit:
+  expression: close < sma_50
+rationale: Hold trend only in elevated vol regimes.
+expected_outcome: May increase noise and costs.
+feature_tags: []
+literature_refs: []

@@ -1,0 +1,14 @@
+id: hyp_high_vol_z_breakout
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: vol_z_20 > 1.0 and close > sma_20
+exit:
+  expression: close < sma_20
+rationale: Breakout-style volume spike + short trend.
+expected_outcome: Many false breakouts.
+feature_tags: []
+literature_refs: []

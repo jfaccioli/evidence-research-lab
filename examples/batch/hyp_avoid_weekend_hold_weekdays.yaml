@@ -1,0 +1,14 @@
+id: hyp_avoid_weekend_hold_weekdays
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_weekend < 0.5 and close > sma_200
+exit:
+  expression: is_weekend > 0.5 or close < sma_200
+rationale: Hold trend only on weekdays (UTC).
+expected_outcome: Crypto 24/7; weekend effect may be myth.
+feature_tags: []
+literature_refs: []

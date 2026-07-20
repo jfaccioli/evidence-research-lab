@@ -1,0 +1,14 @@
+id: hyp_ema200_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > ema_200
+exit:
+  expression: close < ema_200
+rationale: EMA(200) trend filter.
+expected_outcome: Similar to SMA200 with slightly faster response.
+feature_tags: []
+literature_refs: []

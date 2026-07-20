@@ -1,0 +1,14 @@
+id: hyp_monday_entry_bias
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_monday > 0.5 and close > sma_50
+exit:
+  expression: close < sma_50
+rationale: Only allow new exposure logic via Monday+trend (state machine).
+expected_outcome: Odd timing; likely fails trade count or edge.
+feature_tags: []
+literature_refs: []

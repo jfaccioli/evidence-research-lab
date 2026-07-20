@@ -1,0 +1,14 @@
+id: hyp_ema20_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend
+entry:
+  expression: close > ema_20
+exit:
+  expression: close < ema_20
+rationale: Fast EMA20 trend.
+expected_outcome: High turnover.
+feature_tags: []
+literature_refs: []

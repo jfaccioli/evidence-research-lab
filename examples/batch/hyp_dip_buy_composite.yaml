@@ -1,0 +1,14 @@
+id: hyp_dip_buy_composite
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: composite
+family_id: family_composite
+entry:
+  expression: close > sma_200 and dist_sma_20 < -0.06 and vol_z_20 > 0.5
+exit:
+  expression: dist_sma_20 > 0 or close < sma_200
+rationale: Dip + volume + long trend.
+expected_outcome: MR+volume story; often fails in crashes.
+feature_tags: []
+literature_refs: []

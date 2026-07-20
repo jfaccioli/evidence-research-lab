@@ -1,0 +1,14 @@
+id: hyp_weekend_only_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_weekend > 0.5
+exit:
+  expression: is_weekend < 0.5
+rationale: Long only on weekends (pure calendar).
+expected_outcome: Should fail if no weekend premium.
+feature_tags: []
+literature_refs: []

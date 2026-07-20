@@ -249,6 +249,24 @@ class HypothesisRegistry:
             row = conn.execute("SELECT COUNT(*) AS n FROM hypotheses").fetchone()
             return int(row["n"] if row else 0)
 
+    def count_runs_for_family(self, family_id: str) -> int:
+        """Count all pipeline runs for hypotheses in a family (includes reruns)."""
+        with self._conn() as conn:
+            row = conn.execute(
+                """
+                SELECT COUNT(*) AS n FROM runs r
+                JOIN hypotheses h ON h.id = r.hypothesis_id AND h.version = r.version
+                WHERE h.family_id = ?
+                """,
+                (family_id,),
+            ).fetchone()
+            return int(row["n"] if row else 0)
+
+    def count_all_runs(self) -> int:
+        with self._conn() as conn:
+            row = conn.execute("SELECT COUNT(*) AS n FROM runs").fetchone()
+            return int(row["n"] if row else 0)
+
     def count_confirmatory_runs_this_month(self) -> int:
         prefix = _now()[:7]  # YYYY-MM
         with self._conn() as conn:

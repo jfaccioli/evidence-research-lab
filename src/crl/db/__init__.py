@@ -19,6 +19,7 @@ from crl.db.schema import (
     open_legacy_compatibility,
     read_schema_version_from_path,
     verify_p1_v1_schema,
+    verify_p1_v2_schema,
     verify_schema_for_version,
 )
 
@@ -38,5 +39,6 @@ __all__ = [
     "open_legacy_compatibility",
     "read_schema_version_from_path",
     "verify_p1_v1_schema",
+    "verify_p1_v2_schema",
     "verify_schema_for_version",
 ]

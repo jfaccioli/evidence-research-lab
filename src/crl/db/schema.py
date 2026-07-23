@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Optional
 
 from crl.db.migrations import (
+    MIGRATION_STATEMENTS,
     MIGRATIONS,
     P1_V1_ALL_TABLES,
     P1_V1_COLUMNS,
@@ -31,14 +32,21 @@ from crl.db.migrations import (
     P1_V1_INDEXES,
     P1_V1_TRIGGER_SQL,
     P1_V1_TRIGGERS,
+    P1_V2_COLUMNS,
+    P1_V2_DATA_TABLES,
+    P1_V2_FOREIGN_KEYS,
+    P1_V2_INDEXES,
+    P1_V2_TRIGGER_SQL,
+    P1_V2_TRIGGERS,
     ColumnSpec,
     CompositeFK,
+    IndexSpec,
     _normalize_sql,
 )
 from crl.research.programme.models import GovernanceCompleteness
 
 SCHEMA_COMPONENT_P1 = "p1_programme"
-CURRENT_P1_SCHEMA_VERSION = 1
+CURRENT_P1_SCHEMA_VERSION = 2
 
 _MAX_DEFINED_VERSION = max(v for v, _ in MIGRATIONS) if MIGRATIONS else 0
 if CURRENT_P1_SCHEMA_VERSION != _MAX_DEFINED_VERSION:
@@ -199,17 +207,17 @@ def _assert_trusted_open_checks(conn: sqlite3.Connection, version: int) -> None:
 
 def _p1_objects_exist(conn: sqlite3.Connection) -> bool:
     """True if any P1 data table, secondary index, or immutability trigger exists."""
-    for name in P1_V1_DATA_TABLES:
+    for name in P1_V1_DATA_TABLES + P1_V2_DATA_TABLES:
         if _table_exists(conn, name):
             return True
-    for idx_name in P1_V1_INDEXES:
+    for idx_name in tuple(P1_V1_INDEXES) + tuple(P1_V2_INDEXES):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",
             (idx_name,),
         ).fetchone()
         if row is not None:
             return True
-    for trg_name in P1_V1_TRIGGERS:
+    for trg_name in tuple(P1_V1_TRIGGERS) + tuple(P1_V2_TRIGGERS):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='trigger' AND name=?",
             (trg_name,),
@@ -263,6 +271,9 @@ def verify_schema_for_version(conn: sqlite3.Connection, version: int) -> None:
     """Dispatch full schema verification for a stamped version."""
     if version == 1:
         verify_p1_v1_schema(conn)
+        return
+    if version == 2:
+        verify_p1_v2_schema(conn)
         return
     raise SchemaError(f"no schema verifier registered for version {version}")
 
@@ -386,8 +397,11 @@ def _verify_table_columns(
             )
 
 
-def _verify_indexes(conn: sqlite3.Connection) -> None:
-    for idx_name, (table, spec) in P1_V1_INDEXES.items():
+def _verify_indexes(
+    conn: sqlite3.Connection,
+    expected_indexes: dict[str, tuple[str, IndexSpec]],
+) -> None:
+    for idx_name, (table, spec) in expected_indexes.items():
         # index must exist and belong to the table
         row = conn.execute(
             "SELECT name, sql FROM sqlite_master WHERE type='index' AND name=?",
@@ -439,8 +453,11 @@ def _composite_fks_from_pragma(
     return result
 
 
-def _verify_composite_foreign_keys(conn: sqlite3.Connection) -> None:
-    for table, expected in P1_V1_FOREIGN_KEYS.items():
+def _verify_composite_foreign_keys(
+    conn: sqlite3.Connection,
+    expected_foreign_keys: dict[str, tuple[CompositeFK, ...]],
+) -> None:
+    for table, expected in expected_foreign_keys.items():
         found = _composite_fks_from_pragma(conn, table)
         expected_set = set(expected)
         missing = expected_set - found
@@ -492,7 +509,13 @@ def _verify_sql_constraints(conn: sqlite3.Connection) -> None:
                 )
 
 
-def _verify_triggers(conn: sqlite3.Connection) -> None:
+def _verify_triggers(
+    conn: sqlite3.Connection,
+    *,
+    expected_triggers: dict[str, str],
+    expected_sql_by_name: dict[str, str],
+    protected_tables: tuple[str, ...],
+) -> None:
     """Require immutability triggers by **canonical SQL**, not token presence.
 
     Compares normalized stored CREATE TRIGGER SQL to the exact migration
@@ -504,7 +527,7 @@ def _verify_triggers(conn: sqlite3.Connection) -> None:
     ).fetchall()
     found = {r[0]: (r[1], r[2] or "") for r in rows}
 
-    for name, expected_table in P1_V1_TRIGGERS.items():
+    for name, expected_table in expected_triggers.items():
         if name not in found:
             raise SchemaMigrationError(f"missing required trigger {name!r}")
         tbl, sql = found[name]
@@ -512,7 +535,7 @@ def _verify_triggers(conn: sqlite3.Connection) -> None:
             raise SchemaMigrationError(
                 f"trigger {name!r} on table {tbl!r} != expected {expected_table!r}"
             )
-        expected_sql = P1_V1_TRIGGER_SQL[name]
+        expected_sql = expected_sql_by_name[name]
         actual_sql = _normalize_sql(sql)
         if actual_sql != expected_sql:
             raise SchemaMigrationError(
@@ -521,9 +544,9 @@ def _verify_triggers(conn: sqlite3.Connection) -> None:
             )
 
     # No unexpected triggers on P1 data tables
-    p1_tables = set(P1_V1_DATA_TABLES)
+    p1_tables = set(protected_tables)
     for name, (tbl, _sql) in found.items():
-        if tbl in p1_tables and name not in P1_V1_TRIGGERS:
+        if tbl in p1_tables and name not in expected_triggers:
             raise SchemaMigrationError(
                 f"unexpected trigger {name!r} on P1 table {tbl!r}"
             )
@@ -538,10 +561,59 @@ def verify_p1_v1_schema(conn: sqlite3.Connection) -> None:
     """
     for table in P1_V1_ALL_TABLES:
         _verify_table_columns(conn, table, P1_V1_COLUMNS[table])
-    _verify_indexes(conn)
-    _verify_composite_foreign_keys(conn)
+    _verify_indexes(conn, P1_V1_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V1_FOREIGN_KEYS)
     _verify_sql_constraints(conn)
-    _verify_triggers(conn)
+    _verify_triggers(
+        conn,
+        expected_triggers=P1_V1_TRIGGERS,
+        expected_sql_by_name=P1_V1_TRIGGER_SQL,
+        protected_tables=P1_V1_DATA_TABLES,
+    )
+
+
+def _verify_v2_sql_constraints(conn: sqlite3.Connection) -> None:
+    required_tokens = {
+        "cohorts": ("DRAFT", "SEALED", "GLOB", "JULIANDAY"),
+        "cohort_members": ("ORDINAL >= 0", "GLOB", "JULIANDAY"),
+        "holdouts": (
+            "AVAILABLE",
+            "RESERVED",
+            "CONSUMED",
+            "ABORTED_BURNED",
+            "GLOB",
+            "JULIANDAY",
+        ),
+    }
+    for table, tokens in required_tokens.items():
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if row is None or not row[0]:
+            raise SchemaMigrationError(f"missing CREATE SQL for {table!r}")
+        sql = _normalize_sql(row[0])
+        missing = [token for token in tokens if token not in sql]
+        if missing:
+            raise SchemaMigrationError(
+                f"table {table!r} missing required CHECK semantics {missing}"
+            )
+
+
+def verify_p1_v2_schema(conn: sqlite3.Connection) -> None:
+    """Verify v1 plus the PR2 cohort and irreversible-holdout foundation."""
+    verify_p1_v1_schema(conn)
+    for table in P1_V2_DATA_TABLES:
+        _verify_table_columns(conn, table, P1_V2_COLUMNS[table])
+    _verify_indexes(conn, P1_V2_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V2_FOREIGN_KEYS)
+    _verify_v2_sql_constraints(conn)
+    _verify_triggers(
+        conn,
+        expected_triggers=P1_V2_TRIGGERS,
+        expected_sql_by_name=P1_V2_TRIGGER_SQL,
+        protected_tables=P1_V2_DATA_TABLES,
+    )
 
 
 def _detect_conflicting_preexisting_tables(conn: sqlite3.Connection) -> None:
@@ -623,8 +695,10 @@ def migrate_database(
                 verify_p1_v1_schema(conn)
                 _assert_no_fk_violations(conn)
                 _assert_integrity_ok(conn)
-                conn.execute("COMMIT")
-                return 1
+                current = 1
+                if target == 1:
+                    conn.execute("COMMIT")
+                    return 1
 
         by_version = {v: fn for v, fn in MIGRATIONS}
         for v in range(current + 1, target + 1):
@@ -638,12 +712,11 @@ def migrate_database(
                     f"injected failure before applying schema version {v}"
                 )
             if _inject_failure_after_statements is not None and v == current + 1:
-                from crl.db.migrations import _V1_STATEMENTS
-
                 n = int(_inject_failure_after_statements)
                 if n < 1:
                     raise SchemaMigrationError("inject_after_statements must be >= 1")
-                for i, stmt in enumerate(_V1_STATEMENTS):
+                statements = MIGRATION_STATEMENTS[v]
+                for i, stmt in enumerate(statements):
                     if i >= n:
                         raise SchemaMigrationError(
                             f"injected failure after {n} DDL statement(s) "

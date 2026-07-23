@@ -181,7 +181,7 @@ def test_explicit_migration_success(tmp_path: Path):
             "programme_split_manifests",
         ):
             assert t in tables
-        assert get_schema_version(conn) == 1
+        assert get_schema_version(conn) == CURRENT_P1_SCHEMA_VERSION
     finally:
         conn.close()
 
@@ -228,9 +228,8 @@ def test_migration_rollback_after_partial_ddl(tmp_path: Path):
 
 def test_migration_idempotent_repeat(tmp_path: Path):
     path = tmp_path / "idem.sqlite"
-    assert migrate_database(path) == 1
-    assert migrate_database(path) == 1
-    assert migrate_database(path, target_version=1) == 1
+    assert migrate_database(path) == CURRENT_P1_SCHEMA_VERSION
+    assert migrate_database(path) == CURRENT_P1_SCHEMA_VERSION
     conn = sqlite3.connect(str(path))
     try:
         n = conn.execute(
@@ -240,6 +239,10 @@ def test_migration_idempotent_repeat(tmp_path: Path):
         assert n == 1
     finally:
         conn.close()
+
+    v1_path = tmp_path / "idem_v1.sqlite"
+    assert migrate_database(v1_path, target_version=1) == 1
+    assert migrate_database(v1_path, target_version=1) == 1
 
 
 def test_unknown_newer_version_rejected_on_migrate(tmp_path: Path):

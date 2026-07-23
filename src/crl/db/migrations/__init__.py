@@ -86,6 +86,20 @@ def _sha256_check(col: str) -> str:
     )
 
 
+def _utc_timestamp_check(col: str) -> str:
+    return (
+        f"length({col}) = 27 "
+        f"AND substr({col}, 5, 1) = '-' "
+        f"AND substr({col}, 8, 1) = '-' "
+        f"AND substr({col}, 11, 1) = 'T' "
+        f"AND substr({col}, 14, 1) = ':' "
+        f"AND substr({col}, 17, 1) = ':' "
+        f"AND substr({col}, 20, 1) = '.' "
+        f"AND substr({col}, 27, 1) = 'Z' "
+        f"AND julianday({col}) IS NOT NULL"
+    )
+
+
 @dataclass(frozen=True)
 class ColumnSpec:
     """Expected column attributes from PRAGMA table_info."""
@@ -401,6 +415,381 @@ def _v1_p1_foundation(conn: sqlite3.Connection) -> None:
         conn.execute(stmt)
 
 
+P1_V2_DATA_TABLES: tuple[str, ...] = (
+    "cohorts",
+    "cohort_members",
+    "holdouts",
+)
+
+P1_V2_COLUMNS: dict[str, dict[str, ColumnSpec]] = {
+    "cohorts": {
+        "cohort_id": ColumnSpec("TEXT", True, 1),
+        "programme_version_id": ColumnSpec("TEXT", True, 0),
+        "state": ColumnSpec("TEXT", True, 0),
+        "protocol_manifest_hash": ColumnSpec("TEXT", True, 0),
+        "membership_hash": ColumnSpec("TEXT", False, 0),
+        "created_at": ColumnSpec("TEXT", True, 0),
+        "sealed_at": ColumnSpec("TEXT", False, 0),
+    },
+    "cohort_members": {
+        "cohort_id": ColumnSpec("TEXT", True, 1),
+        "ordinal": ColumnSpec("INTEGER", True, 0),
+        "candidate_id": ColumnSpec("TEXT", True, 2),
+        "spec_hash": ColumnSpec("TEXT", True, 0),
+        "added_at": ColumnSpec("TEXT", True, 0),
+    },
+    "holdouts": {
+        "holdout_id": ColumnSpec("TEXT", True, 1),
+        "programme_version_id": ColumnSpec("TEXT", True, 0),
+        "state": ColumnSpec("TEXT", True, 0),
+        "reserved_cohort_id": ColumnSpec("TEXT", False, 0),
+        "reservation_token_hash": ColumnSpec("TEXT", False, 0),
+        "created_at": ColumnSpec("TEXT", True, 0),
+        "reserved_at": ColumnSpec("TEXT", False, 0),
+        "terminal_at": ColumnSpec("TEXT", False, 0),
+        "terminal_reason": ColumnSpec("TEXT", False, 0),
+    },
+}
+
+P1_V2_INDEXES: dict[str, tuple[str, IndexSpec]] = {
+    "idx_cohorts_programme": (
+        "cohorts",
+        IndexSpec(unique=False, columns=("programme_version_id",)),
+    ),
+    "idx_holdouts_state_reserved": (
+        "holdouts",
+        IndexSpec(unique=False, columns=("state", "reserved_at")),
+    ),
+}
+
+P1_V2_FOREIGN_KEYS: dict[str, tuple[CompositeFK, ...]] = {
+    "cohorts": (
+        (
+            "programme_versions",
+            (("programme_version_id", "programme_version_id"),),
+        ),
+    ),
+    "cohort_members": (
+        ("cohorts", (("cohort_id", "cohort_id"),)),
+    ),
+    "holdouts": (
+        (
+            "programme_versions",
+            (("programme_version_id", "programme_version_id"),),
+        ),
+        (
+            "cohorts",
+            (
+                ("reserved_cohort_id", "cohort_id"),
+                ("programme_version_id", "programme_version_id"),
+            ),
+        ),
+    ),
+}
+
+_V2_TABLE_STATEMENTS: tuple[str, ...] = (
+    f"""
+    CREATE TABLE cohorts (
+        cohort_id TEXT PRIMARY KEY,
+        programme_version_id TEXT NOT NULL,
+        state TEXT NOT NULL DEFAULT 'DRAFT',
+        protocol_manifest_hash TEXT NOT NULL,
+        membership_hash TEXT,
+        created_at TEXT NOT NULL,
+        sealed_at TEXT,
+        CHECK (state IN ('DRAFT', 'SEALED')),
+        CHECK (length(trim(cohort_id)) > 0),
+        CHECK (length(trim(programme_version_id)) > 0),
+        CHECK ({_sha256_check("protocol_manifest_hash")}),
+        CHECK ({_utc_timestamp_check("created_at")}),
+        CHECK (sealed_at IS NULL OR ({_utc_timestamp_check("sealed_at")})),
+        CHECK (sealed_at IS NULL OR sealed_at >= created_at),
+        CHECK (
+            (
+                state = 'DRAFT'
+                AND membership_hash IS NULL
+                AND sealed_at IS NULL
+            )
+            OR
+            (
+                state = 'SEALED'
+                AND membership_hash IS NOT NULL
+                AND sealed_at IS NOT NULL
+            )
+        ),
+        CHECK (membership_hash IS NULL OR ({_sha256_check("membership_hash")})),
+        UNIQUE (cohort_id, programme_version_id),
+        FOREIGN KEY (programme_version_id)
+            REFERENCES programme_versions(programme_version_id)
+    )
+    """,
+    f"""
+    CREATE TABLE cohort_members (
+        cohort_id TEXT NOT NULL,
+        ordinal INTEGER NOT NULL,
+        candidate_id TEXT NOT NULL,
+        spec_hash TEXT NOT NULL,
+        added_at TEXT NOT NULL,
+        PRIMARY KEY (cohort_id, candidate_id),
+        UNIQUE (cohort_id, ordinal),
+        CHECK (length(trim(cohort_id)) > 0),
+        CHECK (length(trim(candidate_id)) > 0),
+        CHECK (ordinal >= 0),
+        CHECK ({_sha256_check("spec_hash")}),
+        CHECK ({_utc_timestamp_check("added_at")}),
+        FOREIGN KEY (cohort_id)
+            REFERENCES cohorts(cohort_id)
+    )
+    """,
+    f"""
+    CREATE TABLE holdouts (
+        holdout_id TEXT PRIMARY KEY,
+        programme_version_id TEXT NOT NULL,
+        state TEXT NOT NULL,
+        reserved_cohort_id TEXT,
+        reservation_token_hash TEXT,
+        created_at TEXT NOT NULL,
+        reserved_at TEXT,
+        terminal_at TEXT,
+        terminal_reason TEXT,
+        CHECK (
+            state IN (
+                'AVAILABLE',
+                'RESERVED',
+                'CONSUMED',
+                'ABORTED_BURNED'
+            )
+        ),
+        CHECK (length(trim(holdout_id)) > 0),
+        CHECK (length(trim(programme_version_id)) > 0),
+        CHECK ({_utc_timestamp_check("created_at")}),
+        CHECK (reserved_at IS NULL OR ({_utc_timestamp_check("reserved_at")})),
+        CHECK (terminal_at IS NULL OR ({_utc_timestamp_check("terminal_at")})),
+        CHECK (reserved_at IS NULL OR reserved_at >= created_at),
+        CHECK (terminal_at IS NULL OR terminal_at >= reserved_at),
+        CHECK (
+            reservation_token_hash IS NULL
+            OR ({_sha256_check("reservation_token_hash")})
+        ),
+        CHECK (
+            (
+                state = 'AVAILABLE'
+                AND reserved_cohort_id IS NULL
+                AND reservation_token_hash IS NULL
+                AND reserved_at IS NULL
+                AND terminal_at IS NULL
+                AND terminal_reason IS NULL
+            )
+            OR
+            (
+                state = 'RESERVED'
+                AND reserved_cohort_id IS NOT NULL
+                AND reservation_token_hash IS NOT NULL
+                AND reserved_at IS NOT NULL
+                AND terminal_at IS NULL
+                AND terminal_reason IS NULL
+            )
+            OR
+            (
+                state IN ('CONSUMED', 'ABORTED_BURNED')
+                AND reserved_cohort_id IS NOT NULL
+                AND reservation_token_hash IS NOT NULL
+                AND reserved_at IS NOT NULL
+                AND terminal_at IS NOT NULL
+                AND terminal_reason IS NOT NULL
+                AND length(terminal_reason) > 0
+            )
+        ),
+        UNIQUE (programme_version_id),
+        UNIQUE (holdout_id, programme_version_id),
+        FOREIGN KEY (programme_version_id)
+            REFERENCES programme_versions(programme_version_id),
+        FOREIGN KEY (reserved_cohort_id, programme_version_id)
+            REFERENCES cohorts(cohort_id, programme_version_id)
+    )
+    """,
+    """
+    CREATE INDEX idx_cohorts_programme
+        ON cohorts(programme_version_id)
+    """,
+    """
+    CREATE INDEX idx_holdouts_state_reserved
+        ON holdouts(state, reserved_at)
+    """,
+)
+
+_V2_TRIGGER_STATEMENTS: tuple[str, ...] = (
+    """
+    CREATE TRIGGER trg_cohorts_insert_draft_only
+    BEFORE INSERT ON cohorts
+    WHEN NEW.state <> 'DRAFT'
+      OR NEW.membership_hash IS NOT NULL
+      OR NEW.sealed_at IS NOT NULL
+    BEGIN
+        SELECT RAISE(ABORT, 'cohorts must be inserted as DRAFT');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_cohorts_seal_only
+    BEFORE UPDATE ON cohorts
+    WHEN NOT (
+        OLD.state = 'DRAFT'
+        AND NEW.state = 'SEALED'
+        AND OLD.cohort_id IS NEW.cohort_id
+        AND OLD.programme_version_id IS NEW.programme_version_id
+        AND OLD.protocol_manifest_hash IS NEW.protocol_manifest_hash
+        AND OLD.created_at IS NEW.created_at
+        AND OLD.membership_hash IS NULL
+        AND NEW.membership_hash IS NOT NULL
+        AND OLD.sealed_at IS NULL
+        AND NEW.sealed_at IS NOT NULL
+        AND EXISTS (
+            SELECT 1
+            FROM cohort_members
+            WHERE cohort_id = OLD.cohort_id
+        )
+    )
+    BEGIN
+        SELECT RAISE(ABORT, 'cohorts permit only DRAFT to SEALED transition');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_cohorts_no_delete
+    BEFORE DELETE ON cohorts
+    BEGIN
+        SELECT RAISE(ABORT, 'cohorts DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_cohort_members_draft_insert_only
+    BEFORE INSERT ON cohort_members
+    WHEN COALESCE(
+        (SELECT state FROM cohorts WHERE cohort_id = NEW.cohort_id),
+        ''
+    ) <> 'DRAFT'
+      OR NEW.added_at < COALESCE(
+          (SELECT created_at FROM cohorts WHERE cohort_id = NEW.cohort_id),
+          '9999-12-31T23:59:59.999999Z'
+      )
+    BEGIN
+        SELECT RAISE(ABORT, 'cohort members may be appended only while DRAFT');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_cohort_members_no_update
+    BEFORE UPDATE ON cohort_members
+    BEGIN
+        SELECT RAISE(ABORT, 'cohort_members UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_cohort_members_no_delete
+    BEFORE DELETE ON cohort_members
+    BEGIN
+        SELECT RAISE(ABORT, 'cohort_members DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_holdouts_insert_available_only
+    BEFORE INSERT ON holdouts
+    WHEN NEW.state <> 'AVAILABLE'
+      OR NEW.reserved_cohort_id IS NOT NULL
+      OR NEW.reservation_token_hash IS NOT NULL
+      OR NEW.reserved_at IS NOT NULL
+      OR NEW.terminal_at IS NOT NULL
+      OR NEW.terminal_reason IS NOT NULL
+    BEGIN
+        SELECT RAISE(ABORT, 'holdouts must be inserted as AVAILABLE');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_holdouts_irreversible_transition
+    BEFORE UPDATE ON holdouts
+    WHEN NOT (
+        (
+            OLD.state = 'AVAILABLE'
+            AND NEW.state = 'RESERVED'
+            AND OLD.holdout_id IS NEW.holdout_id
+            AND OLD.programme_version_id IS NEW.programme_version_id
+            AND OLD.created_at IS NEW.created_at
+            AND OLD.reserved_cohort_id IS NULL
+            AND NEW.reserved_cohort_id IS NOT NULL
+            AND OLD.reservation_token_hash IS NULL
+            AND NEW.reservation_token_hash IS NOT NULL
+            AND OLD.reserved_at IS NULL
+            AND NEW.reserved_at IS NOT NULL
+            AND OLD.terminal_at IS NULL
+            AND NEW.terminal_at IS NULL
+            AND OLD.terminal_reason IS NULL
+            AND NEW.terminal_reason IS NULL
+            AND COALESCE(
+                (
+                    SELECT state
+                    FROM cohorts
+                    WHERE cohort_id = NEW.reserved_cohort_id
+                ),
+                ''
+            ) = 'SEALED'
+        )
+        OR
+        (
+            OLD.state = 'RESERVED'
+            AND NEW.state IN ('CONSUMED', 'ABORTED_BURNED')
+            AND OLD.holdout_id IS NEW.holdout_id
+            AND OLD.programme_version_id IS NEW.programme_version_id
+            AND OLD.created_at IS NEW.created_at
+            AND OLD.reserved_cohort_id IS NEW.reserved_cohort_id
+            AND OLD.reservation_token_hash IS NEW.reservation_token_hash
+            AND OLD.reserved_at IS NEW.reserved_at
+            AND OLD.terminal_at IS NULL
+            AND NEW.terminal_at IS NOT NULL
+            AND OLD.terminal_reason IS NULL
+            AND NEW.terminal_reason IS NOT NULL
+            AND length(NEW.terminal_reason) > 0
+        )
+    )
+    BEGIN
+        SELECT RAISE(ABORT, 'invalid or reversible holdout transition');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_holdouts_no_delete
+    BEFORE DELETE ON holdouts
+    BEGIN
+        SELECT RAISE(ABORT, 'holdouts DELETE forbidden');
+    END
+    """,
+)
+
+_V2_STATEMENTS: tuple[str, ...] = _V2_TABLE_STATEMENTS + _V2_TRIGGER_STATEMENTS
+
+P1_V2_TRIGGER_SQL: dict[str, str] = {
+    _trigger_name_from_create(stmt): _normalize_sql(stmt)
+    for stmt in _V2_TRIGGER_STATEMENTS
+}
+
+P1_V2_TRIGGERS: dict[str, str] = {}
+for _name, _norm in P1_V2_TRIGGER_SQL.items():
+    import re as _re
+
+    _match = _re.search(r"\bON\s+([A-Z_][A-Z0-9_]*)\b", _norm)
+    if not _match:
+        raise RuntimeError(f"cannot parse table for trigger {_name}")
+    P1_V2_TRIGGERS[_name] = _match.group(1).lower()
+
+
+def _v2_holdout_foundation(conn: sqlite3.Connection) -> None:
+    """Create cohort and irreversible holdout state-machine schema."""
+    for stmt in _V2_STATEMENTS:
+        conn.execute(stmt)
+
+
 MIGRATIONS: list[tuple[int, MigrationFn]] = [
     (1, _v1_p1_foundation),
+    (2, _v2_holdout_foundation),
 ]
+
+MIGRATION_STATEMENTS: dict[int, tuple[str, ...]] = {
+    1: _V1_STATEMENTS,
+    2: _V2_STATEMENTS,
+}

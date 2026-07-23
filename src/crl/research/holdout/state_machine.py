@@ -17,7 +17,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Iterable, Optional
 
-from crl.db.schema import CURRENT_P1_SCHEMA_VERSION, connect_p1
+from crl.db.schema import connect_p1
 from crl.research.holdout.cohort import CohortMember, membership_hash
 
 
@@ -100,8 +100,8 @@ class HoldoutStateMachine:
             version = conn.execute(
                 "SELECT version FROM crl_schema_meta WHERE component='p1_programme'"
             ).fetchone()[0]
-            if int(version) < 2 or CURRENT_P1_SCHEMA_VERSION < 2:
-                raise HoldoutStateError("holdout state machine requires schema v2")
+            if int(version) < 2:
+                raise HoldoutStateError("holdout state machine requires schema v2+")
         finally:
             conn.close()
 
@@ -302,6 +302,82 @@ class HoldoutStateMachine:
             self._finish(conn, error)
             conn.close()
 
+    def reserve_on_connection(
+        self,
+        conn: sqlite3.Connection,
+        *,
+        holdout_id: str,
+        cohort_id: str,
+        reserved_at: Optional[datetime] = None,
+    ) -> HoldoutReservation:
+        """AVAILABLE→RESERVED on an existing transaction (no begin/commit).
+
+        Used by PR3 atomic trial+budget+holdout registration so reservation
+        participates in the caller's SQLite transaction.
+        """
+        holdout_id = _identifier(holdout_id, "holdout_id")
+        cohort_id = _identifier(cohort_id, "cohort_id")
+        token = secrets.token_urlsafe(32)
+        token_digest = _token_hash(token)
+        reserved_text = _utc_text(reserved_at)
+        holdout = conn.execute(
+            """
+            SELECT programme_version_id, state, created_at
+            FROM holdouts
+            WHERE holdout_id=?
+            """,
+            (holdout_id,),
+        ).fetchone()
+        if holdout is None:
+            raise HoldoutTransitionError(f"unknown holdout {holdout_id!r}")
+        cohort = conn.execute(
+            """
+            SELECT programme_version_id, state, protocol_manifest_hash,
+                   membership_hash
+            FROM cohorts
+            WHERE cohort_id=?
+            """,
+            (cohort_id,),
+        ).fetchone()
+        if cohort is None:
+            raise CohortStateError(f"unknown cohort {cohort_id!r}")
+        if cohort["state"] != CohortState.SEALED.value:
+            raise CohortStateError("cohort must be SEALED before reservation")
+        if cohort["membership_hash"] is None:
+            raise CohortStateError("sealed cohort is missing membership hash")
+        if cohort["protocol_manifest_hash"] is None:
+            raise CohortStateError("sealed cohort is missing protocol manifest")
+        if cohort["programme_version_id"] != holdout["programme_version_id"]:
+            raise CohortStateError(
+                "cohort and holdout must share programme_version_id"
+            )
+        if reserved_text < holdout["created_at"]:
+            raise HoldoutTransitionError(
+                "reserved_at cannot precede holdout creation"
+            )
+        changed = conn.execute(
+            """
+            UPDATE holdouts
+            SET state='RESERVED',
+                reserved_cohort_id=?,
+                reservation_token_hash=?,
+                reserved_at=?
+            WHERE holdout_id=? AND state='AVAILABLE'
+            """,
+            (cohort_id, token_digest, reserved_text, holdout_id),
+        ).rowcount
+        if changed != 1:
+            raise HoldoutTransitionError(
+                "holdout is not AVAILABLE; reservation is irreversible"
+            )
+        return HoldoutReservation(
+            holdout_id=holdout_id,
+            programme_version_id=holdout["programme_version_id"],
+            cohort_id=cohort_id,
+            reservation_token=token,
+            reserved_at=reserved_text,
+        )
+
     def reserve(
         self,
         *,
@@ -310,71 +386,15 @@ class HoldoutStateMachine:
         reserved_at: Optional[datetime] = None,
     ) -> HoldoutReservation:
         """Atomically reserve one programme holdout for one sealed cohort."""
-        holdout_id = _identifier(holdout_id, "holdout_id")
-        cohort_id = _identifier(cohort_id, "cohort_id")
-        token = secrets.token_urlsafe(32)
-        token_digest = _token_hash(token)
-        reserved_text = _utc_text(reserved_at)
         conn = self._connect()
         error: BaseException | None = None
         try:
             self._begin(conn)
-            holdout = conn.execute(
-                """
-                SELECT programme_version_id, state, created_at
-                FROM holdouts
-                WHERE holdout_id=?
-                """,
-                (holdout_id,),
-            ).fetchone()
-            if holdout is None:
-                raise HoldoutTransitionError(f"unknown holdout {holdout_id!r}")
-            cohort = conn.execute(
-                """
-                SELECT programme_version_id, state, protocol_manifest_hash,
-                       membership_hash
-                FROM cohorts
-                WHERE cohort_id=?
-                """,
-                (cohort_id,),
-            ).fetchone()
-            if cohort is None:
-                raise CohortStateError(f"unknown cohort {cohort_id!r}")
-            if cohort["state"] != CohortState.SEALED.value:
-                raise CohortStateError("cohort must be SEALED before reservation")
-            if cohort["membership_hash"] is None:
-                raise CohortStateError("sealed cohort is missing membership hash")
-            if cohort["protocol_manifest_hash"] is None:
-                raise CohortStateError("sealed cohort is missing protocol manifest")
-            if cohort["programme_version_id"] != holdout["programme_version_id"]:
-                raise CohortStateError(
-                    "cohort and holdout must share programme_version_id"
-                )
-            if reserved_text < holdout["created_at"]:
-                raise HoldoutTransitionError(
-                    "reserved_at cannot precede holdout creation"
-                )
-            changed = conn.execute(
-                """
-                UPDATE holdouts
-                SET state='RESERVED',
-                    reserved_cohort_id=?,
-                    reservation_token_hash=?,
-                    reserved_at=?
-                WHERE holdout_id=? AND state='AVAILABLE'
-                """,
-                (cohort_id, token_digest, reserved_text, holdout_id),
-            ).rowcount
-            if changed != 1:
-                raise HoldoutTransitionError(
-                    "holdout is not AVAILABLE; reservation is irreversible"
-                )
-            return HoldoutReservation(
+            return self.reserve_on_connection(
+                conn,
                 holdout_id=holdout_id,
-                programme_version_id=holdout["programme_version_id"],
                 cohort_id=cohort_id,
-                reservation_token=token,
-                reserved_at=reserved_text,
+                reserved_at=reserved_at,
             )
         except BaseException as exc:
             error = exc

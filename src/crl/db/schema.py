@@ -38,6 +38,12 @@ from crl.db.migrations import (
     P1_V2_INDEXES,
     P1_V2_TRIGGER_SQL,
     P1_V2_TRIGGERS,
+    P1_V3_COLUMNS,
+    P1_V3_DATA_TABLES,
+    P1_V3_FOREIGN_KEYS,
+    P1_V3_INDEXES,
+    P1_V3_TRIGGER_SQL,
+    P1_V3_TRIGGERS,
     ColumnSpec,
     CompositeFK,
     IndexSpec,
@@ -46,7 +52,7 @@ from crl.db.migrations import (
 from crl.research.programme.models import GovernanceCompleteness
 
 SCHEMA_COMPONENT_P1 = "p1_programme"
-CURRENT_P1_SCHEMA_VERSION = 2
+CURRENT_P1_SCHEMA_VERSION = 3
 
 _MAX_DEFINED_VERSION = max(v for v, _ in MIGRATIONS) if MIGRATIONS else 0
 if CURRENT_P1_SCHEMA_VERSION != _MAX_DEFINED_VERSION:
@@ -207,17 +213,21 @@ def _assert_trusted_open_checks(conn: sqlite3.Connection, version: int) -> None:
 
 def _p1_objects_exist(conn: sqlite3.Connection) -> bool:
     """True if any P1 data table, secondary index, or immutability trigger exists."""
-    for name in P1_V1_DATA_TABLES + P1_V2_DATA_TABLES:
+    for name in P1_V1_DATA_TABLES + P1_V2_DATA_TABLES + P1_V3_DATA_TABLES:
         if _table_exists(conn, name):
             return True
-    for idx_name in tuple(P1_V1_INDEXES) + tuple(P1_V2_INDEXES):
+    for idx_name in (
+        tuple(P1_V1_INDEXES) + tuple(P1_V2_INDEXES) + tuple(P1_V3_INDEXES)
+    ):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",
             (idx_name,),
         ).fetchone()
         if row is not None:
             return True
-    for trg_name in tuple(P1_V1_TRIGGERS) + tuple(P1_V2_TRIGGERS):
+    for trg_name in (
+        tuple(P1_V1_TRIGGERS) + tuple(P1_V2_TRIGGERS) + tuple(P1_V3_TRIGGERS)
+    ):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='trigger' AND name=?",
             (trg_name,),
@@ -274,6 +284,9 @@ def verify_schema_for_version(conn: sqlite3.Connection, version: int) -> None:
         return
     if version == 2:
         verify_p1_v2_schema(conn)
+        return
+    if version == 3:
+        verify_p1_v3_schema(conn)
         return
     raise SchemaError(f"no schema verifier registered for version {version}")
 
@@ -613,6 +626,79 @@ def verify_p1_v2_schema(conn: sqlite3.Connection) -> None:
         expected_triggers=P1_V2_TRIGGERS,
         expected_sql_by_name=P1_V2_TRIGGER_SQL,
         protected_tables=P1_V2_DATA_TABLES,
+    )
+
+
+def _verify_v3_sql_constraints(conn: sqlite3.Connection) -> None:
+    required_tokens = {
+        "ledger_events": (
+            "EVENT_SEQ >= 1",
+            "TRIAL_REGISTERED",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "trials": (
+            "HYPOTHESIS_EVAL",
+            "SENSITIVITY_POINT",
+            "COST_STRESS_BASE",
+            "COST_STRESS_2X",
+            "SELECTION_CAPABLE IN (0, 1)",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "trial_state_events": (
+            "REGISTERED",
+            "COMPLETED",
+            "ABORTED",
+            "RESULT_EXPOSED IN (0, 1)",
+            "JULIANDAY",
+        ),
+        "budget_allocations": ("UNITS_ALLOCATED > 0", "JULIANDAY"),
+        "budget_debits": ("UNITS_SPENT > 0", "JULIANDAY"),
+        "legacy_n_bound_proposals": (
+            "UPPER_BOUND_N >= 0",
+            "GLOB",
+            "JULIANDAY",
+        ),
+    }
+    for table, tokens in required_tokens.items():
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if row is None or not row[0]:
+            raise SchemaMigrationError(f"missing CREATE SQL for {table!r}")
+        sql = _normalize_sql(row[0])
+        missing = [token for token in tokens if token not in sql]
+        if missing:
+            raise SchemaMigrationError(
+                f"table {table!r} missing required CHECK semantics {missing}"
+            )
+    # Hard fail if agent-writable multiplicity Boolean ever appears.
+    for table in P1_V3_DATA_TABLES:
+        cols = {
+            r[1]
+            for r in conn.execute(f"PRAGMA table_info({table})").fetchall()
+        }
+        if "counts_for_multiplicity" in cols:
+            raise SchemaMigrationError(
+                f"table {table!r} must not store counts_for_multiplicity"
+            )
+
+
+def verify_p1_v3_schema(conn: sqlite3.Connection) -> None:
+    """Verify v2 plus the PR3 analytical-trial ledger foundation."""
+    verify_p1_v2_schema(conn)
+    for table in P1_V3_DATA_TABLES:
+        _verify_table_columns(conn, table, P1_V3_COLUMNS[table])
+    _verify_indexes(conn, P1_V3_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V3_FOREIGN_KEYS)
+    _verify_v3_sql_constraints(conn)
+    _verify_triggers(
+        conn,
+        expected_triggers=P1_V3_TRIGGERS,
+        expected_sql_by_name=P1_V3_TRIGGER_SQL,
+        protected_tables=P1_V3_DATA_TABLES,
     )
 
 

@@ -109,10 +109,10 @@ def test_v2_schema_is_explicit_and_v1_can_upgrade(tmp_path: Path):
     finally:
         conn.close()
 
-    assert migrate_database(path) == 2
+    assert migrate_database(path) == CURRENT_P1_SCHEMA_VERSION
     conn = connect_p1(path)
     try:
-        assert get_schema_version(conn) == 2
+        assert get_schema_version(conn) == CURRENT_P1_SCHEMA_VERSION
         tables = {
             row[0]
             for row in conn.execute(
@@ -120,6 +120,9 @@ def test_v2_schema_is_explicit_and_v1_can_upgrade(tmp_path: Path):
             )
         }
         assert {"cohorts", "cohort_members", "holdouts"} <= tables
+        if CURRENT_P1_SCHEMA_VERSION >= 3:
+            assert "ledger_events" in tables
+            assert "trials" in tables
     finally:
         conn.close()
 

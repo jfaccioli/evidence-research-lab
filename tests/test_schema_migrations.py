@@ -31,6 +31,7 @@ from crl.db.schema import (
     open_legacy_compatibility,
     read_schema_version_from_path,
     verify_p1_v1_schema,
+    verify_p1_v3_schema,
 )
 from crl.research.hypotheses.registry import (
     SCHEMA as LEGACY_SCHEMA,
@@ -1365,3 +1366,89 @@ def test_compat_open_genuine_legacy_registry_still_ok(tmp_path: Path):
         assert "research_lineages" not in tables
     finally:
         c.close()
+
+
+def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
+    tmp_path: Path,
+):
+    """PR3: v2 remains readable; v2→v3 is atomic/idempotent; damaged v3 fails."""
+    assert CURRENT_P1_SCHEMA_VERSION == 3
+    path = tmp_path / "v2_to_v3.sqlite"
+    assert migrate_database(path, target_version=2) == 2
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 2
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "holdouts" in tables
+        assert "ledger_events" not in tables
+        assert "trials" not in tables
+    finally:
+        conn.close()
+
+    # Partial v3 DDL rolls back to valid v2
+    with pytest.raises(SchemaMigrationError, match="injected failure after"):
+        migrate_database(path, _inject_failure_after_statements=2)
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 2
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "ledger_events" not in tables
+        assert "trials" not in tables
+        assert "budget_debits" not in tables
+    finally:
+        conn.close()
+
+    assert migrate_database(path) == 3
+    assert migrate_database(path) == 3  # idempotent
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 3
+        verify_p1_v3_schema(conn)
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        for t in (
+            "ledger_events",
+            "trials",
+            "trial_state_events",
+            "budget_allocations",
+            "budget_debits",
+            "legacy_n_bound_proposals",
+        ):
+            assert t in tables
+        assert "approved_legacy_n_bounds" not in tables
+        # No agent-writable multiplicity Boolean
+        cols = {
+            r[1]
+            for r in conn.execute("PRAGMA table_info(trials)").fetchall()
+        }
+        assert "counts_for_multiplicity" not in cols
+    finally:
+        conn.close()
+
+    # Damaged v3 trigger fails trusted open
+    damaged = tmp_path / "damaged_v3.sqlite"
+    migrate_database(damaged)
+    conn = sqlite3.connect(str(damaged))
+    try:
+        conn.execute("DROP TRIGGER trg_ledger_events_no_update")
+        conn.commit()
+    finally:
+        conn.close()
+    with pytest.raises(SchemaError):
+        connect_p1(damaged)
+    with pytest.raises(SchemaError):
+        open_legacy_compatibility(damaged)

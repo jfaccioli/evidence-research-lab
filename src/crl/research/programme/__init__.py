@@ -2,9 +2,10 @@
 
 from crl.research.programme.models import (
     CandleSemantics,
+    EpochLifecycle,
     FeatureWarmUp,
+    GovernanceCompleteness,
     GovernanceEpoch,
-    GovernanceEpochStatus,
     ProgrammeBoundaries,
     ProgrammeVersion,
     ResearchLineage,
@@ -21,9 +22,10 @@ from crl.research.programme.split_manifest import (
 
 __all__ = [
     "CandleSemantics",
+    "EpochLifecycle",
     "FeatureWarmUp",
+    "GovernanceCompleteness",
     "GovernanceEpoch",
-    "GovernanceEpochStatus",
     "ManifestValidationError",
     "ProgrammeBoundaries",
     "ProgrammeSplitManifest",

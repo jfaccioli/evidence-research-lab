@@ -2,6 +2,11 @@
 
 Synthetic fixtures only in PR1 — no real prospective programme is sealed here.
 Unused by the live fractional-split pipeline.
+
+Sealing rules:
+- All scientific models are frozen (immutable).
+- Canonical JSON preserves full datetime precision (including microseconds).
+- Construction and ``content_hash()`` always run complete scientific validation.
 """
 
 from __future__ import annotations
@@ -9,32 +14,39 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import datetime, timezone
-from typing import Any, Literal, Optional
+from typing import Any, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from crl.research.programme.models import (
     CandleSemantics,
     FeatureWarmUp,
     ProgrammeBoundaries,
+    _reject_whitespace_optional_id,
     require_utc,
 )
 
 
 class ManifestValidationError(ValueError):
-    """Raised when a programme split manifest violates calendar/timing rules."""
+    """Raised by validate_split_manifest / content_hash for scientific violations.
+
+    Direct ``ProgrammeSplitManifest(...)`` construction raises pydantic
+    ``ValidationError`` (which may wrap the same messages). Callers should
+    catch ``ValidationError`` for constructors and ``ManifestValidationError``
+    for the explicit validate/hash helpers — or catch both.
+    """
 
 
 class TimingSemantics(BaseModel):
     """Signal / decision / execution ordering for validation.
 
-    Absolute UTC instants may be supplied (tests and explicit programmes).
-    When omitted, the default lab fill model is assumed valid by construction:
-    features ready by decision (bar close) and execution at next bar open
-    (strictly after decision).
+    Absolute UTC instants must be **all present** or **all absent**.
+    When present: ``signal_available_at <= decision_at < execution_at``.
+    When absent, the default lab fill model is assumed valid by construction:
+    features ready by decision (bar close) and execution at next bar open.
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     signal_available_at: Optional[datetime] = None
     decision_at: Optional[datetime] = None
@@ -50,11 +62,47 @@ class TimingSemantics(BaseModel):
             return None
         return require_utc(v, "timing timestamp")
 
+    @model_validator(mode="after")
+    def _all_or_none_ordering(self) -> TimingSemantics:
+        present = [
+            self.signal_available_at is not None,
+            self.decision_at is not None,
+            self.execution_at is not None,
+        ]
+        if any(present) and not all(present):
+            raise ValueError(
+                "timing instants must be all present or all absent "
+                "(signal_available_at, decision_at, execution_at)"
+            )
+        if all(present):
+            assert self.signal_available_at is not None
+            assert self.decision_at is not None
+            assert self.execution_at is not None
+            if self.signal_available_at > self.decision_at:
+                raise ValueError("signal_available_at must be <= decision_at")
+            if not (self.decision_at < self.execution_at):
+                raise ValueError("decision_at must be strictly before execution_at")
+        return self
+
 
 class ProgrammeSplitManifest(BaseModel):
-    """Frozen calendar-based programme split (design §1.1 / §9)."""
+    """Frozen calendar-based programme split (design §1.1 / §9).
 
-    model_config = ConfigDict(extra="forbid")
+    **raw_data_end semantics (exclusive upper bound of the raw series):**
+    Raw bars occupy the half-open interval
+    ``[raw_data_start, raw_data_end)`` in the same time domain as boundaries.
+    The last included candle is the last bar whose close time is strictly less
+    than ``raw_data_end``. Dataset vintage freeze must be at least the
+    availability/close time of that last included candle, which under bar-close
+    semantics is bounded by ``raw_data_end`` (freeze >= raw_data_end is the
+    conservative requirement that the vintage is not frozen before the exclusive
+    end of the declared raw window).
+
+    Construction validates scientific calendar/timing contracts. Nested models
+    are frozen; the root is frozen after successful validation.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     programme_version_id: str = Field(min_length=1)
     programme_lineage_id: str = Field(min_length=1)
@@ -97,6 +145,11 @@ class ProgrammeSplitManifest(BaseModel):
             raise ValueError("stable ID / required string fields must be non-empty")
         return s
 
+    @field_validator("governance_epoch_id", "parent_programme_version_id")
+    @classmethod
+    def _optional_ids(cls, v: Optional[str], info) -> Optional[str]:
+        return _reject_whitespace_optional_id(v, info.field_name)
+
     @field_validator(
         "dataset_vintage_freeze_time",
         "raw_data_start",
@@ -106,21 +159,52 @@ class ProgrammeSplitManifest(BaseModel):
     def _utc_required(cls, v: datetime) -> datetime:
         return require_utc(v, "manifest timestamp")
 
+    @model_validator(mode="after")
+    def _scientific_contracts(self) -> ProgrammeSplitManifest:
+        _validate_manifest_invariants(self)
+        return self
 
-def _iso_z(dt: datetime) -> str:
+
+def _iso_full(dt: datetime) -> str:
+    """UTC ISO-8601 with full precision (microseconds) and Z suffix."""
     dt = require_utc(dt, "timestamp")
-    # Canonical: seconds precision with Z suffix
-    s = dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    return s
+    dt = dt.astimezone(timezone.utc)
+    return dt.strftime("%Y-%m-%dT%H:%M:%S.") + f"{dt.microsecond:06d}Z"
+
+
+def _revalidate_manifest(manifest: ProgrammeSplitManifest) -> ProgrammeSplitManifest:
+    """Reconstruct and fully revalidate from dumped data.
+
+    Defends against invalid instances produced by ``model_copy(update=...)``
+    (which does not re-run field validators by default).
+    """
+    if not isinstance(manifest, ProgrammeSplitManifest):
+        raise ManifestValidationError(
+            "expected ProgrammeSplitManifest for revalidation"
+        )
+    try:
+        # Round-trip through model_validate so Field(min_length=...) and
+        # scientific contracts run again on the dumped payload.
+        return ProgrammeSplitManifest.model_validate(
+            manifest.model_dump(mode="python")
+        )
+    except ValidationError as exc:
+        raise ManifestValidationError(str(exc)) from exc
+    except ValueError as exc:
+        raise ManifestValidationError(str(exc)) from exc
 
 
 def canonical_manifest_dict(manifest: ProgrammeSplitManifest) -> dict[str, Any]:
-    """JSON-ready dict with sorted structure and Z-normalized UTC timestamps."""
-    raw = manifest.model_dump(mode="python")
+    """JSON-ready dict with sorted keys and full-precision UTC timestamps.
+
+    Always revalidates by reconstruction before dumping.
+    """
+    m = _revalidate_manifest(manifest)
+    raw = m.model_dump(mode="python")
 
     def convert(obj: Any) -> Any:
         if isinstance(obj, datetime):
-            return _iso_z(obj)
+            return _iso_full(obj)
         if isinstance(obj, dict):
             return {k: convert(obj[k]) for k in sorted(obj.keys())}
         if isinstance(obj, list):
@@ -131,9 +215,10 @@ def canonical_manifest_dict(manifest: ProgrammeSplitManifest) -> dict[str, Any]:
 
 
 def canonical_serialization(manifest: ProgrammeSplitManifest) -> str:
-    """Deterministic canonical JSON (sorted keys, compact separators)."""
+    """Deterministic canonical JSON after full reconstruct/revalidate."""
+    m = _revalidate_manifest(manifest)
     return json.dumps(
-        canonical_manifest_dict(manifest),
+        canonical_manifest_dict(m),
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
@@ -141,31 +226,25 @@ def canonical_serialization(manifest: ProgrammeSplitManifest) -> str:
 
 
 def content_hash(manifest: ProgrammeSplitManifest) -> str:
-    """SHA-256 hex digest of the canonical serialization."""
-    return hashlib.sha256(canonical_serialization(manifest).encode("utf-8")).hexdigest()
+    """SHA-256 hex of canonical serialization after reconstruct/revalidate."""
+    if not isinstance(manifest, ProgrammeSplitManifest):
+        raise ManifestValidationError("content_hash requires a ProgrammeSplitManifest")
+    m = _revalidate_manifest(manifest)
+    return hashlib.sha256(canonical_serialization(m).encode("utf-8")).hexdigest()
 
 
-def validate_split_manifest(manifest: ProgrammeSplitManifest) -> ProgrammeSplitManifest:
-    """Validate calendar/timing invariants. Returns the same instance on success.
+def _validate_manifest_invariants(m: ProgrammeSplitManifest) -> None:
+    """Calendar / timing / vintage scientific contracts.
 
-    Raises ManifestValidationError (or pydantic ValidationError for type issues).
+    Raises ManifestValidationError on violation when called from helpers.
+    When invoked from pydantic model_validator, raises ValueError (wrapped as
+    ValidationError by pydantic).
     """
-    try:
-        # Re-validate field constraints if constructed loosely
-        m = (
-            manifest
-            if isinstance(manifest, ProgrammeSplitManifest)
-            else ProgrammeSplitManifest.model_validate(manifest)
-        )
-    except Exception as exc:  # pydantic ValidationError
-        raise ManifestValidationError(str(exc)) from exc
-
     errors: list[str] = []
 
     def fail(msg: str) -> None:
         errors.append(msg)
 
-    # Non-empty stable IDs (also enforced by model; re-check parent optional)
     for name in (
         "programme_version_id",
         "programme_lineage_id",
@@ -180,82 +259,124 @@ def validate_split_manifest(manifest: ProgrammeSplitManifest) -> ProgrammeSplitM
     if m.timezone != "UTC":
         fail("timezone must be UTC")
 
-    # Raw start/end ordering
+    # Raw window: half-open [raw_data_start, raw_data_end)
     if not (m.raw_data_start < m.raw_data_end):
-        fail("raw_data_start must be strictly before raw_data_end")
+        fail(
+            "raw_data_start must be strictly before raw_data_end "
+            "(raw series is half-open [raw_data_start, raw_data_end))"
+        )
 
-    # Warm-up / eligible decision start
     elig = m.feature_warm_up.eligible_decision_start
     if elig < m.raw_data_start:
         fail("eligible_decision_start must be >= raw_data_start")
-    if elig > m.raw_data_end:
-        fail("eligible_decision_start must be <= raw_data_end")
+    # eligible start must lie inside the raw half-open window
+    if not (elig < m.raw_data_end):
+        fail("eligible_decision_start must be < raw_data_end (inside raw half-open window)")
     if m.feature_warm_up.min_bars < 0:
         fail("feature_warm_up.min_bars must be >= 0")
 
     b = m.boundaries
-    # Train / validation / holdout ordering
-    if not (b.train_start <= b.train_end):
-        fail("train_start must be <= train_end")
-    if not (b.train_end <= b.val_end):
-        fail("train_end must be <= val_end")
-    if not (b.val_end <= b.holdout_start):
-        fail("val_end must be <= holdout_start")
+    # Half-open nonempty intervals
+    if not (b.train_start < b.train_end):
+        fail("train interval empty: require train_start < train_end (half-open)")
+    if not (b.train_end < b.val_end):
+        fail(
+            "validation interval empty or overlapping train: "
+            "require train_end < val_end (half-open; train_end == val_end rejected)"
+        )
     if not (b.holdout_start < b.holdout_end):
-        fail("holdout_start must be strictly before holdout_end")
+        fail("holdout interval empty: require holdout_start < holdout_end (half-open)")
+    if b.holdout_start < b.val_end:
+        fail(
+            "holdout overlaps validation: require holdout_start >= val_end "
+            "(half-open; shared boundary candle not double-counted)"
+        )
 
-    # Boundaries inside raw window
+    # Boundaries inside raw half-open window
     if b.train_start < m.raw_data_start:
         fail("train_start must be >= raw_data_start")
-    if b.holdout_end > m.raw_data_end:
-        fail("holdout_end must be <= raw_data_end")
+    if not (b.holdout_end <= m.raw_data_end):
+        fail(
+            "holdout_end must be <= raw_data_end "
+            "(holdout half-open end cannot exceed raw exclusive end)"
+        )
 
-    # Eligible decision should not start after first train decision window ends absurdly;
-    # require eligible_decision_start <= train_end (can trade during train after warm-up)
-    if elig > b.holdout_end:
-        fail("eligible_decision_start must be <= holdout_end")
-    if elig > b.train_end:
-        # Warm-up may extend into train; eligible start after train_end would leave no train
-        fail("eligible_decision_start must be <= train_end")
+    if not (elig < b.holdout_end):
+        fail("eligible_decision_start must be < holdout_end")
+    if not (elig < b.train_end):
+        fail("eligible_decision_start must be < train_end")
 
-    # Dataset vintage required (non-null UTC already)
-    if m.dataset_vintage_freeze_time.tzinfo is None:
-        fail("dataset_vintage_freeze_time must be UTC-aware")
+    # Vintage: not earlier than availability of last included candle.
+    # Last included candle close is strictly before raw_data_end (exclusive end);
+    # conservative PR1 rule: freeze_time >= raw_data_end so the vintage cannot
+    # predate the declared exclusive end of the raw window.
+    if m.dataset_vintage_freeze_time < m.raw_data_end:
+        fail(
+            "dataset_vintage_freeze_time must be >= raw_data_end "
+            "(raw_data_end is the exclusive upper bound of the raw series; "
+            "vintage must not predate availability of the last included candle)"
+        )
 
-    # Parent / version metadata: genesis may omit parent; non-empty reason already checked
     if m.parent_programme_version_id is not None and not m.parent_programme_version_id.strip():
         fail("parent_programme_version_id if set must be non-empty")
 
-    # Candle fields non-empty
     if not m.candle_semantics.open_time_field.strip():
         fail("candle_semantics.open_time_field must be non-empty")
     if not m.candle_semantics.close_time_field.strip():
         fail("candle_semantics.close_time_field must be non-empty")
 
-    # Signal / decision / execution ordering
     t = m.timing
-    if t.signal_available_at is not None and t.decision_at is not None:
+    present = [
+        t.signal_available_at is not None,
+        t.decision_at is not None,
+        t.execution_at is not None,
+    ]
+    if any(present) and not all(present):
+        fail(
+            "timing instants must be all present or all absent "
+            "(signal_available_at, decision_at, execution_at)"
+        )
+    if all(present):
+        assert t.signal_available_at is not None
+        assert t.decision_at is not None
+        assert t.execution_at is not None
         if t.signal_available_at > t.decision_at:
-            fail("signal_available_at must be no later than decision_at")
-    if t.decision_at is not None and t.execution_at is not None:
-        if not (t.execution_at > t.decision_at):
-            fail("execution_at must be strictly after decision_at")
-    # If absolute times partially provided, require consistent sets for the pair checks above.
-    # Rule-based default (bar_close → next_bar_open) is always execution-after-decision.
-    if t.execution_kind == "next_bar_open" and t.decision_kind == "bar_close":
-        pass  # valid by construction
-    else:
-        fail("unsupported decision/execution kind combination for PR1")
+            fail("signal_available_at must be <= decision_at")
+        if not (t.decision_at < t.execution_at):
+            fail("decision_at must be strictly before execution_at (signal <= decision < execution)")
 
+    if not (t.execution_kind == "next_bar_open" and t.decision_kind == "bar_close"):
+        fail("unsupported decision/execution kind combination for PR1")
     if t.signal_kind != "features_ready_by_decision":
         fail("unsupported signal_kind for PR1")
 
     if errors:
-        raise ManifestValidationError("; ".join(errors))
-    return m
+        raise ValueError("; ".join(errors))
 
 
-def validate_and_hash(manifest: ProgrammeSplitManifest) -> tuple[ProgrammeSplitManifest, str]:
+def validate_split_manifest(
+    manifest: Union[ProgrammeSplitManifest, dict[str, Any]],
+) -> ProgrammeSplitManifest:
+    """Validate calendar/timing invariants. Returns a frozen validated instance.
+
+    Raises ManifestValidationError (never bare ValidationError to callers).
+    """
+    try:
+        if isinstance(manifest, ProgrammeSplitManifest):
+            _validate_manifest_invariants(manifest)
+            return manifest
+        return ProgrammeSplitManifest.model_validate(manifest)
+    except ManifestValidationError:
+        raise
+    except ValidationError as exc:
+        raise ManifestValidationError(str(exc)) from exc
+    except ValueError as exc:
+        raise ManifestValidationError(str(exc)) from exc
+
+
+def validate_and_hash(
+    manifest: Union[ProgrammeSplitManifest, dict[str, Any]],
+) -> tuple[ProgrammeSplitManifest, str]:
     """Validate then return (manifest, content_hash)."""
     m = validate_split_manifest(manifest)
     return m, content_hash(m)

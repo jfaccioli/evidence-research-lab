@@ -2,6 +2,9 @@
 
 These models are **not** wired into the live pipeline in PR1. They exist so
 later PRs can persist and validate lineage without inventing parallel types.
+
+Scientific models are **frozen** (immutable) after construction so sealed
+identity cannot drift after hashing.
 """
 
 from __future__ import annotations
@@ -20,28 +23,45 @@ def require_utc(dt: datetime, field_name: str) -> datetime:
     return dt.astimezone(timezone.utc)
 
 
-class GovernanceEpochStatus(str, Enum):
-    """Epoch completeness labels.
+def utc_now() -> datetime:
+    """Single-clock UTC timestamp for audit fields."""
+    return datetime.now(timezone.utc)
 
-    LEGACY rows never transition to COMPLETE under P1 rules.
-    COMPLETE is only meaningful for a governed epoch after full reconciliation
-    (later PRs); PR1 storage must not auto-assign COMPLETE.
+
+class _FrozenModel(BaseModel):
+    """Base for sealed scientific identity objects."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class GovernanceCompleteness(str, Enum):
+    """Governed-epoch *completeness* labels (approved design).
+
+    These are **labels**, not a public authority API. Authoritative COMPLETE
+    may only be established by PR3 reconciliation (not by model construction
+    or a caller-supplied flag). PR1 helpers never return COMPLETE.
     """
 
-    LEGACY = "legacy"
+    COMPLETE = "COMPLETE"
+    INCOMPLETE_KNOWN_GAPS = "INCOMPLETE_KNOWN_GAPS"
+    INCOMPLETE_UNBOUNDED = "INCOMPLETE_UNBOUNDED"
+    LEGACY_RECONSTRUCTED_CONSERVATIVELY = "LEGACY_RECONSTRUCTED_CONSERVATIVELY"
+
+
+class EpochLifecycle(str, Enum):
+    """Operational lifecycle of an epoch row (separate from completeness)."""
+
     OPEN = "open"
-    COMPLETE = "complete"
-    INCOMPLETE = "incomplete"
+    CLOSED = "closed"
 
 
-class ResearchLineage(BaseModel):
+class ResearchLineage(_FrozenModel):
     """Lab-wide continuous research history identity."""
-
-    model_config = ConfigDict(extra="forbid")
 
     research_lineage_id: str = Field(min_length=1)
     description: str = ""
-    created_at: Optional[datetime] = None
+    # Required for persistence (SQL NOT NULL). Defaults to construction time UTC.
+    created_at: datetime = Field(default_factory=utc_now)
 
     @field_validator("research_lineage_id")
     @classmethod
@@ -51,15 +71,24 @@ class ResearchLineage(BaseModel):
             raise ValueError("research_lineage_id must be non-empty")
         return s
 
+    @field_validator("created_at")
+    @classmethod
+    def _utc_created(cls, v: datetime) -> datetime:
+        return require_utc(v, "created_at")
 
-class GovernanceEpoch(BaseModel):
-    """Span of research under full P1 controls (or LEGACY pre-epoch)."""
 
-    model_config = ConfigDict(extra="forbid")
+class GovernanceEpoch(_FrozenModel):
+    """Span of research under full P1 controls.
+
+    Default completeness is INCOMPLETE_UNBOUNDED. LEGACY_RECONSTRUCTED_CONSERVATIVELY
+    is **not** a default: it requires the later conservative legacy census and
+    human approval. COMPLETE is never established by this constructor.
+    """
 
     governance_epoch_id: str = Field(min_length=1)
     research_lineage_id: str = Field(min_length=1)
-    status: GovernanceEpochStatus = GovernanceEpochStatus.OPEN
+    completeness: GovernanceCompleteness = GovernanceCompleteness.INCOMPLETE_UNBOUNDED
+    lifecycle: EpochLifecycle = EpochLifecycle.OPEN
     opened_at: Optional[datetime] = None
     closed_at: Optional[datetime] = None
     notes: str = ""
@@ -72,11 +101,29 @@ class GovernanceEpoch(BaseModel):
             raise ValueError("identity fields must be non-empty")
         return s
 
+    @field_validator("opened_at", "closed_at")
+    @classmethod
+    def _utc_optional(cls, v: Optional[datetime]) -> Optional[datetime]:
+        if v is None:
+            return None
+        return require_utc(v, "epoch timestamp")
 
-class FeatureWarmUp(BaseModel):
+    @field_validator("completeness")
+    @classmethod
+    def _no_authoritative_complete_via_constructor(
+        cls, v: GovernanceCompleteness
+    ) -> GovernanceCompleteness:
+        # Public construction must not mint authoritative COMPLETE.
+        if v is GovernanceCompleteness.COMPLETE:
+            raise ValueError(
+                "COMPLETE cannot be set via public GovernanceEpoch construction; "
+                "authoritative completeness is established only by PR3 reconciliation"
+            )
+        return v
+
+
+class FeatureWarmUp(_FrozenModel):
     """Feature warm-up bars and first eligible decision timestamp (UTC)."""
-
-    model_config = ConfigDict(extra="forbid")
 
     min_bars: int = Field(ge=0)
     eligible_decision_start: datetime
@@ -87,20 +134,26 @@ class FeatureWarmUp(BaseModel):
         return require_utc(v, "eligible_decision_start")
 
 
-class CandleSemantics(BaseModel):
+class CandleSemantics(_FrozenModel):
     """Candle open/close field names and incomplete-bar policy."""
-
-    model_config = ConfigDict(extra="forbid")
 
     open_time_field: str = Field(min_length=1)
     close_time_field: str = Field(min_length=1)
     incomplete_open_candle: Literal["drop", "forbid"] = "drop"
 
 
-class ProgrammeBoundaries(BaseModel):
-    """Immutable calendar endpoints for train / validation / holdout."""
+class ProgrammeBoundaries(_FrozenModel):
+    """Immutable calendar endpoints for train / validation / holdout.
 
-    model_config = ConfigDict(extra="forbid")
+    Endpoint inclusion (explicit, half-open):
+    - train:      [train_start, train_end)
+    - validation: [train_end, val_end)
+    - holdout:    [holdout_start, holdout_end)
+
+    Intervals must be nonempty (start < end) and non-overlapping
+    (holdout_start >= val_end). Contiguous programmes may set
+    holdout_start == val_end.
+    """
 
     train_start: datetime
     train_end: datetime
@@ -120,21 +173,38 @@ class ProgrammeBoundaries(BaseModel):
         return require_utc(v, "boundary timestamp")
 
 
-class ProgrammeVersion(BaseModel):
-    """Sealed programme configuration identity (split + lineage metadata)."""
+def _reject_whitespace_optional_id(v: Optional[str], field: str) -> Optional[str]:
+    if v is None:
+        return None
+    s = str(v).strip()
+    if not s:
+        raise ValueError(f"{field} must not be whitespace-only")
+    return s
 
-    model_config = ConfigDict(extra="forbid")
+
+def _require_sha256_hex(v: str) -> str:
+    s = v.strip()
+    if len(s) != 64 or s != s.lower() or any(c not in "0123456789abcdef" for c in s):
+        raise ValueError(
+            "split_manifest_content_hash must be a 64-character lowercase SHA-256 hex digest"
+        )
+    return s
+
+
+class ProgrammeVersion(_FrozenModel):
+    """Sealed programme configuration identity (split + lineage metadata)."""
 
     programme_version_id: str = Field(min_length=1)
     programme_lineage_id: str = Field(min_length=1)
     research_lineage_id: str = Field(min_length=1)
-    # None => legacy / not under a governed epoch
+    # None => not under a governed epoch (pre-P1 / ungoverned)
     governance_epoch_id: Optional[str] = None
     parent_programme_version_id: Optional[str] = None
     version_reason: str = Field(min_length=1)
     prior_results_available_at_creation: bool
-    split_manifest_content_hash: str = ""
-    created_at: Optional[datetime] = None
+    # Content hash of the sealed split manifest (64-char lowercase SHA-256).
+    split_manifest_content_hash: str = Field(min_length=64, max_length=64)
+    created_at: datetime = Field(default_factory=utc_now)
 
     @field_validator(
         "programme_version_id",
@@ -148,3 +218,18 @@ class ProgrammeVersion(BaseModel):
         if not s:
             raise ValueError("required identity/metadata fields must be non-empty")
         return s
+
+    @field_validator("governance_epoch_id", "parent_programme_version_id")
+    @classmethod
+    def _optional_ids(cls, v: Optional[str], info) -> Optional[str]:
+        return _reject_whitespace_optional_id(v, info.field_name)
+
+    @field_validator("split_manifest_content_hash")
+    @classmethod
+    def _hash_format(cls, v: str) -> str:
+        return _require_sha256_hex(v)
+
+    @field_validator("created_at")
+    @classmethod
+    def _utc_created(cls, v: datetime) -> datetime:
+        return require_utc(v, "created_at")

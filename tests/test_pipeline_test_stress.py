@@ -141,7 +141,7 @@ def test_pipeline_confirmatory_uses_test_stress_not_val(tmp_path: Path, monkeypa
     def fake_project_root():
         return root
 
-    def fake_load_or_build_features(ohlcv, *, dataset_id, cache_dir, force=False):
+    def fake_load_or_build_features(ohlcv, *, dataset_id, cache_dir, force=False, **_kwargs):
         return ohlcv
 
     def fake_run_backtest(frame, spec, costs, stress=False, initial_equity=1.0):

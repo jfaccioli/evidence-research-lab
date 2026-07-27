@@ -75,19 +75,37 @@ def run_doctor(config_path: str | None = None) -> DoctorReport:
     checks.append(Check("ohlcv_4h_manifest", has_4h, "optional but recommended for power studies"))
 
     # Programme dirs
-    batch = root / "examples" / "batch"
-    prog_dirs = sorted(
-        p.name
-        for p in batch.iterdir()
-        if p.is_dir() and (p / "INDEX.yaml").exists()
-    ) if batch.exists() else []
+    from crl.ops.programmes import list_programmes
+
+    progs = list_programmes()
+    prog_dirs = [p.name for p in progs]
+    missing_notes = [p.name for p in progs if not p.has_exploratory_note]
     checks.append(
         Check(
             "programme_dirs",
             len(prog_dirs) > 0,
-            f"n={len(prog_dirs)} sample={prog_dirs[:8]}",
+            f"n={len(prog_dirs)} hyps_total={sum(p.n_hyps for p in progs)}",
         )
     )
+    checks.append(
+        Check(
+            "programme_notes_coverage",
+            len(missing_notes) == 0,
+            "all have EXPLORATORY_NOTE"
+            if not missing_notes
+            else f"missing notes: {missing_notes[:12]}",
+        )
+    )
+
+    # Paper / shadow import surface
+    try:
+        from crl.production.paper.session import run_paper_session  # noqa: F401
+        from crl.production.shadow.walk import shadow_walk  # noqa: F401
+        from crl.production.risk_envelope import check_order  # noqa: F401
+
+        checks.append(Check("production_imports", True, "paper/shadow/risk_envelope"))
+    except Exception as e:
+        checks.append(Check("production_imports", False, str(e)))
 
     # Docs
     for rel in (

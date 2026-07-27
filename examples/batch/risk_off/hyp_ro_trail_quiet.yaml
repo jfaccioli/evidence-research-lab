@@ -1,0 +1,17 @@
+id: hyp_ro_trail_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_risk_off
+entry:
+  expression: above_atr_trail == 1 and rvol_below_median == 1
+exit:
+  expression: above_atr_trail == 0 or rvol_above_median == 1
+rationale: >
+  ATR trail only in quiet vol. risk-off.
+expected_outcome: Exploratory; frozen gates.
+feature_tags: [risk_off_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

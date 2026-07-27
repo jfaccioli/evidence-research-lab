@@ -1,0 +1,17 @@
+id: hyp_ro_mom_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_risk_off
+entry:
+  expression: mom_pos_20 == 1 and rvol_below_median == 1
+exit:
+  expression: mom_pos_20 == 0 or rvol_above_median == 1
+rationale: >
+  Mom only when quiet. risk-off.
+expected_outcome: Exploratory; frozen gates.
+feature_tags: [risk_off_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

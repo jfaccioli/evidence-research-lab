@@ -1,0 +1,17 @@
+id: hyp_ro_exit_volspike
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_risk_off
+entry:
+  expression: above_sma_50 == 1
+exit:
+  expression: above_sma_50 == 0 or rvol_above_median == 1
+rationale: >
+  Enter mild trend; exit on high-vol regime. risk-off participation.
+expected_outcome: Exploratory; frozen gates.
+feature_tags: [risk_off_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

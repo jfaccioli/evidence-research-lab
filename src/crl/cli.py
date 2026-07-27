@@ -181,6 +181,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_doctor.set_defaults(func=cmd_doctor)
 
+    p_progs = sub.add_parser(
+        "programmes",
+        help="List pre-registered programme dirs under examples/batch",
+    )
+    p_progs.set_defaults(func=cmd_programmes)
+
+    p_batch.add_argument(
+        "--temp-registry",
+        action="store_true",
+        help="Use data/processed/tmp_batch_<hypdir>.sqlite (implies no catalog write)",
+    )
+
     p_catalog = sub.add_parser("catalog", help="Write hypothesis YAMLs from catalog")
     p_catalog.set_defaults(func=cmd_catalog)
 
@@ -350,21 +362,31 @@ def knowledge_paths_print(root) -> str:
 def cmd_batch(args: argparse.Namespace) -> int:
     from crl.research.pipeline.batch import run_batch
 
+    root = project_root()
     hyp_dir = Path(args.hyp_dir) if getattr(args, "hyp_dir", None) else None
     # Programme dirs: never rewrite catalog by default (avoids clobbering locked hyps).
     if hyp_dir is not None:
         write_hyps = bool(getattr(args, "write_catalog", False))
     else:
         write_hyps = not args.no_write
-    if args.no_write:
+    if args.no_write or getattr(args, "temp_registry", False):
         write_hyps = False
+
+    registry_path = getattr(args, "registry_path", None)
+    if getattr(args, "temp_registry", False) and not registry_path:
+        name = hyp_dir.name if hyp_dir else "catalog"
+        reg_dir = root / "data" / "processed"
+        reg_dir.mkdir(parents=True, exist_ok=True)
+        registry_path = str(reg_dir / f"tmp_batch_{name}.sqlite")
+        print(f"temp_registry={registry_path}", flush=True)
+
     summary = run_batch(
         hyp_dir=hyp_dir,
         dataset_id=args.dataset_id,
         limit=args.limit,
         write_hyps=write_hyps,
         config_path=args.config,
-        registry_path=getattr(args, "registry_path", None),
+        registry_path=registry_path,
     )
     print(
         f"Done. passed_val={summary['n_passed_val']} "
@@ -380,6 +402,14 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     rep = run_doctor(args.config)
     print(json.dumps(rep.to_dict(), indent=2))
     return 0 if rep.ok else 1
+
+
+def cmd_programmes(args: argparse.Namespace) -> int:
+    from crl.ops.programmes import list_programmes, programmes_to_dict
+
+    rows = list_programmes()
+    print(json.dumps(programmes_to_dict(rows), indent=2))
+    return 0
 
 
 def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):

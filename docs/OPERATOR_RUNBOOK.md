@@ -28,6 +28,8 @@ python -m crl doctor
 | `python -m crl batch --hyp-dir examples/batch/<prog> --registry-path data/processed/tmp_prog.sqlite` | Run **locked** programme (no catalog rewrite) |
 | `python -m crl learn` | Refresh KB from registry |
 | `python -m crl thesis` | Print Thesis Tree |
+| `python -m crl programmes` | Inventory programme dirs + hyp counts |
+| `python -m crl batch --hyp-dir … --temp-registry` | Programme batch with auto temp sqlite |
 
 ### Programme batch pattern (recommended)
 

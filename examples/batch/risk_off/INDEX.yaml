@@ -1,0 +1,6 @@
+programme: risk_off_v1
+hypotheses:
+  - hyp_ro_flat_highvol.yaml
+  - hyp_ro_exit_volspike.yaml
+  - hyp_ro_mom_quiet.yaml
+  - hyp_ro_trail_quiet.yaml

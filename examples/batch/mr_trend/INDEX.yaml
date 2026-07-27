@@ -1,0 +1,6 @@
+programme: mr_trend_v1
+hypotheses:
+  - hyp_mr_fade_z_trend.yaml
+  - hyp_mr_fade_z60.yaml
+  - hyp_mr_rejoin_sma20.yaml
+  - hyp_mr_avoid_ext_mom.yaml

@@ -1,0 +1,17 @@
+id: hyp_mr_fade_z60
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mr_trend
+entry:
+  expression: price_z_60 < -1 and above_sma_50 == 1
+exit:
+  expression: price_z_60 >= 0 or above_sma_50 == 0
+rationale: >
+  Longer z fade with mild trend.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [mr_trend_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

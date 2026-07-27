@@ -496,7 +496,16 @@ def cmd_paper(args: argparse.Namespace) -> int:
         )
         out = root / "data" / "paper_journal" / "replay_summary.json"
         write_replay_summary(rows, out)
-        print(json.dumps({"n": len(rows), "summary": str(out), "results": rows}, indent=2, default=str))
+        from crl.production.paper.report import write_paper_report
+
+        md = root / "data" / "paper_journal" / "replay_summary.md"
+        write_paper_report(rows, md, title=f"Paper replay: {Path(args.hyp_dir).name}")
+        print(json.dumps({
+            "n": len(rows),
+            "summary_json": str(out),
+            "summary_md": str(md),
+            "results": rows,
+        }, indent=2, default=str))
         return 0
     spec = load_hypothesis_yaml(Path(args.hypothesis))
     res = run_paper_session(

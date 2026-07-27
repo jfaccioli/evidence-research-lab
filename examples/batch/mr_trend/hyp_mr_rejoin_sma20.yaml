@@ -1,0 +1,17 @@
+id: hyp_mr_rejoin_sma20
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mr_trend
+entry:
+  expression: dist_sma_20 < -0.05 and mom_pos_60 == 1
+exit:
+  expression: dist_sma_20 >= 0 or mom_pos_60 == 0
+rationale: >
+  Rejoin SMA20 after dip while slow mom positive.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [mr_trend_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

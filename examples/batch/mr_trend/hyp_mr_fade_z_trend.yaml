@@ -1,0 +1,17 @@
+id: hyp_mr_fade_z_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_mr_trend
+entry:
+  expression: price_z_20 < -1 and above_sma_200 == 1 and rvol_below_median == 1
+exit:
+  expression: price_z_20 >= 0 or above_sma_200 == 0 or rvol_above_median == 1
+rationale: >
+  Quiet-regime fade of z-stretch in major trend. Distinct composite.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [mr_trend_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

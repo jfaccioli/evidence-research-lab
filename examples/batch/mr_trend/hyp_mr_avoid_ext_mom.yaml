@@ -1,0 +1,17 @@
+id: hyp_mr_avoid_ext_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_mr_trend
+entry:
+  expression: mom_pos_20 == 1 and price_z_20 < 1.5
+exit:
+  expression: mom_pos_20 == 0 or price_z_20 >= 1.5
+rationale: >
+  Mom with extension cap (overlap asymmetric; kept as MR-family control).
+expected_outcome: Exploratory frozen gates.
+feature_tags: [mr_trend_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

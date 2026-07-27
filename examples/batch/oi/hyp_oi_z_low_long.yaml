@@ -1,0 +1,22 @@
+id: hyp_oi_z_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: open_interest
+family_id: family_oi_unwind
+entry:
+  expression: oi_z_60 < -1 and mom_pos_20 == 1
+exit:
+  expression: oi_z_60 >= -1 or mom_pos_20 == 0
+rationale: >
+  Depressed OI z + momentum long — one formulation. Programme lock: docs/PROGRAMME_OI_PIT_V1.md.
+  TRUE exchange OI via PIT join — not an OHLCV proxy. Mock OI must never be used for promotion.
+expected_outcome: >
+  Exploratory only until gates say otherwise. Null is success if clean.
+feature_tags:
+  - oi_pit_v1
+  - true_oi
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

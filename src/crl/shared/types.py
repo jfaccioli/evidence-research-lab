@@ -38,6 +38,8 @@ class Taxonomy(str, Enum):
     SENTIMENT_PROXY = "sentiment_proxy"
     ONCHAIN_PROXY = "onchain_proxy"
     FUNDING_PROXY = "funding_proxy"
+    # True exchange OI when joined via oi PIT module (not an OHLCV stand-in).
+    OPEN_INTEREST = "open_interest"
     OTHER = "other"
 
 

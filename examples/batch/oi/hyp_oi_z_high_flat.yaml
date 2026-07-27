@@ -1,0 +1,22 @@
+id: hyp_oi_z_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: open_interest
+family_id: family_oi_level
+entry:
+  expression: mom_pos_20 == 1 and oi_z_60 <= 1
+exit:
+  expression: mom_pos_20 == 0 or oi_z_60 > 1
+rationale: >
+  Extreme OI z-score crowding filter; flatten when oi_z_60 > 1. Programme lock: docs/PROGRAMME_OI_PIT_V1.md.
+  TRUE exchange OI via PIT join — not an OHLCV proxy. Mock OI must never be used for promotion.
+expected_outcome: >
+  Exploratory only until gates say otherwise. Null is success if clean.
+feature_tags:
+  - oi_pit_v1
+  - true_oi
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

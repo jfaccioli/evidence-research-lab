@@ -1,0 +1,22 @@
+id: hyp_oi_high_exit_only
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: open_interest
+family_id: family_oi_level
+entry:
+  expression: above_sma_200 == 1
+exit:
+  expression: above_sma_200 == 0 or oi_high == 1
+rationale: >
+  Enter on trend; exit on oi_high or trend break (exit-filter variant). Programme lock: docs/PROGRAMME_OI_PIT_V1.md.
+  TRUE exchange OI via PIT join — not an OHLCV proxy. Mock OI must never be used for promotion.
+expected_outcome: >
+  Exploratory only until gates say otherwise. Null is success if clean.
+feature_tags:
+  - oi_pit_v1
+  - true_oi
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

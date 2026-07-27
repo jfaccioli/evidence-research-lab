@@ -1,0 +1,17 @@
+# Pre-registered OI PIT programme v1 — max 10 hyps. Do not expand without new programme version.
+programme: oi_btc_usdt_m_daily_v1
+design: docs/PROGRAMME_OI_PIT_V1.md
+mode: exploratory_only_until_gates
+live_fetch_authorized: false
+scaffold_only: true
+hypotheses:
+  - hyp_oi_high_flat.yaml
+  - hyp_oi_z_high_flat.yaml
+  - hyp_oi_rising_flat.yaml
+  - hyp_oi_chg_pct_high_flat.yaml
+  - hyp_oi_sum5_high_flat.yaml
+  - hyp_oi_trend_and_not_high.yaml
+  - hyp_oi_high_exit_only.yaml
+  - hyp_oi_falling_long.yaml
+  - hyp_oi_z_low_long.yaml
+  - hyp_oi_only_not_high_mom.yaml

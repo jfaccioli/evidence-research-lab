@@ -1,6 +1,6 @@
-# Programme: Point-in-time BTC open interest (OI) (v1) — **DESIGN ONLY**
+# Programme: Point-in-time BTC open interest (OI) (v1)
 
-**Status:** Pre-registered design lock. **No live OI data fetch. No runs. No feature mining.**  
+**Status:** **Scaffolded** (mock PIT path + 10 locked hyps). **No live OI science batch yet.**  
 **Authority:** Next orthogonal mechanism after funding daily null (high information gain).  
 **Mode:** Research only — no paper/shadow/live; no gate softening.  
 **Budget:** ≤ **10** pre-registered exploratory hypotheses.  
@@ -112,26 +112,30 @@ Locked **before** seeing confirmatory results. YAML to be materialised under
 
 ---
 
-## 7. Implementation map (future)
+## 7. Implementation map
 
-| Artefact | Path (planned) |
-|----------|----------------|
+| Artefact | Path |
+|----------|------|
 | This design | `docs/PROGRAMME_OI_PIT_V1.md` |
 | Programme config | `configs/programmes/oi_btc_usdt_m_daily_v1.yaml` |
-| PIT join + features | `src/crl/shared/data/oi.py` (to build) |
-| Mock series | `src/crl/shared/data/sources/oi_mock.py` (to build) |
-| Pre-registered hyps | `examples/batch/oi/` (at execute) |
-| Tests | `tests/test_oi_pit.py` (at implement) |
+| PIT join + features | `src/crl/shared/data/oi.py` |
+| Mock series | `src/crl/shared/data/sources/oi_mock.py` |
+| Offline/live helpers | `src/crl/shared/data/sources/binance_oi.py` |
+| Pre-registered hyps | `examples/batch/oi/` |
+| Tests | `tests/test_oi_pit.py` |
+| Mock smoke | `scripts/oi_pit_mock_smoke.py` |
 
 ---
 
-## 8. Execution order (later)
+## 8. Execution order
 
-1. Implement OI PIT module + mock tests (mirror funding).  
-2. Ingest versioned real OI history when authorized.  
-3. Join to daily OHLCV; batch ≤10 exploratory on temp registry.  
-4. Gate autopsy + Thesis Tree (`oi` / crowding stock mechanism node).  
+1. ~~Implement OI PIT module + mock tests~~ (scaffold done).  
+2. Ingest versioned real OI history when authorized (network + human OK).  
+3. Join to daily OHLCV; batch ≤10 exploratory on **temp** registry.  
+4. Gate autopsy + Thesis Tree (`oi_leverage_stock`).  
 5. Only then consider funding×OI or 4h OI as **new** programmes.
+
+**Blocked for science batch:** real OI history ingest + budget spend OK. Mock results are **not** promotion evidence.
 
 ---
 

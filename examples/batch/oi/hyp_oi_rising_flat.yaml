@@ -1,0 +1,22 @@
+id: hyp_oi_rising_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: open_interest
+family_id: family_oi_change
+entry:
+  expression: above_sma_200 == 1 and oi_rising == 0
+exit:
+  expression: above_sma_200 == 0 or oi_rising == 1
+rationale: >
+  Expanding OI (new leverage) marks fragile risk-on — avoid longs when oi_rising. Programme lock: docs/PROGRAMME_OI_PIT_V1.md.
+  TRUE exchange OI via PIT join — not an OHLCV proxy. Mock OI must never be used for promotion.
+expected_outcome: >
+  Exploratory only until gates say otherwise. Null is success if clean.
+feature_tags:
+  - oi_pit_v1
+  - true_oi
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

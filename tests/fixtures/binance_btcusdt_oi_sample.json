@@ -1,0 +1,26 @@
+[
+  {
+    "symbol": "BTCUSDT",
+    "sumOpenInterest": "81234.512",
+    "sumOpenInterestValue": "5100123456.12",
+    "timestamp": 1609459200000
+  },
+  {
+    "symbol": "BTCUSDT",
+    "sumOpenInterest": "82001.100",
+    "sumOpenInterestValue": "5211000000.00",
+    "timestamp": 1609545600000
+  },
+  {
+    "symbol": "BTCUSDT",
+    "sumOpenInterest": "79800.250",
+    "sumOpenInterestValue": "4980000000.00",
+    "timestamp": 1609632000000
+  },
+  {
+    "symbol": "BTCUSDT",
+    "sumOpenInterest": "80550.000",
+    "sumOpenInterestValue": "5025000000.00",
+    "timestamp": 1609718400000
+  }
+]

@@ -290,7 +290,7 @@ Synthetic/mock filtering; legacy_pre_p1 release workflow; Thesis Tree authoritat
 ## PR7 — Integration / adversarial tests
 
 ### Implementation status
-**Partial dual-Grok starters** (handoff 0038): `tests/adversarial/` covers a subset of design §11 (ledger immutability, synthetic contamination, unanchored/legacy promotion block, bundle overwrite). Full 18-scenario matrix still open.
+**Design §11 matrix complete** (handoff 0039): `tests/adversarial/test_p1_design_section11_matrix.py` covers scenarios **1–18** (holdout concurrency/crash/burn, cohort isolation, data-handle capability, N_global across programme versions, ledger immutability, hash-chain tamper detection, bundle no-overwrite, synthetic contamination, budget atomic rollback, unanchored/backup promotion block, split warm-up rules, sensitivity neighbours, citation non-double-count, legacy non-COMPLETE, snapshot backup API, accrual burn on loader error). Prior starters retained.
 
 ### Objective
 Full 18 design scenarios + direct-entrypoint bypass + reconciliation audit + safe migration rehearsal on **temporary copies only**.

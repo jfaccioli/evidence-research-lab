@@ -1,0 +1,7 @@
+programme: calendar_v1
+hypotheses:
+  - hyp_cal_weekday_only.yaml
+  - hyp_cal_avoid_friday.yaml
+  - hyp_cal_month_start.yaml
+  - hyp_cal_avoid_month_end.yaml
+  - hyp_cal_monday_mom.yaml

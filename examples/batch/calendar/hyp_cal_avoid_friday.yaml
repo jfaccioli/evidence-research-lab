@@ -1,0 +1,16 @@
+id: hyp_cal_avoid_friday
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_friday == 0 and mom_pos_20 == 1
+exit:
+  expression: is_friday == 1 or mom_pos_20 == 0
+rationale: >
+  Avoid Friday holds for mom. calendar_seasonality.
+expected_outcome: Exploratory only.
+feature_tags: [calendar_v1]
+literature_refs: []
+falsification: {min_trades: 30}

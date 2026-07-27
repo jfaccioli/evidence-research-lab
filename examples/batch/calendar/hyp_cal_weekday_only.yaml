@@ -1,0 +1,16 @@
+id: hyp_cal_weekday_only
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_weekend == 0 and above_sma_200 == 1
+exit:
+  expression: is_weekend == 1 or above_sma_200 == 0
+rationale: >
+  Hold trend only on weekdays — weekend flat. calendar_seasonality.
+expected_outcome: Exploratory only.
+feature_tags: [calendar_v1]
+literature_refs: []
+falsification: {min_trades: 30}

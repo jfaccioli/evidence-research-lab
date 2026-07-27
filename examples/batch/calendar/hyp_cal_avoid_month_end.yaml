@@ -1,0 +1,16 @@
+id: hyp_cal_avoid_month_end
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: calendar
+family_id: family_calendar
+entry:
+  expression: is_month_end == 0 and above_sma_200 == 1
+exit:
+  expression: is_month_end == 1 or above_sma_200 == 0
+rationale: >
+  Flat into month-end in trend. calendar_seasonality.
+expected_outcome: Exploratory only.
+feature_tags: [calendar_v1]
+literature_refs: []
+falsification: {min_trades: 30}

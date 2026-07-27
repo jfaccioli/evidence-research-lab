@@ -1,0 +1,7 @@
+programme: slow_fast
+hypotheses:
+  - hyp_sf_accel_pos_trend.yaml
+  - hyp_sf_accel_neg_flat.yaml
+  - hyp_sf_fast_above_slow.yaml
+  - hyp_sf_both_mom.yaml
+  - hyp_sf_accel10_30.yaml

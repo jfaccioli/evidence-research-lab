@@ -1,0 +1,19 @@
+id: hyp_sf_both_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_slow_fast
+entry:
+  expression: mom_pos_20 == 1 and mom_pos_60 == 1
+exit:
+  expression: mom_pos_20 == 0 or mom_pos_60 == 0
+rationale: >
+  Agreement long only. slow_fast_disagreement control.
+expected_outcome: >
+  Exploratory only under frozen gates. Null is valuable.
+feature_tags:
+  - slow_fast_v1
+literature_refs: []
+falsification:
+  min_trades: 30

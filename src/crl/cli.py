@@ -192,6 +192,26 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_thesis.set_defaults(func=cmd_thesis)
 
+    p_paper = sub.add_parser(
+        "paper",
+        help="Historical paper session for one hyp (no exchange; LIVE disabled)",
+    )
+    p_paper.add_argument("--hypothesis", "-H", required=True)
+    p_paper.add_argument("--dataset-id", default=None)
+    p_paper.add_argument("--cash", type=float, default=50.0)
+    p_paper.add_argument(
+        "--journal-dir",
+        default=None,
+        help="Default: data/paper_journal/",
+    )
+    p_paper.set_defaults(func=cmd_paper)
+
+    p_batch.add_argument(
+        "--hyp-dir",
+        default=None,
+        help="Hypothesis directory (default examples/batch)",
+    )
+
     args = parser.parse_args(argv)
     return int(args.func(args))
 
@@ -299,7 +319,9 @@ def knowledge_paths_print(root) -> str:
 def cmd_batch(args: argparse.Namespace) -> int:
     from crl.research.pipeline.batch import run_batch
 
+    hyp_dir = Path(args.hyp_dir) if getattr(args, "hyp_dir", None) else None
     summary = run_batch(
+        hyp_dir=hyp_dir,
         dataset_id=args.dataset_id,
         limit=args.limit,
         write_hyps=not args.no_write,
@@ -311,6 +333,57 @@ def cmd_batch(args: argparse.Namespace) -> int:
     )
     print(f"Summary: {summary['summary_md']}")
     return 0 if summary["n_errors"] == 0 else 1
+
+
+def cmd_paper(args: argparse.Namespace) -> int:
+    """Run a historical paper session (sim fills only)."""
+    from crl.production.paper.session import run_paper_session
+    from crl.research.pipeline.batch import load_hypothesis_yaml
+    from crl.shared.data.feature_store import load_or_build_features
+    from crl.shared.data.store import load_dataset, latest_manifest
+
+    cfg = load_config(args.config)
+    root = project_root()
+    spec = load_hypothesis_yaml(Path(args.hypothesis))
+    mdir = root / cfg.get("data", {}).get("manifest_dir", "data/manifests")
+    dataset_id = args.dataset_id
+    if dataset_id is None:
+        m = latest_manifest(
+            mdir,
+            symbol=cfg.get("symbol_binance", "BTCUSDT"),
+            interval=spec.timeframe if spec.timeframe in ("1d", "4h") else "1d",
+            source="binance_public",
+        )
+        if m is None:
+            print("No dataset. Run: crl fetch --interval 1d", file=sys.stderr)
+            return 1
+        dataset_id = m.dataset_id
+    df, _ = load_dataset(dataset_id, manifest_dir=mdir, verify_hash=True)
+    cache = root / cfg.get("data", {}).get("cache_dir", "data/processed") / "features"
+    feat = load_or_build_features(df, dataset_id=str(dataset_id), cache_dir=cache)
+    jdir = Path(args.journal_dir) if args.journal_dir else (root / "data" / "paper_journal")
+    costs = cfg.get("costs", {})
+    fee_rt = float(costs.get("fee_bps_per_side", 10)) * 2 + float(
+        costs.get("slippage_bps_per_side", 5)
+    ) * 2 + float(costs.get("half_spread_bps", 1.5)) * 2
+    res = run_paper_session(
+        spec,
+        feat,
+        starting_cash=float(args.cash),
+        fee_bps_rt=fee_rt,
+        journal_dir=jdir,
+    )
+    print(json.dumps({
+        "hypothesis_id": res.hypothesis_id,
+        "n_bars": res.n_bars,
+        "n_fills": res.n_fills,
+        "starting_cash": res.starting_cash,
+        "equity_end": res.equity_end,
+        "final_position": res.final_position,
+        "journal_path": res.journal_path,
+        "notes": res.notes,
+    }, indent=2))
+    return 0
 
 
 def cmd_meta(args: argparse.Namespace) -> int:

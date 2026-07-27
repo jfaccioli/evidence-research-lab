@@ -57,3 +57,12 @@ Batch summary: `reports/batch_summary.*`
 ## Human-only
 
 API keys, live trading, gate changes, paid data sources.
+
+## Paper path (no capital)
+
+```bash
+python -m crl paper -H examples/batch/hyp_sma200_long.yaml --cash 50
+# writes data/paper_journal/paper_*.jsonl
+```
+
+LIVE remains disabled until Phase 5 dual flags + human keys.

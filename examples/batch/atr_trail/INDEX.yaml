@@ -1,0 +1,7 @@
+programme: atr_trail
+hypotheses:
+  - hyp_atr_trail_sma100.yaml
+  - hyp_atr_trail_sma200.yaml
+  - hyp_atr_trail_mom20.yaml
+  - hyp_atr_trail_quiet.yaml
+  - hyp_atr_trail_only.yaml

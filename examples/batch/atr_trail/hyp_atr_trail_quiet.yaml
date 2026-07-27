@@ -1,0 +1,19 @@
+id: hyp_atr_trail_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_atr_trail
+entry:
+  expression: rvol_below_median == 1 and above_atr_trail == 1
+exit:
+  expression: rvol_above_median == 1 or above_atr_trail == 0
+rationale: >
+  Quiet vol + trail. atr_risk_trail.
+expected_outcome: >
+  Exploratory only under frozen gates. Null is valuable.
+feature_tags:
+  - atr_trail_v1
+literature_refs: []
+falsification:
+  min_trades: 30

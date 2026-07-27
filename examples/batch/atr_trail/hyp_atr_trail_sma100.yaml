@@ -1,0 +1,19 @@
+id: hyp_atr_trail_sma100
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_atr_trail
+entry:
+  expression: close > sma_100 and above_atr_trail == 1
+exit:
+  expression: close < sma_100 or above_atr_trail == 0
+rationale: >
+  ATR trail + SMA100 — path-dependent risk budget. atr_risk_trail.
+expected_outcome: >
+  Exploratory only under frozen gates. Null is valuable.
+feature_tags:
+  - atr_trail_v1
+literature_refs: []
+falsification:
+  min_trades: 30

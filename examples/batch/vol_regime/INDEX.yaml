@@ -1,0 +1,7 @@
+programme: vol_regime
+hypotheses:
+  - hyp_vr_only_lowvol.yaml
+  - hyp_vr_exit_volspike.yaml
+  - hyp_vr_vol_chg_avoid.yaml
+  - hyp_vr_highvol_mom_only.yaml
+  - hyp_vr_calm_mom.yaml

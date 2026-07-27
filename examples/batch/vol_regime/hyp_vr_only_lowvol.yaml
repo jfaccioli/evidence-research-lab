@@ -1,0 +1,19 @@
+id: hyp_vr_only_lowvol
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_vol_regime
+entry:
+  expression: rvol_below_median == 1 and above_sma_200 == 1
+exit:
+  expression: rvol_above_median == 1 or above_sma_200 == 0
+rationale: >
+  Long only quiet + trend. vol_regime_shift.
+expected_outcome: >
+  Exploratory only under frozen gates. Null is valuable.
+feature_tags:
+  - vol_regime_v1
+literature_refs: []
+falsification:
+  min_trades: 30

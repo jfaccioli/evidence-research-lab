@@ -1,0 +1,19 @@
+id: hyp_sf_accel10_30
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_slow_fast
+entry:
+  expression: mom_accel_10_30 > 0 and above_sma_50 == 1
+exit:
+  expression: mom_accel_10_30 <= 0 or above_sma_50 == 0
+rationale: >
+  Shorter accel + SMA50. slow_fast_disagreement.
+expected_outcome: >
+  Exploratory only under frozen gates. Null is valuable.
+feature_tags:
+  - slow_fast_v1
+literature_refs: []
+falsification:
+  min_trades: 30

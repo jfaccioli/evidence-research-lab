@@ -1,10 +1,12 @@
 # Programme: Point-in-time BTC USDT-M funding rates (v1)
 
-**Status:** Designed + implementation scaffolded (mock PIT path).  
+**Status:** **Exploratory batch complete — programme-level null (0/10 `passed_val`).**  
+Scaffold + real Binance funding history + gate autopsy done.  
 **Authority:** Meta-research recommendation; human standing research policy.  
 **Mode:** Research only — no paper/shadow/live; no gate softening.  
-**Budget:** ≤ **10** pre-registered exploratory hypotheses (1u each planned).  
-**Lineage:** same `research_lineage_id` as main BTC research (H5 default).
+**Budget:** ≤ **10** pre-registered exploratory hypotheses — **spent** (temp registry; not live).  
+**Lineage:** same `research_lineage_id` as main BTC research (H5 default).  
+**Autopsy:** `examples/batch/funding/GATE_AUTOPSY_V1.md`
 
 ---
 
@@ -130,11 +132,11 @@ Exact expressions are frozen in `examples/batch/funding/*.yaml`.
 
 ---
 
-## 9. Next steps after scaffold
+## 9. Status after exploratory batch
 
-1. Ingest real Binance (or chosen venue) funding history → versioned parquet + manifest.  
-2. Join to existing BTC 1d OHLCV; recompute features; run `crl batch` on the 10 hyps **exploratory**.  
-3. Update Thesis Tree / learnings with null or nominate.  
-4. Only then consider confirmatory budget.
-
-**Blocked for real runs:** network fetch of historical funding + human OK to spend research budget units on the batch.
+1. ~~Ingest real Binance funding~~ → `binance_funding_BTCUSDT_funding_d1bbe1f63b23`.  
+2. ~~Join + batch 10 hyps exploratory~~ → **0/10 `passed_val`** (`EXPLORATORY_NOTE.md`).  
+3. ~~Gate autopsy~~ → `GATE_AUTOPSY_V1.md`.  
+4. Thesis Tree / learnings updated for programme null (no confirmatory nomination).  
+5. **Do not** re-mine daily funding thresholds on the same data.  
+6. Optional follow-ons (separate programmes): 4h power study; true OI PIT.

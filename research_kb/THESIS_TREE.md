@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T12:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] 15 mechanisms tracked; 6 closed/retired/null; 9 still open; registry n=123 (+10 funding exploratory on temp registry, not live). Success = uncertainty reduction, not alpha discovery.
+**Updated:** `2026-07-27T14:00:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] 16 mechanisms; funding daily null; OI 1 val tease confirmatory-killed; zero candidates. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -11,20 +11,21 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 - No confirmatory *candidates* yet — uncertainty remains high on all mechanisms.
 - Daily BTC long-only space may be saturated with public technical rules.
-- **True exchange funding (daily long-only filters):** first pre-reg programme null (0/10); see `funding_crowding`. OI + on-chain PIT series still not in evidence base.
+- True exchange funding (daily long-only filters): programme null 0/10. True OI (Bybit linear daily): 1 val tease → confirmatory fail; no candidate.
 - Whether *any* low-frequency BTC spot edge survives costs + multiple testing is open.
-- Whether funding-level filters are only underpowered on daily (`min_trades`) is open → separate 4h power programme only, not daily re-mining.
+- Binance public OI hist depth is ~30d — deep same-venue Binance OI still unavailable via free API.
 
 ## Mechanisms
 
 ### `tsmom_underreaction` — Time-series momentum / underreaction
 
-- **Stance:** `active` (confidence 0.40)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** Gradual diffusion of information; intermediate returns continue.
 - **Evidence mass:** n_tests=31, passed_val=0, failed_test=1, candidate=0
 
 **Supporting**
+
 
 - Exploratory gates can pass with 30 trades and decent val Sharpe.
 - No strong supporting evidence on val.
@@ -46,7 +47,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `crowding_proxy` — Crowding / leverage stress proxy
 
-- **Stance:** `active` (confidence 0.40)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** High-vol or crowded risk-on states precede unwind (proxy only).
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -67,12 +68,13 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `slow_fast_disagreement` — Slow vs fast signal disagreement
 
-- **Stance:** `active` (confidence 0.40)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** When short-horizon mom disagrees with long trend, edge may be in resolution.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
+
 
 - No strong supporting evidence on val.
 
@@ -90,12 +92,13 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `vol_regime_shift` — Volatility regime-shift risk
 
-- **Stance:** `active` (confidence 0.40)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** Rising vol marks stress transitions; reduce exposure.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
+
 
 - Process: underrepresented mechanism tested; lower val DD than B&H observed.
 
@@ -113,7 +116,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `liquidity_panic_rebound` — Forced selling / panic rebound
 
-- **Stance:** `active` (confidence 0.40)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** Sharp selloffs reverse when temporary liquidity demand fades.
 - **Evidence mass:** n_tests=3, passed_val=0, failed_test=0, candidate=0
@@ -156,28 +159,26 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 ### `funding_crowding` — Perpetual funding / leverage crowding (true series)
 
 - **Stance:** `active` (confidence 0.55)
-- **Recommendation:** `pivot` (daily long-only pre-reg set **exhausted_null**; do not re-mine thresholds)
+- **Recommendation:** `pivot`
 - **Claim:** Funding rate as cost of leverage and crowded positioning; PIT exchange series only.
-- **Evidence mass:** live registry n_tests=2 prior; **programme v1 exploratory n=10 on temp registry**, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=2, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
-- Process: true Binance USDT-M funding ingested and joined PIT (not OHLCV proxy); join/lag rules locked before batch.
-- Two level/trend-gate formulations (`high_flat`, `trend_and_not_high`) show positive val excess and CI lo &gt; 0 but fail `min_trades` (n=19) + reality few-trades — **not** an edge, only a power hint.
+
+- Process: true Binance USDT-M funding ingested and joined PIT; join/lag locked before batch.
+- Two level formulations showed positive val excess/CI lo but failed min_trades only (power hint, not edge).
 
 **Refuting**
 
-- **Programme-level null:** funding PIT v1 pre-reg batch **0/10 `passed_val`** under frozen gates (`examples/batch/funding/EXPLORATORY_NOTE.md`, `GATE_AUTOPSY_V1.md`).
-- Bootstrap Sharpe CI lo &lt; 0 kills **8/10** (dominant); adequate-trade filters still fail robustness / negative excess vs B&H.
-- Mean-revert family (`neg_long`, `z_low_long`, `only_neg_mom`): multi-gate collapse (Sharpe, WF, fee_fragile, 2× cost).
-- Daily long-only funding **level/change/z/sum24** locked set does not survive exploratory validation.
+- Funding PIT v1: 0/10 passed_val under frozen gates (temp registry). See examples/batch/funding/GATE_AUTOPSY_V1.md.
+- Bootstrap CI lo < 0 kills 8/10; mean-revert funding longs multi-gate dead.
+- Daily long-only funding locked set exhausted_null for this pre-reg programme.
 
 **Remaining unknowns**
 
-- 4h (or other) horizon power for sparse level filters — **separate programme only** (`docs/PROGRAMME_FUNDING_4H_POWER_V1.md`).
-- Funding × true OI interaction — deferred to OI programme, not daily funding grids.
-- Other venues / short-side / perp structure — out of current budget.
-- OOS confirmatory not earned (no nomination).
+- Optional 4h funding power programme only (docs/PROGRAMME_FUNDING_4H_POWER_V1.md).
+- Paired with OI: both single-series daily locks closed without candidates.
 
 ### `asymmetric_capture` — Asymmetric upside/downside capture vs B&H
 
@@ -187,6 +188,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Evidence mass:** n_tests=1, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
+
 
 - Process: underrepresented mechanism tested; lower val DD than B&H observed.
 
@@ -205,7 +207,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `capacity_tiny_friction` — Tiny-capital friction realism
 
-- **Stance:** `untested` (confidence 0.10)
+- **Stance:** `untested` (confidence 0.1)
 - **Recommendation:** `observe`
 - **Claim:** Edges that only work with zero friction are invalid for 10–50 AUD.
 - **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
@@ -224,6 +226,30 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Multiple-testing burden grows with family size.
 - No direct tests yet — high IG if economically distinct.
 - Underrepresented in catalog — remaining uncertainty high.
+
+### `oi_leverage_stock` — Open interest / leverage stock (true series)
+
+- **Stance:** `active` (confidence 0.55)
+- **Recommendation:** `pivot`
+- **Claim:** Exchange-native OI as stock of open leverage; PIT snapshots only — not funding.
+- **Evidence mass:** n_tests=10, passed_val=1, failed_test=1, candidate=0
+
+**Supporting**
+
+
+- Process: true exchange OI (Bybit linear) ingested PIT; 10 pre-reg hyps locked before batch.
+
+**Refuting**
+
+- Exploratory 1/10 passed_val (hyp_oi_chg_pct_high_flat) then confirmatory failed_test (test Sharpe≈-0.10, fee_fragile, CI lo<0) — val-only tease.
+- 9/10 failed_val; raw oi_high expanding-median filters produced 0 val trades (secular OI growth).
+- No confirmatory candidate from OI PIT v1 programme.
+
+**Remaining unknowns**
+
+- Same-venue deep Binance OI if available later.
+- Pre-registered de-trended OI stock without threshold mining.
+- Funding×OI interaction blocked until both single-series closed (done for daily locks).
 
 ### `herding_trend` — Herding / risk-on trend following
 
@@ -248,7 +274,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `vol_risk_premium` — Volatility risk preference / quiet markets
 
-- **Stance:** `exhausted_null` (confidence 0.70)
+- **Stance:** `exhausted_null` (confidence 0.7)
 - **Recommendation:** `retire`
 - **Claim:** Agents prefer risk when realized vol is low.
 - **Evidence mass:** n_tests=38, passed_val=0, failed_test=0, candidate=0
@@ -268,7 +294,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `volume_confirmation` — Volume confirmation of price moves
 
-- **Stance:** `exhausted_null` (confidence 0.70)
+- **Stance:** `exhausted_null` (confidence 0.7)
 - **Recommendation:** `retire`
 - **Claim:** Moves without volume are less reliable; thrust needs participation.
 - **Evidence mass:** n_tests=18, passed_val=0, failed_test=0, candidate=0
@@ -288,7 +314,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `mean_reversion_cross_section_proxy` — Relative value / stretch vs own history only
 
-- **Stance:** `exhausted_null` (confidence 0.70)
+- **Stance:** `exhausted_null` (confidence 0.7)
 - **Recommendation:** `retire`
 - **Claim:** Extreme z-score stretches mean-revert when not in structural bear.
 - **Evidence mass:** n_tests=14, passed_val=0, failed_test=0, candidate=0
@@ -308,7 +334,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `breakout_attention` — Breakout + attention / participation
 
-- **Stance:** `refuted` (confidence 0.50)
+- **Stance:** `refuted` (confidence 0.5)
 - **Recommendation:** `pivot`
 - **Claim:** New highs with volume reflect information incorporation.
 - **Evidence mass:** n_tests=11, passed_val=0, failed_test=0, candidate=0
@@ -329,7 +355,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `calendar_seasonality` — Calendar / seasonality microstructure
 
-- **Stance:** `refuted` (confidence 0.50)
+- **Stance:** `refuted` (confidence 0.5)
 - **Recommendation:** `pivot`
 - **Claim:** Day-of-week or month-end effects from institutional calendars.
 - **Evidence mass:** n_tests=10, passed_val=0, failed_test=0, candidate=0
@@ -348,6 +374,3 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Multiple-testing burden grows with family size.
 - A structurally different operationalisation might still be open.
 
----
-
-*Chief Research Scientist mode: maximise knowledge per budget unit.*

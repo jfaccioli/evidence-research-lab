@@ -296,3 +296,95 @@ Updated after batches. Optimises *knowledge*, not win count.
 
 
 ---
+
+## 2026-07-27 — OI PIT v1 exploratory + confirmatory kill (temp registry)
+
+**Programme:** `docs/PROGRAMME_OI_PIT_V1.md`  
+**Autopsy:** `examples/batch/oi/GATE_AUTOPSY_V1.md`  
+**OI series:** Bybit linear `bybit_oi_BTCUSDT_oi_b38c4e688cf0` (Binance public OI hist too shallow).  
+**Batch:** 10/10 pre-reg exploratory → **1 `passed_val`**, **9 `failed_val`**; survivor **`failed_test`** on confirmatory.
+
+### What we learned
+
+- True OI is now in the evidence base (Bybit linear, disclosed cross-venue vs Binance spot OHLCV).
+- **Val tease is not an edge:** `hyp_oi_chg_pct_high_flat` passed exploratory (n=30, Sh≈1.38) then confirmatory test Sh≈−0.10 — classic overfit / regime-specific pattern (regime concentration warn 0.97).
+- Expanding-median raw **`oi_high` is a poor filter** under secular OI growth → three hyps with **0 val trades**.
+- Bootstrap CI still dominant killer among non-sparse failures.
+- No confirmatory candidate; do **not** mine OI thresholds on same data.
+
+### Mechanism update
+
+- `oi_leverage_stock`: **pivot**; daily pre-reg set closed without candidate; confidence ↑ on *status*, not alpha.
+
+
+---
+
+## 2026-07-27 10:08 UTC
+
+- Registry hypotheses: **123** (runs=240)
+- Unique rule fingerprints: **73**
+
+### What we learned
+
+- Zero confirmatory candidates in registry.
+- Underrepresented mechanisms: oi_leverage_stock, capacity_tiny_friction, liquidity_panic_rebound, funding_crowding, asymmetric_capture, atr_risk_trail
+
+### Repeating failure modes
+
+- **low_sample** (n=197): Rules too sparse on daily bars — need more trades or different horizon.
+- **weak_sharpe** (n=36): No risk-adjusted edge after costs on evaluated splits.
+- **reality** (n=2): Statistically cute but economically/executionally weak.
+
+### Mechanism coverage
+
+- `oi_leverage_stock`: 0 ← underrepresented
+- `capacity_tiny_friction`: 0 ← underrepresented
+- `liquidity_panic_rebound`: 1 ← underrepresented
+- `funding_crowding`: 1 ← underrepresented
+- `asymmetric_capture`: 1 ← underrepresented
+- `atr_risk_trail`: 2 ← underrepresented
+- `crowding_proxy`: 3
+- `vol_regime_shift`: 4
+- `slow_fast_disagreement`: 4
+- `breakout_attention`: 10
+- `calendar_seasonality`: 10
+- `mean_reversion_cross_section_proxy`: 14
+- `volume_confirmation`: 18
+- `tsmom_underreaction`: 31
+- `vol_risk_premium`: 37
+- `herding_trend`: 63
+
+### Family recommendations
+
+- `family_trend` [retire] n=20 — Large family (20) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_momentum` [retire] n=16 — Large family (16) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_composite` [retire] n=13 — Large family (13) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_vol_filter` [retire] n=12 — Large family (12) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_mean_reversion` [retire] n=12 — Large family (12) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_calendar` [retire] n=10 — Large family (10) nearly all failed, dominant tag=weak_sharpe; diminishing returns.
+- `family_volume` [retire] n=10 — Large family (10) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_sentiment_proxy` [pivot] n=4 — All failed — try different mechanism, not nearby params.
+- `family_onchain_proxy` [pivot] n=3 — All failed — try different mechanism, not nearby params.
+- `family_funding_proxy` [pivot] n=3 — All failed — try different mechanism, not nearby params.
+- `hyp_e2e_mock_1784522180` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `family_trend_vol_filter` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784522240` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784523788` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784524120` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+
+### Retire (exhausted) families
+
+`family_trend`, `family_momentum`, `family_composite`, `family_vol_filter`, `family_mean_reversion`, `family_calendar`, `family_volume`
+
+### Latest batch snapshot
+
+- run=10 passed_val=1 failed=9 errors=0
+
+### Planner stance
+
+- Prefer underrepresented mechanisms with high information gain.
+- Do not clone exhausted families.
+- Null results that cleanly retire a mechanism are valuable.
+
+
+---

@@ -1,10 +1,11 @@
 # Programme: Point-in-time BTC open interest (OI) (v1)
 
-**Status:** **Scaffolded** (mock PIT path + 10 locked hyps). **No live OI science batch yet.**  
-**Authority:** Next orthogonal mechanism after funding daily null (high information gain).  
+**Status:** **Exploratory complete + confirmatory on survivor.** 1/10 `passed_val` → **`failed_test`**. No candidate.  
+**Authority:** Orthogonal mechanism after funding daily null.  
 **Mode:** Research only — no paper/shadow/live; no gate softening.  
-**Budget:** ≤ **10** pre-registered exploratory hypotheses.  
-**Related:** Funding programme is **separate**; do not grid funding×OI until both single-series programmes have locked results.
+**Budget:** ≤ **10** pre-registered exploratory — **spent** (temp registry); 1 confirmatory unit spent on survivor.  
+**OI data:** Bybit linear daily (`bybit_oi_…`) — Binance public hist too shallow (~30d).  
+**Autopsy:** `examples/batch/oi/GATE_AUTOPSY_V1.md`
 
 ---
 
@@ -127,15 +128,16 @@ Locked **before** seeing confirmatory results. YAML to be materialised under
 
 ---
 
-## 8. Execution order
+## 8. Execution status
 
-1. ~~Implement OI PIT module + mock tests~~ (scaffold done).  
-2. Ingest versioned real OI history when authorized (network + human OK).  
-3. Join to daily OHLCV; batch ≤10 exploratory on **temp** registry.  
-4. Gate autopsy + Thesis Tree (`oi_leverage_stock`).  
-5. Only then consider funding×OI or 4h OI as **new** programmes.
+1. ~~Implement OI PIT module + mock tests~~  
+2. ~~Ingest versioned OI~~ (Bybit linear multi-year; Binance public insufficient)  
+3. ~~Exploratory batch 10~~ → 1 `passed_val`, 9 `failed_val`  
+4. ~~Confirmatory of survivor~~ → **`failed_test`**  
+5. ~~Gate autopsy + Thesis Tree~~  
+6. **Stop** threshold mining on this series. Optional future: new programme versions only (de-trended OI, same-venue deep hist, or funding×OI with fresh multiplicity).
 
-**Blocked for science batch:** real OI history ingest + budget spend OK. Mock results are **not** promotion evidence.
+Mock results are **not** promotion evidence. Live registry was **not** written.
 
 ---
 

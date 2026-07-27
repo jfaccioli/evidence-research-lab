@@ -20,6 +20,11 @@ open_interest:
   min_trust_score: 0.70
 
 hypothesis_dir: examples/batch/oi
-status: designed_scaffold_only
+status: exploratory_complete_confirmatory_null
+oi_source_used: bybit_oi_linear_daily
+oi_series_id: bybit_oi_BTCUSDT_oi_b38c4e688cf0
 live_fetch_authorized: false
 paper_trading: false
+note: >
+  Binance public openInterestHist too shallow for multi-year programme;
+  Bybit linear OI used and labeled honestly. 1 val survivor failed confirmatory.

@@ -138,6 +138,20 @@ def test_offline_binance_oi_fixture_parses_and_asof():
     assert asof["oi_last"].notna().any()
 
 
+def test_bybit_fixture_parse():
+    import json
+
+    from crl.shared.data.sources.bybit_oi import events_from_bybit_json_records
+
+    records = [
+        {"openInterest": "100.5", "timestamp": "1609459200000"},
+        {"openInterest": "101.0", "timestamp": "1609545600000"},
+    ]
+    ev = events_from_bybit_json_records(records)
+    assert len(ev) == 2
+    assert float(ev["open_interest"].iloc[0]) == 100.5
+
+
 def test_feature_store_oi_cache_key(tmp_path: Path):
     from crl.shared.data.feature_store import (
         FEATURE_SCHEMA_VERSION_OI,

@@ -53,6 +53,7 @@ def _row(res: PaperSessionResult) -> dict[str, Any]:
         "starting_cash": res.starting_cash,
         "equity_end": res.equity_end,
         "total_return": ret,
+        "max_drawdown": res.max_drawdown,
         "final_position": res.final_position,
         "journal_path": res.journal_path,
     }

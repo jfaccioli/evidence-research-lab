@@ -1,0 +1,17 @@
+id: hyp_h4h_ema200
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: trend
+family_id: family_hold_4h
+entry:
+  expression: close > ema_200
+exit:
+  expression: close < ema_200
+rationale: >
+  4h EMA200 hold.
+expected_outcome: Exploratory power for low-turnover holds.
+feature_tags: [hold_4h_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

@@ -1,0 +1,17 @@
+id: hyp_h4h_sma200
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: trend
+family_id: family_hold_4h
+entry:
+  expression: above_sma_200 == 1
+exit:
+  expression: above_sma_200 == 0
+rationale: >
+  4h low-turnover SMA200 hold — power/capacity for slow trend. Not threshold mining.
+expected_outcome: Exploratory power for low-turnover holds.
+feature_tags: [hold_4h_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

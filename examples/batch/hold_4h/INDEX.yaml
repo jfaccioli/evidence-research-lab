@@ -1,0 +1,6 @@
+programme: hold_4h_v1
+hypotheses:
+  - hyp_h4h_sma200.yaml
+  - hyp_h4h_ema200.yaml
+  - hyp_h4h_sma50_200.yaml
+  - hyp_h4h_sma200_quiet.yaml

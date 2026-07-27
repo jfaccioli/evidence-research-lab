@@ -1,0 +1,17 @@
+id: hyp_h4h_sma200_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: vol_filter
+family_id: family_hold_4h
+entry:
+  expression: above_sma_200 == 1 and rvol_below_median == 1
+exit:
+  expression: above_sma_200 == 0 or rvol_above_median == 1
+rationale: >
+  4h trend only in quiet vol.
+expected_outcome: Exploratory power for low-turnover holds.
+feature_tags: [hold_4h_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

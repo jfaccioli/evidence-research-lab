@@ -431,6 +431,7 @@ def cmd_paper(args: argparse.Namespace) -> int:
         "n_fills": res.n_fills,
         "starting_cash": res.starting_cash,
         "equity_end": res.equity_end,
+        "max_drawdown": res.max_drawdown,
         "final_position": res.final_position,
         "journal_path": res.journal_path,
         "notes": res.notes,

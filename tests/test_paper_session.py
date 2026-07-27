@@ -30,5 +30,7 @@ def test_paper_session_runs_on_mock(tmp_path: Path):
     )
     assert res.n_bars > 50
     assert res.equity_end is not None
+    assert res.max_drawdown is not None
+    assert 0.0 <= res.max_drawdown <= 1.0
     assert res.journal_path is not None
     assert Path(res.journal_path).exists()

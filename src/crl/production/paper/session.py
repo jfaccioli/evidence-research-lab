@@ -30,6 +30,7 @@ class PaperSessionResult:
     starting_cash: float
     journal_path: Optional[str] = None
     equity_end: Optional[float] = None
+    max_drawdown: Optional[float] = None
     notes: list[str] = field(default_factory=list)
 
 
@@ -155,6 +156,15 @@ def run_paper_session(
             for rec in journal:
                 f.write(json.dumps(rec, default=str) + "\n")
 
+    max_dd = None
+    if equity_series:
+        peak = equity_series[0]
+        max_dd = 0.0
+        for eq in equity_series:
+            peak = max(peak, eq)
+            if peak > 0:
+                max_dd = max(max_dd, 1.0 - eq / peak)
+
     return PaperSessionResult(
         hypothesis_id=spec.id,
         n_bars=len(work),
@@ -164,5 +174,10 @@ def run_paper_session(
         starting_cash=starting_cash,
         journal_path=str(jpath) if jpath else None,
         equity_end=equity_series[-1] if equity_series else starting_cash,
-        notes=["historical bar walk; not live clock", "LIVE disabled by design"],
+        max_drawdown=max_dd,
+        notes=[
+            "historical bar walk; not live clock",
+            "LIVE disabled by design",
+            "NOT a substitute for train/val/test research gates",
+        ],
     )

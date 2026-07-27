@@ -1,0 +1,11 @@
+programme: funding_btc_usdt_m_4h_power_v1
+design: docs/PROGRAMME_FUNDING_4H_POWER_V1.md
+mode: exploratory_only_until_gates
+live_fetch_authorized: false
+hypotheses:
+  - hyp_f4h_high_flat.yaml
+  - hyp_f4h_trend_and_not_high.yaml
+  - hyp_f4h_high_exit_only.yaml
+  - hyp_f4h_pos_flat.yaml
+  - hyp_f4h_chg_up_flat.yaml
+  - hyp_f4h_z_high_flat.yaml

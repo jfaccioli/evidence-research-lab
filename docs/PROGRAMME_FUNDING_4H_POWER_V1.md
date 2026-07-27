@@ -1,11 +1,13 @@
 # Programme: Funding PIT — 4h power study (v1) — **DESIGN ONLY**
 
-**Status:** Pre-registered design lock. **No data fetch. No runs. No threshold mining.**  
+**Status:** **Exploratory complete — programme-level null (0/6 `passed_val`).**  
 **Parent result:** Daily funding PIT v1 programme null + gate autopsy  
 (`docs/PROGRAMME_FUNDING_PIT_V1.md`, `examples/batch/funding/GATE_AUTOPSY_V1.md`).  
 **Mode:** Research only — no paper/shadow/live; **gates unchanged**.  
-**Budget:** ≤ **6** pre-registered exploratory hypotheses (tight; power-focused).  
-**Authority:** Follow-on from autopsy Cluster A (min_trades-limited near-misses).
+**Budget:** ≤ **6** pre-registered exploratory — **spent** (temp registry).  
+**Authority:** Follow-on from autopsy Cluster A (min_trades-limited near-misses).  
+**Autopsy:** `examples/batch/funding_4h/GATE_AUTOPSY_V1.md`  
+**Result:** All hyps had n_trades ≫ 30 and still failed — **not a pure power problem**.
 
 ---
 
@@ -90,13 +92,12 @@ Exact YAML paths to be added under `examples/batch/funding_4h/` **only when exec
 
 ---
 
-## 7. Execution checklist (later — not now)
+## 7. Execution status
 
-1. Ingest/version 4h OHLCV if missing.  
-2. Join funding → 4h features; unit tests for as-of.  
-3. Materialise 6 YAMLs from this lock; `crl batch` exploratory + temp registry.  
-4. Gate autopsy; Thesis Tree update; **no** threshold chase.  
-5. Confirmatory only if exploratory nomination earned.
+1. ~~Ingest/version 4h OHLCV~~ → `binance_public_BTCUSDT_4h_b02118ab586a`  
+2. ~~Join funding + batch 6~~ → **0/6 `passed_val`**  
+3. ~~Gate autopsy~~ → `GATE_AUTOPSY_V1.md`  
+4. No confirmatory (no exploratory survivor).
 
 ---
 

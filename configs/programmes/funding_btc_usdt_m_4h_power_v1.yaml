@@ -1,0 +1,12 @@
+programme_version_id: funding_btc_usdt_m_4h_power_v1
+programme_lineage_id: funding_btc_usdt_m_4h
+research_lineage_id: crl_btc_research_v0
+version_reason: "4h power study of daily funding level filters after min_trades near-misses"
+asset: BTC/USDT
+perp_symbol: BTCUSDT
+interval: 4h
+hypothesis_dir: examples/batch/funding_4h
+status: designed_ready_to_run
+max_hypotheses: 6
+live_fetch_authorized: false
+paper_trading: false

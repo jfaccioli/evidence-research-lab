@@ -1,0 +1,23 @@
+id: hyp_f4h_chg_up_flat
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: funding_proxy
+family_id: family_funding_change
+entry:
+  expression: above_sma_200 == 1 and funding_chg_1 <= 0
+exit:
+  expression: above_sma_200 == 0 or funding_chg_1 > 0
+rationale: >
+  4h power study of daily hyp_funding_chg_up_flat. Programme: docs/PROGRAMME_FUNDING_4H_POWER_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy. No new thresholds vs daily lock.
+expected_outcome: >
+  Power/horizon test only. Mock funding never for promotion.
+feature_tags:
+  - funding_pit_v1
+  - funding_4h_power_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost; power study not threshold mining.

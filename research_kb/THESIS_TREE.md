@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T14:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] 16 mechanisms; funding daily null; OI 1 val tease confirmatory-killed; zero candidates. Success = uncertainty reduction, not alpha discovery.
+**Updated:** `2026-07-27T14:30:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] Funding daily+4h nulls; OI confirmatory kill; zero candidates. Success = uncertainty reduction.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -11,9 +11,9 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 - No confirmatory *candidates* yet — uncertainty remains high on all mechanisms.
 - Daily BTC long-only space may be saturated with public technical rules.
-- True exchange funding (daily long-only filters): programme null 0/10. True OI (Bybit linear daily): 1 val tease → confirmatory fail; no candidate.
+- True funding/OI/on-chain PIT series not yet in evidence base.
 - Whether *any* low-frequency BTC spot edge survives costs + multiple testing is open.
-- Binance public OI hist depth is ~30d — deep same-venue Binance OI still unavailable via free API.
+- Funding level filters: daily 0/10 and 4h power 0/6 — not rescued by trade count; line exhausted for long-only filters on these locks.
 
 ## Mechanisms
 
@@ -25,7 +25,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Evidence mass:** n_tests=31, passed_val=0, failed_test=1, candidate=0
 
 **Supporting**
-
 
 - Exploratory gates can pass with 30 trades and decent val Sharpe.
 - No strong supporting evidence on val.
@@ -75,7 +74,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 **Supporting**
 
-
 - No strong supporting evidence on val.
 
 **Refuting**
@@ -98,7 +96,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
-
 
 - Process: underrepresented mechanism tested; lower val DD than B&H observed.
 
@@ -158,27 +155,26 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `funding_crowding` — Perpetual funding / leverage crowding (true series)
 
-- **Stance:** `active` (confidence 0.55)
+- **Stance:** `active` (confidence 0.65)
 - **Recommendation:** `pivot`
 - **Claim:** Funding rate as cost of leverage and crowded positioning; PIT exchange series only.
 - **Evidence mass:** n_tests=2, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
-
-- Process: true Binance USDT-M funding ingested and joined PIT; join/lag locked before batch.
-- Two level formulations showed positive val excess/CI lo but failed min_trades only (power hint, not edge).
+- _(none logged)_
 
 **Refuting**
 
-- Funding PIT v1: 0/10 passed_val under frozen gates (temp registry). See examples/batch/funding/GATE_AUTOPSY_V1.md.
-- Bootstrap CI lo < 0 kills 8/10; mean-revert funding longs multi-gate dead.
-- Daily long-only funding locked set exhausted_null for this pre-reg programme.
+- Early failure(s) — formulation-specific; mechanism not fully closed.
+- Funding 4h power v1: 0/6 passed_val with n_trades≥63 — daily min_trades near-misses were not latent edges (examples/batch/funding_4h/GATE_AUTOPSY_V1.md).
 
 **Remaining unknowns**
 
-- Optional 4h funding power programme only (docs/PROGRAMME_FUNDING_4H_POWER_V1.md).
-- Paired with OI: both single-series daily locks closed without candidates.
+- OOS confirmatory not earned or not run.
+- Multiple-testing burden grows with family size.
+- Underrepresented in catalog — remaining uncertainty high.
+- Daily + 4h long-only funding filter locks closed without candidate; stop mining this family.
 
 ### `asymmetric_capture` — Asymmetric upside/downside capture vs B&H
 
@@ -188,7 +184,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Evidence mass:** n_tests=1, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
-
 
 - Process: underrepresented mechanism tested; lower val DD than B&H observed.
 
@@ -229,27 +224,25 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `oi_leverage_stock` — Open interest / leverage stock (true series)
 
-- **Stance:** `active` (confidence 0.55)
-- **Recommendation:** `pivot`
+- **Stance:** `untested` (confidence 0.1)
+- **Recommendation:** `observe`
 - **Claim:** Exchange-native OI as stock of open leverage; PIT snapshots only — not funding.
-- **Evidence mass:** n_tests=10, passed_val=1, failed_test=1, candidate=0
+- **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
-
-- Process: true exchange OI (Bybit linear) ingested PIT; 10 pre-reg hyps locked before batch.
+- _(none logged)_
 
 **Refuting**
 
-- Exploratory 1/10 passed_val (hyp_oi_chg_pct_high_flat) then confirmatory failed_test (test Sharpe≈-0.10, fee_fragile, CI lo<0) — val-only tease.
-- 9/10 failed_val; raw oi_high expanding-median filters produced 0 val trades (secular OI growth).
-- No confirmatory candidate from OI PIT v1 programme.
+- _(none logged)_
 
 **Remaining unknowns**
 
-- Same-venue deep Binance OI if available later.
-- Pre-registered de-trended OI stock without threshold mining.
-- Funding×OI interaction blocked until both single-series closed (done for daily locks).
+- OOS confirmatory not earned or not run.
+- Multiple-testing burden grows with family size.
+- No direct tests yet — high IG if economically distinct.
+- Underrepresented in catalog — remaining uncertainty high.
 
 ### `herding_trend` — Herding / risk-on trend following
 

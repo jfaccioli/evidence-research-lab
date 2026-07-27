@@ -21,6 +21,7 @@ from crl.db.schema import (
     verify_p1_v1_schema,
     verify_p1_v2_schema,
     verify_p1_v3_schema,
+    verify_p1_v4_schema,
     verify_schema_for_version,
 )
 
@@ -42,5 +43,6 @@ __all__ = [
     "verify_p1_v1_schema",
     "verify_p1_v2_schema",
     "verify_p1_v3_schema",
+    "verify_p1_v4_schema",
     "verify_schema_for_version",
 ]

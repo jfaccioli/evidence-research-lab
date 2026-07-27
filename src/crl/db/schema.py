@@ -44,6 +44,18 @@ from crl.db.migrations import (
     P1_V3_INDEXES,
     P1_V3_TRIGGER_SQL,
     P1_V3_TRIGGERS,
+    P1_V4_COLUMNS,
+    P1_V4_DATA_TABLES,
+    P1_V4_FOREIGN_KEYS,
+    P1_V4_INDEXES,
+    P1_V4_TRIGGER_SQL,
+    P1_V4_TRIGGERS,
+    P1_V5_COLUMNS,
+    P1_V5_DATA_TABLES,
+    P1_V5_FOREIGN_KEYS,
+    P1_V5_INDEXES,
+    P1_V5_TRIGGER_SQL,
+    P1_V5_TRIGGERS,
     ColumnSpec,
     CompositeFK,
     IndexSpec,
@@ -52,7 +64,7 @@ from crl.db.migrations import (
 from crl.research.programme.models import GovernanceCompleteness
 
 SCHEMA_COMPONENT_P1 = "p1_programme"
-CURRENT_P1_SCHEMA_VERSION = 3
+CURRENT_P1_SCHEMA_VERSION = 5
 
 _MAX_DEFINED_VERSION = max(v for v, _ in MIGRATIONS) if MIGRATIONS else 0
 if CURRENT_P1_SCHEMA_VERSION != _MAX_DEFINED_VERSION:
@@ -213,11 +225,19 @@ def _assert_trusted_open_checks(conn: sqlite3.Connection, version: int) -> None:
 
 def _p1_objects_exist(conn: sqlite3.Connection) -> bool:
     """True if any P1 data table, secondary index, or immutability trigger exists."""
-    for name in P1_V1_DATA_TABLES + P1_V2_DATA_TABLES + P1_V3_DATA_TABLES:
+    for name in (
+        P1_V1_DATA_TABLES
+        + P1_V2_DATA_TABLES
+        + P1_V3_DATA_TABLES
+        + P1_V4_DATA_TABLES
+    ):
         if _table_exists(conn, name):
             return True
     for idx_name in (
-        tuple(P1_V1_INDEXES) + tuple(P1_V2_INDEXES) + tuple(P1_V3_INDEXES)
+        tuple(P1_V1_INDEXES)
+        + tuple(P1_V2_INDEXES)
+        + tuple(P1_V3_INDEXES)
+        + tuple(P1_V4_INDEXES)
     ):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='index' AND name=?",
@@ -226,7 +246,10 @@ def _p1_objects_exist(conn: sqlite3.Connection) -> bool:
         if row is not None:
             return True
     for trg_name in (
-        tuple(P1_V1_TRIGGERS) + tuple(P1_V2_TRIGGERS) + tuple(P1_V3_TRIGGERS)
+        tuple(P1_V1_TRIGGERS)
+        + tuple(P1_V2_TRIGGERS)
+        + tuple(P1_V3_TRIGGERS)
+        + tuple(P1_V4_TRIGGERS)
     ):
         row = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='trigger' AND name=?",
@@ -287,6 +310,12 @@ def verify_schema_for_version(conn: sqlite3.Connection, version: int) -> None:
         return
     if version == 3:
         verify_p1_v3_schema(conn)
+        return
+    if version == 4:
+        verify_p1_v4_schema(conn)
+        return
+    if version == 5:
+        verify_p1_v5_schema(conn)
         return
     raise SchemaError(f"no schema verifier registered for version {version}")
 
@@ -702,6 +731,146 @@ def verify_p1_v3_schema(conn: sqlite3.Connection) -> None:
     )
 
 
+def _verify_v4_sql_constraints(conn: sqlite3.Connection) -> None:
+    required_tokens = {
+        "artifact_digests": (
+            "BUNDLE_KIND IN ('RUN', 'COHORT')",
+            "IS_CORRECTION IN (0, 1)",
+            "SUPERSEDES_ARTIFACT_ID",
+            "ARTIFACT_ID",
+            "MERKLE_ROOT",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "trial_completion_links": (
+            "TRIAL_ID",
+            "COMPLETION_EVENT_SEQ",
+            "ARTIFACT_ID",
+            "RUN_ID",
+            "REGISTRATION_EVENT_SEQ",
+            "STATE_EVENT_ID",
+        ),
+        "checkpoints": (
+            "CHECKPOINT_EVENT_SEQ = FINAL_EVENT_SEQ + 1",
+            "IS_LOCAL_ONLY = 1",
+            "IS_AUTHORITATIVE = 0",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "ledger_events": (
+            "ARTIFACT_BUNDLE_SEALED",
+            "ARTIFACT_BUNDLE_SUPERSESSION",
+            "CHECKPOINT_RECORDED",
+            "TRIAL_REGISTERED",
+        ),
+    }
+    for table, tokens in required_tokens.items():
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if row is None or not row[0]:
+            raise SchemaMigrationError(f"missing CREATE SQL for {table!r}")
+        sql = _normalize_sql(row[0])
+        missing = [token for token in tokens if token not in sql]
+        if missing:
+            raise SchemaMigrationError(
+                f"table {table!r} missing required CHECK semantics {missing}"
+            )
+
+
+def verify_p1_v4_schema(conn: sqlite3.Connection) -> None:
+    """Verify v3 plus PR4 immutable artefact digests and checkpoints.
+
+    v4 may attach additional triggers to v3 tables (e.g. completed-state
+    requires exact completion link). Verify v2 structure, then v3 objects,
+    then v4 objects with a merged expected-trigger set so those extensions
+    are required rather than rejected as unexpected.
+    """
+    verify_p1_v2_schema(conn)
+    for table in P1_V3_DATA_TABLES:
+        _verify_table_columns(conn, table, P1_V3_COLUMNS[table])
+    _verify_indexes(conn, P1_V3_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V3_FOREIGN_KEYS)
+    _verify_v3_sql_constraints(conn)
+    for table in P1_V4_DATA_TABLES:
+        _verify_table_columns(conn, table, P1_V4_COLUMNS[table])
+    _verify_indexes(conn, P1_V4_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V4_FOREIGN_KEYS)
+    _verify_v4_sql_constraints(conn)
+    merged_triggers = {**P1_V3_TRIGGERS, **P1_V4_TRIGGERS}
+    merged_sql = {**P1_V3_TRIGGER_SQL, **P1_V4_TRIGGER_SQL}
+    _verify_triggers(
+        conn,
+        expected_triggers=merged_triggers,
+        expected_sql_by_name=merged_sql,
+        protected_tables=P1_V3_DATA_TABLES + P1_V4_DATA_TABLES,
+    )
+
+
+def _verify_v5_sql_constraints(conn: sqlite3.Connection) -> None:
+    required_tokens = {
+        "external_anchors": (
+            "UNANCHORED_PENDING",
+            "ANCHORED",
+            "FINAL_EVENT_SEQ",
+            "REGISTRATION_EVENT_SEQ",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "off_machine_backups": (
+            "BACKUP_UNVERIFIED",
+            "BACKUP_VERIFIED",
+            "SNAPSHOT_SHA256",
+            "FINAL_EVENT_SEQ",
+            "REGISTRATION_EVENT_SEQ",
+            "GLOB",
+            "JULIANDAY",
+        ),
+        "ledger_events": (
+            "EXTERNAL_ANCHOR_RECORDED",
+            "OFF_MACHINE_BACKUP_RECORDED",
+            "CHECKPOINT_RECORDED",
+            "ARTIFACT_BUNDLE_SEALED",
+        ),
+    }
+    for table, tokens in required_tokens.items():
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if row is None or not row[0]:
+            raise SchemaMigrationError(f"missing CREATE SQL for {table!r}")
+        sql = _normalize_sql(row[0])
+        missing = [token for token in tokens if token not in sql]
+        if missing:
+            raise SchemaMigrationError(
+                f"table {table!r} missing required CHECK semantics {missing}"
+            )
+
+
+def verify_p1_v5_schema(conn: sqlite3.Connection) -> None:
+    """Verify v4 plus PR5 external anchor / off-machine backup tables."""
+    verify_p1_v4_schema(conn)
+    for table in P1_V5_DATA_TABLES:
+        _verify_table_columns(conn, table, P1_V5_COLUMNS[table])
+    _verify_indexes(conn, P1_V5_INDEXES)
+    _verify_composite_foreign_keys(conn, P1_V5_FOREIGN_KEYS)
+    _verify_v5_sql_constraints(conn)
+    merged_triggers = {**P1_V3_TRIGGERS, **P1_V4_TRIGGERS, **P1_V5_TRIGGERS}
+    merged_sql = {
+        **P1_V3_TRIGGER_SQL,
+        **P1_V4_TRIGGER_SQL,
+        **P1_V5_TRIGGER_SQL,
+    }
+    _verify_triggers(
+        conn,
+        expected_triggers=merged_triggers,
+        expected_sql_by_name=merged_sql,
+        protected_tables=P1_V3_DATA_TABLES + P1_V4_DATA_TABLES + P1_V5_DATA_TABLES,
+    )
+
+
 def _detect_conflicting_preexisting_tables(conn: sqlite3.Connection) -> None:
     for name in P1_V1_ALL_TABLES:
         if not _table_exists(conn, name):
@@ -742,7 +911,10 @@ def migrate_database(
     conn.isolation_level = None
     conn.row_factory = sqlite3.Row
     try:
-        conn.execute("PRAGMA foreign_keys = ON")
+        # DDL-only migrations (including v4 ledger_events rebuild) run with
+        # foreign_keys OFF so parent-table rebuilds remain transactional.
+        # Integrity is enforced via PRAGMA foreign_key_check before stamp.
+        conn.execute("PRAGMA foreign_keys = OFF")
         conn.execute("BEGIN IMMEDIATE")
         current = get_schema_version(conn, component=component)
         if current is None:

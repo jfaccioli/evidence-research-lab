@@ -1,13 +1,15 @@
-"""PR3 analytical-trial ledger foundation (unwired to live promotion).
+"""PR3/PR4 analytical-trial ledger foundation (unwired to live promotion).
 
 Provides append-only events, factual trial registration, policy-derived
-multiplicity, derived completeness (never promotable COMPLETE at PR3), and
-atomic trial+budget(+holdout) registration. The existing P0 fail-closed
+multiplicity, derived completeness (never promotable COMPLETE), and atomic
+trial+budget(+holdout) registration. PR4 adds sealed artefact digests, exact completion-to-artefact links, and
+bundle-linked COMPLETED finalization. The existing P0 fail-closed
 multiple-testing path remains the default for promotable decisions.
 
-PR3 does **not** expose a public path to mint verified legacy-N human approval.
-``propose_legacy_n_bound`` is diagnostic only. Reproduction byte-identity is
-system-derived from stored immutable input hashes, never a caller Boolean.
+PR3/PR4 do **not** expose a public path to mint verified legacy-N human
+approval. ``propose_legacy_n_bound`` is diagnostic only. Reproduction
+byte-identity is system-derived from stored immutable input hashes, never a
+caller Boolean. Local checkpoints are non-authoritative.
 """
 
 from crl.research.ledger.budget import (
@@ -36,8 +38,10 @@ from crl.research.ledger.multiplicity import (
     compute_multiplicity,
 )
 from crl.research.ledger.registration import (
+    BundleRegistrationResult,
     RegistrationError,
     RegistrationResult,
+    TrialCompletionWithBundleResult,
     TrialLedger,
 )
 from crl.research.ledger.trials import (
@@ -51,6 +55,7 @@ from crl.research.ledger.trials import (
 __all__ = [
     "BudgetAvailability",
     "BudgetError",
+    "BundleRegistrationResult",
     "ChainVerification",
     "CompletenessAssessment",
     "ExecutionState",
@@ -60,6 +65,7 @@ __all__ = [
     "MultiplicityCensus",
     "RegistrationError",
     "RegistrationResult",
+    "TrialCompletionWithBundleResult",
     "TrialKind",
     "TrialLedger",
     "TrialRegistrationError",

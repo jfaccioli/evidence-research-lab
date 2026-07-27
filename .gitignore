@@ -33,3 +33,4 @@ journal/RESEARCH_JOURNAL.md
 *.sqlite
 .coverage
 htmlcov/
+.handoffs/

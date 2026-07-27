@@ -19,6 +19,13 @@ ALLOWED_EVENT_TYPES = frozenset(
         "trial_state_transition",
         "budget_allocated",
         "legacy_n_bound_proposed",
+        # PR4
+        "artifact_bundle_sealed",
+        "artifact_bundle_supersession",
+        "checkpoint_recorded",
+        # PR5
+        "external_anchor_recorded",
+        "off_machine_backup_recorded",
     }
 )
 

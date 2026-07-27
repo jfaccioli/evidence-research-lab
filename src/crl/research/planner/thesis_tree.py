@@ -68,6 +68,9 @@ class ThesisTree:
     nodes: list[ThesisNode]
     global_unknowns: list[str]
     summary: str
+    # PR6: default non-authoritative; authoritative only when gates pass.
+    authoritative: bool = False
+    authority_reasons: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -75,6 +78,8 @@ class ThesisTree:
             "summary": self.summary,
             "global_unknowns": self.global_unknowns,
             "nodes": [n.to_dict() for n in self.nodes],
+            "authoritative": self.authoritative,
+            "authority_reasons": list(self.authority_reasons),
         }
 
 
@@ -91,8 +96,20 @@ def rebuild_thesis_tree(
     root: Path,
     *,
     experiment_notes: list[dict[str, Any]] | None = None,
+    authoritative: bool = False,
+    authority_reasons: list[str] | None = None,
 ) -> ThesisTree:
-    """Rebuild tree from registry evidence + optional per-experiment notes."""
+    """Rebuild tree from registry evidence + optional per-experiment notes.
+
+    PR6: default ``authoritative=False``. Callers must not pass
+    ``authoritative=True`` unless ``crl.research.evidence.authority`` gates pass
+    (COMPLETE + promotion unblocked). CLI rebuilds remain non-authoritative.
+    """
+    if authoritative and not authority_reasons:
+        raise PermissionError(
+            "authoritative Thesis Tree rebuild refused without audited "
+            "authority_reasons from completeness/anchor/backup gates"
+        )
     analysis = analyze_registry(registry_path)
     notes_by_mech: dict[str, list[dict[str, Any]]] = {}
     for en in experiment_notes or []:
@@ -139,8 +156,16 @@ def rebuild_thesis_tree(
 
     n_ref = sum(1 for n in nodes if n.stance in ("refuted", "retired", "exhausted_null"))
     n_open = sum(1 for n in nodes if n.stance in ("untested", "active", "weakly_supported"))
+    auth = bool(authoritative)
+    reasons = list(authority_reasons or [])
+    if not auth and not reasons:
+        reasons = [
+            "default_non_authoritative_thesis_rebuild",
+            "requires_complete_governed_epoch_anchor_and_backup",
+        ]
+    mode = "AUTHORITATIVE" if auth else "NON-AUTHORITATIVE"
     summary = (
-        f"{len(nodes)} mechanisms tracked; {n_ref} closed/retired/null; "
+        f"[{mode}] {len(nodes)} mechanisms tracked; {n_ref} closed/retired/null; "
         f"{n_open} still open; "
         f"registry n={analysis.n_hypotheses}. "
         "Success = uncertainty reduction, not alpha discovery."
@@ -151,6 +176,8 @@ def rebuild_thesis_tree(
         nodes=nodes,
         global_unknowns=global_unknowns,
         summary=summary,
+        authoritative=auth,
+        authority_reasons=reasons,
     )
     _write_tree(root, tree)
     return tree

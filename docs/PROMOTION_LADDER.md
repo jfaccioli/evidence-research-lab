@@ -52,3 +52,36 @@ Only then: tiny live as a **system** test, not a profit mandate.
 - Crypto-specific (funding, OI) only with **PIT historical series** + trust scores — no proxy laundering.  
 - Track survival rates via `crl meta`.  
 - Confirmatory runs only after exploratory pass + budget.
+
+## Deferred external-signal programmes (do not skip; do not jump the queue)
+
+These can make the **research base** stronger later. They are **not** reliability infrastructure and **not** current Phase 2 primary work. Primary non-price programme remains **exchange-native funding / OI** (PIT) once P1 integrity lands. Softening gates or proxy-laundering social/prediction feeds is forbidden.
+
+### X (Twitter) / social
+
+| When | Role |
+|------|------|
+| **Now** | OHLCV **sentiment_proxy** only; live X **not** a backtest feature |
+| **Phase 2+ research** | Only with a **versioned, point-in-time historical** archive (paid or frozen snapshot), trust score, lag rules |
+| **Phase 4–5 ops (optional)** | Live X as **non-signal** monitoring (outages, regulatory shocks) — never silently fed into untested rules |
+
+**Value if done right:** attention / narrative regime as an *independent* mechanism class after price+funding space is honestly explored.  
+**Harm if done early:** look-ahead fiction, non-reproducible “tweets said so,” burned confirmatory budget on untrustworthy series.
+
+### Polymarket (prediction markets)
+
+| When | Role |
+|------|------|
+| **Now** | **Out of scope** — no pipeline, no hyps, no promotion claims |
+| **Phase 2+ research (after funding PIT programme design is locked or blocked)** | Optional bounded programme: crypto-relevant market odds as **market-implied probability / event risk** features, only if history is reconstructible with timestamps and join lag |
+| **Never without** | Dataset hash + trust class, pre-registered ≤ small hyp budget, same frozen validation gates |
+
+**Value if done right:** independent event-odds information orthogonal to OHLCV technicals.  
+**Harm if done early:** another un-versioned scrape, selection bias on which markets, and distraction from P1 + funding science.
+
+### Ordering (do not reorder casually)
+
+1. Finish **P1** (holdout, ledger, artefacts, checkpoints, anchors as planned).  
+2. **Funding / OI PIT** (or clean null / impossibility record).  
+3. Only then consider **Polymarket** and/or **X historical** as new programmes under the same budget and multiplicity rules.  
+4. **Live** social/prediction feeds only after the matching historical programme has honest exploratory evidence — and only under paper/shadow rules before tiny live.

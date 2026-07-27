@@ -32,6 +32,8 @@ from crl.db.schema import (
     read_schema_version_from_path,
     verify_p1_v1_schema,
     verify_p1_v3_schema,
+    verify_p1_v4_schema,
+    verify_p1_v5_schema,
 )
 from crl.research.hypotheses.registry import (
     SCHEMA as LEGACY_SCHEMA,
@@ -1372,7 +1374,7 @@ def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
     tmp_path: Path,
 ):
     """PR3: v2 remains readable; v2→v3 is atomic/idempotent; damaged v3 fails."""
-    assert CURRENT_P1_SCHEMA_VERSION == 3
+    assert CURRENT_P1_SCHEMA_VERSION >= 3
     path = tmp_path / "v2_to_v3.sqlite"
     assert migrate_database(path, target_version=2) == 2
     conn = connect_p1(path)
@@ -1408,8 +1410,8 @@ def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
     finally:
         conn.close()
 
-    assert migrate_database(path) == 3
-    assert migrate_database(path) == 3  # idempotent
+    assert migrate_database(path, target_version=3) == 3
+    assert migrate_database(path, target_version=3) == 3  # idempotent
     conn = connect_p1(path)
     try:
         assert get_schema_version(conn) == 3
@@ -1430,6 +1432,7 @@ def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
         ):
             assert t in tables
         assert "approved_legacy_n_bounds" not in tables
+        assert "artifact_digests" not in tables
         # No agent-writable multiplicity Boolean
         cols = {
             r[1]
@@ -1441,7 +1444,7 @@ def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
 
     # Damaged v3 trigger fails trusted open
     damaged = tmp_path / "damaged_v3.sqlite"
-    migrate_database(damaged)
+    migrate_database(damaged, target_version=3)
     conn = sqlite3.connect(str(damaged))
     try:
         conn.execute("DROP TRIGGER trg_ledger_events_no_update")
@@ -1452,3 +1455,135 @@ def test_v2_to_v3_migration_atomic_idempotent_and_damaged_v3_fails_open(
         connect_p1(damaged)
     with pytest.raises(SchemaError):
         open_legacy_compatibility(damaged)
+
+
+def test_v3_to_v4_migration_atomic_idempotent_and_damaged_v4_fails_open(
+    tmp_path: Path,
+):
+    """PR4: v3 remains readable; v3→v4 atomic/idempotent; damaged v4 fails."""
+    assert CURRENT_P1_SCHEMA_VERSION >= 4
+    path = tmp_path / "v3_to_v4.sqlite"
+    assert migrate_database(path, target_version=3) == 3
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 3
+        verify_p1_v3_schema(conn)
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "ledger_events" in tables
+        assert "artifact_digests" not in tables
+        assert "checkpoints" not in tables
+    finally:
+        conn.close()
+
+    with pytest.raises(SchemaMigrationError, match="injected failure after"):
+        migrate_database(path, target_version=4, _inject_failure_after_statements=2)
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 3
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "artifact_digests" not in tables
+        assert "checkpoints" not in tables
+    finally:
+        conn.close()
+
+    assert migrate_database(path, target_version=4) == 4
+    assert migrate_database(path, target_version=4) == 4
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 4
+        verify_p1_v4_schema(conn)
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "artifact_digests" in tables
+        assert "trial_completion_links" in tables
+        assert "checkpoints" in tables
+        ad_sql = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name='artifact_digests'"
+        ).fetchone()[0]
+        assert "artifact_id" in ad_sql
+        assert "supersedes_artifact_id" in ad_sql
+        assert "merkle_root" in ad_sql
+        sql = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name='ledger_events'"
+        ).fetchone()[0]
+        assert "artifact_bundle_sealed" in sql
+        assert "checkpoint_recorded" in sql
+        # Completion-link enforcement triggers present on trial_state_events.
+        trg = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='trigger'"
+            ).fetchall()
+        }
+        assert "trg_trial_state_completed_requires_link" in trg
+        assert "trg_trial_state_single_completed" in trg
+    finally:
+        conn.close()
+
+    damaged = tmp_path / "damaged_v4.sqlite"
+    migrate_database(damaged)
+    conn = sqlite3.connect(str(damaged))
+    try:
+        conn.execute("DROP TRIGGER trg_artifact_digests_no_update")
+        conn.commit()
+    finally:
+        conn.close()
+    with pytest.raises(SchemaError):
+        connect_p1(damaged)
+    with pytest.raises(SchemaError):
+        open_legacy_compatibility(damaged)
+
+
+def test_v4_to_v5_migration_creates_anchor_tables(tmp_path: Path):
+    """PR5: v4→v5 adds external_anchors / off_machine_backups; event types expand."""
+    assert CURRENT_P1_SCHEMA_VERSION >= 5
+    path = tmp_path / "v4_to_v5.sqlite"
+    assert migrate_database(path, target_version=4) == 4
+    conn = connect_p1(path)
+    try:
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "external_anchors" not in tables
+        assert "off_machine_backups" not in tables
+    finally:
+        conn.close()
+
+    assert migrate_database(path) == 5
+    assert migrate_database(path) == 5
+    conn = connect_p1(path)
+    try:
+        assert get_schema_version(conn) == 5
+        verify_p1_v5_schema(conn)
+        tables = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table'"
+            ).fetchall()
+        }
+        assert "external_anchors" in tables
+        assert "off_machine_backups" in tables
+        sql = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name='ledger_events'"
+        ).fetchone()[0]
+        assert "external_anchor_recorded" in sql
+        assert "off_machine_backup_recorded" in sql
+    finally:
+        conn.close()

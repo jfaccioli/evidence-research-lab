@@ -816,8 +816,13 @@ def test_legacy_never_complete_and_caller_boolean_ignored(tmp_path: Path):
         assert assessment.is_legacy_era
         assert assessment.promotion_blocked
         assert "legacy_era_never_complete" in assessment.gaps
-        assert "missing_artifact_bundle_digests_pr4" in assessment.gaps
+        # PR4 schema may be present; local checkpoints + PR5 anchors still block.
+        assert (
+            "missing_artifact_bundle_digests_pr4" in assessment.gaps
+            or "local_checkpoints_non_authoritative" in assessment.gaps
+        )
         assert "missing_verified_legacy_n_approval" in assessment.gaps
+        assert "missing_external_anchor_pr5" in assessment.gaps
 
         # With proposal still not COMPLETE and still unbounded (no verified approval)
         ledger.propose_legacy_n_bound(
@@ -840,14 +845,19 @@ def test_legacy_never_complete_and_caller_boolean_ignored(tmp_path: Path):
             GovernanceCompleteness.LEGACY_RECONSTRUCTED_CONSERVATIVELY
         )
         assert assessment2.promotion_blocked
-        assert "pr4_artifact_checkpoint_invariants_missing" in (
-            assessment2.promotion_block_reasons
+        assert (
+            "pr4_artifact_checkpoint_invariants_missing"
+            in assessment2.promotion_block_reasons
+            or "pr4_local_checkpoints_non_authoritative"
+            in assessment2.promotion_block_reasons
+            or "pr5_external_anchor_or_off_machine_backup_missing"
+            in assessment2.promotion_block_reasons
         )
         assert "missing_verified_legacy_n_approval" in (
             assessment2.promotion_block_reasons
         )
 
-        # Governed epoch also not COMPLETE at PR3
+        # Governed epoch also not COMPLETE at PR4
         assessment3 = assess_completeness(
             conn,
             research_lineage_id="rl1",

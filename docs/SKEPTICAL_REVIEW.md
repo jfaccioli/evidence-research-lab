@@ -270,6 +270,10 @@ data_assets(dataset_id, trust_score, source, sha256, ...)
 - Vol-scaled cost models as default  
 - Multi-asset, shorting, execution  
 - Live X sentiment features  
+- **X / social historical programme** — only with versioned PIT archive + trust scores; live X is not a backtest feature (see `docs/PROMOTION_LADDER.md` deferred external-signal programmes)  
+- **Polymarket / prediction-market odds programme** — only after funding/OI PIT path is designed or blocked; reconstructible history + lag + pre-registered budget required; not a reliability shortcut  
+
+**Note:** Neither X nor Polymarket strengthens *reliability* of the lab (that is P1 integrity + promotion ladder). They can only strengthen *discovery* if PIT discipline holds. Skipping them forever is fine if budget prefers cleaner market-structure series.
 
 ### Phase 1 “hooks only” (interfaces, no heavy logic)
 

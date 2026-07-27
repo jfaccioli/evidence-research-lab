@@ -184,7 +184,7 @@ Content-addressed bundles, full lineage, collision protection, consistent SQLite
 - `checkpoints(event_seq, db_snapshot_hash, artifact_merkle_root, …)`
 
 ### Backward compatibility
-- Legacy report paths may remain readable; **new** code writes to `artifacts/runs/{run_id}/` when enabled.
+- Legacy report paths may remain readable; **new** code writes to `artifacts/runs/{run_id}/{artifact_id}/` (exclusive run identity + sealed child) when enabled.
 - **Legacy reports untouched** (no rewrite of historical report files).
 
 ### Failure/rollback
@@ -207,6 +207,11 @@ Content-addressed bundles, full lineage, collision protection, consistent SQLite
 ---
 
 ## PR5 — External-anchor adapter
+
+### Design status
+**Detailed design:** `docs/P1_PR5_DESIGN.md` (handoff 0034).  
+**PR4 residual independent ACCEPT:** handoff 0035 (ChatGPT manual).  
+**Implementation:** handoff 0036 (dual-Grok producer); schema v5 + `src/crl/research/anchor/**` on branch `p1/pr4-artifact-checkpoints` (uncommitted).
 
 ### Objective
 Provider-neutral anchor interface; default UNANCHORED_PENDING; off-machine backup interface and verification state.
@@ -246,6 +251,9 @@ Provider-neutral anchor interface; default UNANCHORED_PENDING; off-machine backu
 
 ## PR6 — Evidence governance
 
+### Implementation status
+**Dual-Grok implemented** (handoff 0037, `ACCEPT_INTERNAL`): `src/crl/research/evidence/**`, legacy banner template, Thesis Tree non-authoritative default. Design: `docs/P1_PR6_DESIGN.md`.
+
 ### Objective
 Synthetic/mock filtering; legacy_pre_p1 release workflow; Thesis Tree authoritative modes; keep latest_plan volatile.
 
@@ -280,6 +288,9 @@ Synthetic/mock filtering; legacy_pre_p1 release workflow; Thesis Tree authoritat
 ---
 
 ## PR7 — Integration / adversarial tests
+
+### Implementation status
+**Partial dual-Grok starters** (handoff 0038): `tests/adversarial/` covers a subset of design §11 (ledger immutability, synthetic contamination, unanchored/legacy promotion block, bundle overwrite). Full 18-scenario matrix still open.
 
 ### Objective
 Full 18 design scenarios + direct-entrypoint bypass + reconciliation audit + safe migration rehearsal on **temporary copies only**.

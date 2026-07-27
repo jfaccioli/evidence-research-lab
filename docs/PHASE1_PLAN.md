@@ -371,6 +371,18 @@ Each gate is a **pure function** of metrics + time-in-status + failure history. 
 
 **Policy:** Do not claim a sentiment edge without a versioned, point-in-time historical series. Ship `xai` client for *hypothesis ideation* and *literature-style search*, not as a fake OHLCV feature.
 
+**Later placement (do not forget):** a true X/social programme is **Phase 2+ research**, after P1 and after or alongside the funding/OI PIT path — never as a reliability patch. Optional **ops-only** live X monitoring is Phase 4–5, not a signal. Full gate table: `docs/PROMOTION_LADDER.md` § Deferred external-signal programmes.
+
+### 5.3b Deferred: Polymarket / prediction markets
+
+| Approach | Backtestable? | Phase 1 |
+|----------|---------------|---------|
+| Live Polymarket scrape as feature | **No** (no sealed history in lab) | **Out** |
+| Versioned historical odds + event join | Yes, if timestamps + lag clean | **Out** (future programme) |
+| Using odds without trust/PIT | Fiction | Forbidden |
+
+**Policy:** Polymarket is **not** part of Phase 1 and is **not** a shortcut to autotrading reliability. If pursued later, treat as a **bounded Phase 2+ mechanism programme** (market-implied event risk), only with hashed PIT series, explicit join lag, small pre-registered hyp budget, and the same frozen gates. Ordering: after funding/OI design is locked or blocked — see promotion ladder deferred programmes.
+
 ### 5.4 Cost summary (Phase 1)
 
 | Item | Expected cost |

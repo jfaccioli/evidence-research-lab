@@ -1335,14 +1335,938 @@ def _v3_trial_ledger_foundation(conn: sqlite3.Connection) -> None:
         conn.execute(stmt)
 
 
+# =============================================================================
+# v4 — immutable artefact bundles, consistent snapshots, post-event checkpoints
+# =============================================================================
+# Clean PR4 v4 (uncommitted redesign): distinct artifact_id identity, non-unique
+# content merkle_root, exact completion-to-artefact links, composite cohort
+# lineage binding, append-only digests/checkpoints. Local checkpoints remain
+# non-authoritative (is_authoritative=0). No PR5 authority.
+
+_EVENT_TYPE_CHECK_V4 = (
+    "event_type IN ("
+    "'trial_registered',"
+    "'trial_state_transition',"
+    "'budget_allocated',"
+    "'legacy_n_bound_proposed',"
+    "'artifact_bundle_sealed',"
+    "'artifact_bundle_supersession',"
+    "'checkpoint_recorded'"
+    ")"
+)
+
+_BUNDLE_KIND_CHECK = "bundle_kind IN ('run', 'cohort')"
+
+P1_V4_DATA_TABLES: tuple[str, ...] = (
+    "artifact_digests",
+    "trial_completion_links",
+    "checkpoints",
+)
+
+P1_V4_COLUMNS: dict[str, dict[str, ColumnSpec]] = {
+    "artifact_digests": {
+        "artifact_id": ColumnSpec("TEXT", True, 1),
+        "merkle_root": ColumnSpec("TEXT", True, 0),
+        "bundle_kind": ColumnSpec("TEXT", True, 0),
+        "run_id": ColumnSpec("TEXT", False, 0),
+        "cohort_id": ColumnSpec("TEXT", False, 0),
+        "trial_id": ColumnSpec("TEXT", False, 0),
+        "research_lineage_id": ColumnSpec("TEXT", True, 0),
+        "programme_version_id": ColumnSpec("TEXT", True, 0),
+        "manifest_sha256": ColumnSpec("TEXT", True, 0),
+        "config_hash": ColumnSpec("TEXT", True, 0),
+        "candidate_spec_hash": ColumnSpec("TEXT", True, 0),
+        "split_manifest_hash": ColumnSpec("TEXT", True, 0),
+        "data_hash": ColumnSpec("TEXT", True, 0),
+        "feature_hash": ColumnSpec("TEXT", True, 0),
+        "dependency_lock_hash": ColumnSpec("TEXT", True, 0),
+        "relative_root": ColumnSpec("TEXT", True, 0),
+        "byte_size": ColumnSpec("INTEGER", True, 0),
+        "registration_event_seq": ColumnSpec("INTEGER", True, 0),
+        "supersedes_artifact_id": ColumnSpec("TEXT", False, 0),
+        "is_correction": ColumnSpec("INTEGER", True, 0),
+        "sealed_at": ColumnSpec("TEXT", True, 0),
+    },
+    "trial_completion_links": {
+        "trial_id": ColumnSpec("TEXT", True, 1),
+        "completion_event_seq": ColumnSpec("INTEGER", True, 0),
+        "artifact_id": ColumnSpec("TEXT", True, 0),
+        "run_id": ColumnSpec("TEXT", True, 0),
+        "registration_event_seq": ColumnSpec("INTEGER", True, 0),
+        "state_event_id": ColumnSpec("TEXT", True, 0),
+    },
+    "checkpoints": {
+        "checkpoint_id": ColumnSpec("TEXT", True, 1),
+        "checkpoint_event_seq": ColumnSpec("INTEGER", True, 0),
+        "final_event_seq": ColumnSpec("INTEGER", True, 0),
+        "final_event_hash": ColumnSpec("TEXT", True, 0),
+        "database_snapshot_hash": ColumnSpec("TEXT", True, 0),
+        "artifact_aggregate_merkle_root": ColumnSpec("TEXT", True, 0),
+        "snapshot_byte_size": ColumnSpec("INTEGER", True, 0),
+        "snapshot_relative_path": ColumnSpec("TEXT", True, 0),
+        "recorded_at": ColumnSpec("TEXT", True, 0),
+        "code_git_sha": ColumnSpec("TEXT", False, 0),
+        "code_package_version": ColumnSpec("TEXT", True, 0),
+        "code_dirty": ColumnSpec("INTEGER", True, 0),
+        "is_local_only": ColumnSpec("INTEGER", True, 0),
+        "is_authoritative": ColumnSpec("INTEGER", True, 0),
+    },
+}
+
+P1_V4_INDEXES: dict[str, tuple[str, IndexSpec]] = {
+    "idx_artifact_digests_merkle": (
+        "artifact_digests",
+        IndexSpec(unique=False, columns=("merkle_root",)),
+    ),
+    "idx_artifact_digests_run": (
+        "artifact_digests",
+        IndexSpec(unique=True, columns=("run_id",)),
+    ),
+    "idx_artifact_digests_cohort": (
+        "artifact_digests",
+        IndexSpec(unique=False, columns=("cohort_id",)),
+    ),
+    "idx_artifact_digests_lineage": (
+        "artifact_digests",
+        IndexSpec(unique=False, columns=("research_lineage_id",)),
+    ),
+    "idx_artifact_digests_event": (
+        "artifact_digests",
+        IndexSpec(unique=True, columns=("registration_event_seq",)),
+    ),
+    "idx_artifact_digests_relative_root": (
+        "artifact_digests",
+        IndexSpec(unique=True, columns=("relative_root",)),
+    ),
+    "idx_trial_completion_links_event": (
+        "trial_completion_links",
+        IndexSpec(unique=True, columns=("completion_event_seq",)),
+    ),
+    "idx_trial_completion_links_artifact": (
+        "trial_completion_links",
+        IndexSpec(unique=True, columns=("artifact_id",)),
+    ),
+    "idx_checkpoints_final_seq": (
+        "checkpoints",
+        IndexSpec(unique=True, columns=("final_event_seq",)),
+    ),
+    "idx_checkpoints_event": (
+        "checkpoints",
+        IndexSpec(unique=True, columns=("checkpoint_event_seq",)),
+    ),
+}
+
+P1_V4_FOREIGN_KEYS: dict[str, tuple[CompositeFK, ...]] = {
+    "artifact_digests": (
+        ("ledger_events", (("registration_event_seq", "event_seq"),)),
+        ("research_lineages", (("research_lineage_id", "research_lineage_id"),)),
+        (
+            "programme_versions",
+            (("programme_version_id", "programme_version_id"),),
+        ),
+        ("trials", (("trial_id", "trial_id"),)),
+        (
+            "cohorts",
+            (
+                ("cohort_id", "cohort_id"),
+                ("programme_version_id", "programme_version_id"),
+            ),
+        ),
+        (
+            "artifact_digests",
+            (("supersedes_artifact_id", "artifact_id"),),
+        ),
+    ),
+    "trial_completion_links": (
+        ("trials", (("trial_id", "trial_id"),)),
+        ("ledger_events", (("completion_event_seq", "event_seq"),)),
+        ("artifact_digests", (("artifact_id", "artifact_id"),)),
+        ("ledger_events", (("registration_event_seq", "event_seq"),)),
+    ),
+    "checkpoints": (
+        ("ledger_events", (("checkpoint_event_seq", "event_seq"),)),
+    ),
+}
+
+# Rebuild ledger_events with expanded event_type CHECK (pure SQL; FKs off).
+_V4_LEDGER_EVENTS_REBUILD: tuple[str, ...] = (
+    f"""
+    CREATE TABLE ledger_events__p1v4 (
+        event_seq INTEGER PRIMARY KEY,
+        event_type TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        prev_event_hash TEXT NOT NULL,
+        event_hash TEXT NOT NULL,
+        recorded_at TEXT NOT NULL,
+        CHECK (event_seq >= 1),
+        CHECK ({_EVENT_TYPE_CHECK_V4}),
+        CHECK (length(trim(payload_json)) > 0),
+        CHECK ({_sha256_check("prev_event_hash")}),
+        CHECK ({_sha256_check("event_hash")}),
+        CHECK ({_utc_timestamp_check("recorded_at")})
+    )
+    """,
+    """
+    INSERT INTO ledger_events__p1v4(
+        event_seq, event_type, payload_json,
+        prev_event_hash, event_hash, recorded_at
+    )
+    SELECT
+        event_seq, event_type, payload_json,
+        prev_event_hash, event_hash, recorded_at
+    FROM ledger_events
+    """,
+    "DROP TRIGGER IF EXISTS trg_ledger_events_no_update",
+    "DROP TRIGGER IF EXISTS trg_ledger_events_no_delete",
+    "DROP TRIGGER IF EXISTS trg_ledger_events_contiguous_insert",
+    "DROP INDEX IF EXISTS idx_ledger_events_hash",
+    "DROP TABLE ledger_events",
+    "ALTER TABLE ledger_events__p1v4 RENAME TO ledger_events",
+    """
+    CREATE UNIQUE INDEX idx_ledger_events_hash
+        ON ledger_events(event_hash)
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_no_update
+    BEFORE UPDATE ON ledger_events
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_no_delete
+    BEFORE DELETE ON ledger_events
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events is append-only: DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_contiguous_insert
+    BEFORE INSERT ON ledger_events
+    WHEN NEW.event_seq <> (
+        SELECT COALESCE(MAX(event_seq), 0) + 1 FROM ledger_events
+    )
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events.event_seq must be contiguous');
+    END
+    """,
+)
+
+_V4_TABLE_STATEMENTS: tuple[str, ...] = (
+    f"""
+    CREATE TABLE artifact_digests (
+        artifact_id TEXT PRIMARY KEY,
+        merkle_root TEXT NOT NULL,
+        bundle_kind TEXT NOT NULL,
+        run_id TEXT,
+        cohort_id TEXT,
+        trial_id TEXT,
+        research_lineage_id TEXT NOT NULL,
+        programme_version_id TEXT NOT NULL,
+        manifest_sha256 TEXT NOT NULL,
+        config_hash TEXT NOT NULL,
+        candidate_spec_hash TEXT NOT NULL,
+        split_manifest_hash TEXT NOT NULL,
+        data_hash TEXT NOT NULL,
+        feature_hash TEXT NOT NULL,
+        dependency_lock_hash TEXT NOT NULL,
+        relative_root TEXT NOT NULL,
+        byte_size INTEGER NOT NULL,
+        registration_event_seq INTEGER NOT NULL,
+        supersedes_artifact_id TEXT,
+        is_correction INTEGER NOT NULL,
+        sealed_at TEXT NOT NULL,
+        CHECK ({_BUNDLE_KIND_CHECK}),
+        CHECK (length(trim(artifact_id)) > 0),
+        CHECK (length(trim(merkle_root)) = 64),
+        CHECK ({_sha256_check("merkle_root")}),
+        CHECK ({_sha256_check("manifest_sha256")}),
+        CHECK ({_sha256_check("config_hash")}),
+        CHECK ({_sha256_check("candidate_spec_hash")}),
+        CHECK ({_sha256_check("split_manifest_hash")}),
+        CHECK ({_sha256_check("data_hash")}),
+        CHECK ({_sha256_check("feature_hash")}),
+        CHECK ({_sha256_check("dependency_lock_hash")}),
+        CHECK (byte_size >= 0),
+        CHECK (length(trim(relative_root)) > 0),
+        CHECK (length(trim(research_lineage_id)) > 0),
+        CHECK (length(trim(programme_version_id)) > 0),
+        CHECK (is_correction IN (0, 1)),
+        CHECK (
+            (
+                bundle_kind = 'run'
+                AND run_id IS NOT NULL
+                AND length(trim(run_id)) > 0
+                AND cohort_id IS NULL
+                AND trial_id IS NOT NULL
+                AND length(trim(trial_id)) > 0
+            )
+            OR
+            (
+                bundle_kind = 'cohort'
+                AND cohort_id IS NOT NULL
+                AND length(trim(cohort_id)) > 0
+                AND run_id IS NULL
+            )
+        ),
+        CHECK (
+            (
+                is_correction = 0
+                AND supersedes_artifact_id IS NULL
+            )
+            OR
+            (
+                is_correction = 1
+                AND supersedes_artifact_id IS NOT NULL
+                AND length(trim(supersedes_artifact_id)) > 0
+                AND supersedes_artifact_id <> artifact_id
+            )
+        ),
+        CHECK ({_utc_timestamp_check("sealed_at")}),
+        UNIQUE (registration_event_seq),
+        UNIQUE (run_id),
+        UNIQUE (relative_root),
+        FOREIGN KEY (registration_event_seq)
+            REFERENCES ledger_events(event_seq),
+        FOREIGN KEY (research_lineage_id)
+            REFERENCES research_lineages(research_lineage_id),
+        FOREIGN KEY (programme_version_id)
+            REFERENCES programme_versions(programme_version_id),
+        FOREIGN KEY (trial_id)
+            REFERENCES trials(trial_id),
+        FOREIGN KEY (cohort_id, programme_version_id)
+            REFERENCES cohorts(cohort_id, programme_version_id),
+        FOREIGN KEY (supersedes_artifact_id)
+            REFERENCES artifact_digests(artifact_id)
+    )
+    """,
+    f"""
+    CREATE TABLE trial_completion_links (
+        trial_id TEXT PRIMARY KEY,
+        completion_event_seq INTEGER NOT NULL,
+        artifact_id TEXT NOT NULL,
+        run_id TEXT NOT NULL,
+        registration_event_seq INTEGER NOT NULL,
+        state_event_id TEXT NOT NULL,
+        CHECK (length(trim(trial_id)) > 0),
+        CHECK (length(trim(artifact_id)) > 0),
+        CHECK (length(trim(run_id)) > 0),
+        CHECK (length(trim(state_event_id)) > 0),
+        CHECK (completion_event_seq >= 1),
+        CHECK (registration_event_seq >= 1),
+        UNIQUE (completion_event_seq),
+        UNIQUE (artifact_id),
+        UNIQUE (state_event_id),
+        FOREIGN KEY (trial_id)
+            REFERENCES trials(trial_id),
+        FOREIGN KEY (completion_event_seq)
+            REFERENCES ledger_events(event_seq),
+        FOREIGN KEY (artifact_id)
+            REFERENCES artifact_digests(artifact_id),
+        FOREIGN KEY (registration_event_seq)
+            REFERENCES ledger_events(event_seq)
+    )
+    """,
+    f"""
+    CREATE TABLE checkpoints (
+        checkpoint_id TEXT PRIMARY KEY,
+        checkpoint_event_seq INTEGER NOT NULL,
+        final_event_seq INTEGER NOT NULL,
+        final_event_hash TEXT NOT NULL,
+        database_snapshot_hash TEXT NOT NULL,
+        artifact_aggregate_merkle_root TEXT NOT NULL,
+        snapshot_byte_size INTEGER NOT NULL,
+        snapshot_relative_path TEXT NOT NULL,
+        recorded_at TEXT NOT NULL,
+        code_git_sha TEXT,
+        code_package_version TEXT NOT NULL,
+        code_dirty INTEGER NOT NULL,
+        is_local_only INTEGER NOT NULL,
+        is_authoritative INTEGER NOT NULL,
+        CHECK (length(trim(checkpoint_id)) > 0),
+        CHECK (checkpoint_event_seq >= 1),
+        CHECK (final_event_seq >= 0),
+        CHECK (checkpoint_event_seq = final_event_seq + 1),
+        CHECK ({_sha256_check("final_event_hash")}),
+        CHECK ({_sha256_check("database_snapshot_hash")}),
+        CHECK ({_sha256_check("artifact_aggregate_merkle_root")}),
+        CHECK (snapshot_byte_size >= 0),
+        CHECK (length(trim(snapshot_relative_path)) > 0),
+        CHECK (length(trim(code_package_version)) > 0),
+        CHECK (code_dirty IN (0, 1)),
+        CHECK (is_local_only = 1),
+        CHECK (is_authoritative = 0),
+        CHECK (
+            code_git_sha IS NULL
+            OR (
+                length(code_git_sha) >= 7
+                AND length(code_git_sha) <= 64
+                AND code_git_sha GLOB '[0-9a-f]*'
+            )
+        ),
+        CHECK ({_utc_timestamp_check("recorded_at")}),
+        UNIQUE (checkpoint_event_seq),
+        UNIQUE (final_event_seq),
+        FOREIGN KEY (checkpoint_event_seq)
+            REFERENCES ledger_events(event_seq)
+    )
+    """,
+    """
+    CREATE INDEX idx_artifact_digests_merkle
+        ON artifact_digests(merkle_root)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_artifact_digests_run
+        ON artifact_digests(run_id)
+    """,
+    """
+    CREATE INDEX idx_artifact_digests_cohort
+        ON artifact_digests(cohort_id)
+    """,
+    """
+    CREATE INDEX idx_artifact_digests_lineage
+        ON artifact_digests(research_lineage_id)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_artifact_digests_event
+        ON artifact_digests(registration_event_seq)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_artifact_digests_relative_root
+        ON artifact_digests(relative_root)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_trial_completion_links_event
+        ON trial_completion_links(completion_event_seq)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_trial_completion_links_artifact
+        ON trial_completion_links(artifact_id)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_checkpoints_final_seq
+        ON checkpoints(final_event_seq)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_checkpoints_event
+        ON checkpoints(checkpoint_event_seq)
+    """,
+)
+
+_V4_TRIGGER_STATEMENTS: tuple[str, ...] = (
+    """
+    CREATE TRIGGER trg_artifact_digests_no_update
+    BEFORE UPDATE ON artifact_digests
+    BEGIN
+        SELECT RAISE(ABORT, 'artifact_digests is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_artifact_digests_no_delete
+    BEFORE DELETE ON artifact_digests
+    BEGIN
+        SELECT RAISE(ABORT, 'artifact_digests is append-only: DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_trial_completion_links_no_update
+    BEFORE UPDATE ON trial_completion_links
+    BEGIN
+        SELECT RAISE(ABORT, 'trial_completion_links is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_trial_completion_links_no_delete
+    BEFORE DELETE ON trial_completion_links
+    BEGIN
+        SELECT RAISE(ABORT, 'trial_completion_links is append-only: DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_artifact_digests_programme_research_lineage_match
+    BEFORE INSERT ON artifact_digests
+    WHEN NOT EXISTS (
+        SELECT 1
+        FROM programme_versions p
+        WHERE p.programme_version_id = NEW.programme_version_id
+          AND p.research_lineage_id = NEW.research_lineage_id
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'artifact programme_version_id/research_lineage_id mismatch'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_artifact_digests_trial_lineage_match
+    BEFORE INSERT ON artifact_digests
+    WHEN NEW.trial_id IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1
+        FROM trials t
+        WHERE t.trial_id = NEW.trial_id
+          AND t.research_lineage_id = NEW.research_lineage_id
+          AND t.programme_version_id = NEW.programme_version_id
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'artifact trial_id lineage/programme mismatch'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_artifact_digests_cohort_programme_match
+    BEFORE INSERT ON artifact_digests
+    WHEN NEW.cohort_id IS NOT NULL
+      AND NOT EXISTS (
+        SELECT 1
+        FROM cohorts c
+        JOIN programme_versions p
+          ON p.programme_version_id = c.programme_version_id
+        WHERE c.cohort_id = NEW.cohort_id
+          AND c.programme_version_id = NEW.programme_version_id
+          AND p.research_lineage_id = NEW.research_lineage_id
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'artifact cohort programme/research lineage mismatch'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_artifact_digests_correction_same_lineage
+    BEFORE INSERT ON artifact_digests
+    WHEN NEW.is_correction = 1
+      AND NOT EXISTS (
+        SELECT 1
+        FROM artifact_digests old
+        WHERE old.artifact_id = NEW.supersedes_artifact_id
+          AND old.research_lineage_id = NEW.research_lineage_id
+          AND old.bundle_kind = NEW.bundle_kind
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'correction must supersede same-lineage same-kind artefact'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_trial_completion_links_run_artifact
+    BEFORE INSERT ON trial_completion_links
+    WHEN NOT EXISTS (
+        SELECT 1
+        FROM artifact_digests ad
+        WHERE ad.artifact_id = NEW.artifact_id
+          AND ad.bundle_kind = 'run'
+          AND ad.run_id = NEW.run_id
+          AND ad.trial_id = NEW.trial_id
+          AND ad.registration_event_seq = NEW.registration_event_seq
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'completion link must bind exact run artefact for trial'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_trial_state_completed_requires_link
+    BEFORE INSERT ON trial_state_events
+    WHEN NEW.execution_state = 'completed'
+      AND NOT EXISTS (
+        SELECT 1
+        FROM trial_completion_links l
+        WHERE l.trial_id = NEW.trial_id
+          AND l.completion_event_seq = NEW.event_seq
+          AND l.state_event_id = NEW.state_event_id
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'completed state requires exact trial_completion_links row'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_trial_state_single_completed
+    BEFORE INSERT ON trial_state_events
+    WHEN NEW.execution_state = 'completed'
+      AND EXISTS (
+        SELECT 1
+        FROM trial_state_events e
+        WHERE e.trial_id = NEW.trial_id
+          AND e.execution_state = 'completed'
+    )
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'trial already has a completed transition'
+        );
+    END
+    """,
+    """
+    CREATE TRIGGER trg_checkpoints_no_update
+    BEFORE UPDATE ON checkpoints
+    BEGIN
+        SELECT RAISE(ABORT, 'checkpoints is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_checkpoints_no_delete
+    BEFORE DELETE ON checkpoints
+    BEGIN
+        SELECT RAISE(ABORT, 'checkpoints is append-only: DELETE forbidden');
+    END
+    """,
+)
+
+_V4_STATEMENTS: tuple[str, ...] = (
+    _V4_LEDGER_EVENTS_REBUILD + _V4_TABLE_STATEMENTS + _V4_TRIGGER_STATEMENTS
+)
+
+P1_V4_TRIGGER_SQL: dict[str, str] = {
+    _trigger_name_from_create(stmt): _normalize_sql(stmt)
+    for stmt in _V4_TRIGGER_STATEMENTS
+}
+
+P1_V4_TRIGGERS: dict[str, str] = {}
+for _name, _norm in P1_V4_TRIGGER_SQL.items():
+    import re as _re
+
+    _match = _re.search(r"\bON\s+([A-Z_][A-Z0-9_]*)\b", _norm)
+    if not _match:
+        raise RuntimeError(f"cannot parse table for trigger {_name}")
+    P1_V4_TRIGGERS[_name] = _match.group(1).lower()
+
+
+def _v4_artifact_checkpoint_foundation(conn: sqlite3.Connection) -> None:
+    """Expand ledger event types; create artefact digest + checkpoint schema."""
+    for stmt in _V4_STATEMENTS:
+        conn.execute(stmt)
+
+
+# =============================================================================
+# v5 — external anchors + off-machine backup verification (PR5)
+# =============================================================================
+# Append-only external_anchors / off_machine_backups. Expand ledger event types.
+# Never mutates prior events; UNANCHORED_PENDING / BACKUP_UNVERIFIED default path.
+
+_EVENT_TYPE_CHECK_V5 = (
+    "event_type IN ("
+    "'trial_registered',"
+    "'trial_state_transition',"
+    "'budget_allocated',"
+    "'legacy_n_bound_proposed',"
+    "'artifact_bundle_sealed',"
+    "'artifact_bundle_supersession',"
+    "'checkpoint_recorded',"
+    "'external_anchor_recorded',"
+    "'off_machine_backup_recorded'"
+    ")"
+)
+
+_ANCHOR_STATUS_CHECK = (
+    "status IN ('UNANCHORED_PENDING', 'ANCHORED')"
+)
+_BACKUP_STATUS_CHECK = (
+    "status IN ('BACKUP_UNVERIFIED', 'BACKUP_VERIFIED')"
+)
+
+P1_V5_DATA_TABLES: tuple[str, ...] = (
+    "external_anchors",
+    "off_machine_backups",
+)
+
+P1_V5_COLUMNS: dict[str, dict[str, ColumnSpec]] = {
+    "external_anchors": {
+        "anchor_id": ColumnSpec("TEXT", True, 1),
+        "provider_id": ColumnSpec("TEXT", True, 0),
+        "status": ColumnSpec("TEXT", True, 0),
+        "research_lineage_id": ColumnSpec("TEXT", True, 0),
+        "final_event_seq": ColumnSpec("INTEGER", True, 0),
+        "final_event_hash": ColumnSpec("TEXT", True, 0),
+        "checkpoint_id": ColumnSpec("TEXT", False, 0),
+        "database_snapshot_hash": ColumnSpec("TEXT", False, 0),
+        "artifact_aggregate_root": ColumnSpec("TEXT", False, 0),
+        "external_ref": ColumnSpec("TEXT", False, 0),
+        "registration_event_seq": ColumnSpec("INTEGER", True, 0),
+        "attested_at": ColumnSpec("TEXT", True, 0),
+        "detail_json": ColumnSpec("TEXT", True, 0),
+    },
+    "off_machine_backups": {
+        "backup_id": ColumnSpec("TEXT", True, 1),
+        "provider_id": ColumnSpec("TEXT", True, 0),
+        "status": ColumnSpec("TEXT", True, 0),
+        "research_lineage_id": ColumnSpec("TEXT", True, 0),
+        "snapshot_relative_path": ColumnSpec("TEXT", True, 0),
+        "snapshot_sha256": ColumnSpec("TEXT", True, 0),
+        "snapshot_size_bytes": ColumnSpec("INTEGER", True, 0),
+        "final_event_seq": ColumnSpec("INTEGER", True, 0),
+        "final_event_hash": ColumnSpec("TEXT", True, 0),
+        "registration_event_seq": ColumnSpec("INTEGER", True, 0),
+        "verified_at": ColumnSpec("TEXT", True, 0),
+        "detail_json": ColumnSpec("TEXT", True, 0),
+    },
+}
+
+P1_V5_INDEXES: dict[str, tuple[str, IndexSpec]] = {
+    "idx_external_anchors_tip": (
+        "external_anchors",
+        IndexSpec(
+            unique=False,
+            columns=("research_lineage_id", "final_event_seq"),
+        ),
+    ),
+    "idx_external_anchors_event": (
+        "external_anchors",
+        IndexSpec(unique=True, columns=("registration_event_seq",)),
+    ),
+    "idx_off_machine_backups_tip": (
+        "off_machine_backups",
+        IndexSpec(
+            unique=False,
+            columns=("research_lineage_id", "final_event_seq"),
+        ),
+    ),
+    "idx_off_machine_backups_event": (
+        "off_machine_backups",
+        IndexSpec(unique=True, columns=("registration_event_seq",)),
+    ),
+}
+
+P1_V5_FOREIGN_KEYS: dict[str, tuple[CompositeFK, ...]] = {
+    "external_anchors": (
+        ("ledger_events", (("registration_event_seq", "event_seq"),)),
+        ("research_lineages", (("research_lineage_id", "research_lineage_id"),)),
+    ),
+    "off_machine_backups": (
+        ("ledger_events", (("registration_event_seq", "event_seq"),)),
+        ("research_lineages", (("research_lineage_id", "research_lineage_id"),)),
+    ),
+}
+
+_V5_LEDGER_EVENTS_REBUILD: tuple[str, ...] = (
+    f"""
+    CREATE TABLE ledger_events__p1v5 (
+        event_seq INTEGER PRIMARY KEY,
+        event_type TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        prev_event_hash TEXT NOT NULL,
+        event_hash TEXT NOT NULL,
+        recorded_at TEXT NOT NULL,
+        CHECK (event_seq >= 1),
+        CHECK ({_EVENT_TYPE_CHECK_V5}),
+        CHECK (length(trim(payload_json)) > 0),
+        CHECK ({_sha256_check("prev_event_hash")}),
+        CHECK ({_sha256_check("event_hash")}),
+        CHECK ({_utc_timestamp_check("recorded_at")})
+    )
+    """,
+    """
+    INSERT INTO ledger_events__p1v5(
+        event_seq, event_type, payload_json,
+        prev_event_hash, event_hash, recorded_at
+    )
+    SELECT
+        event_seq, event_type, payload_json,
+        prev_event_hash, event_hash, recorded_at
+    FROM ledger_events
+    """,
+    "DROP TRIGGER IF EXISTS trg_ledger_events_no_update",
+    "DROP TRIGGER IF EXISTS trg_ledger_events_no_delete",
+    "DROP TRIGGER IF EXISTS trg_ledger_events_contiguous_insert",
+    "DROP INDEX IF EXISTS idx_ledger_events_hash",
+    "DROP TABLE ledger_events",
+    "ALTER TABLE ledger_events__p1v5 RENAME TO ledger_events",
+    """
+    CREATE UNIQUE INDEX idx_ledger_events_hash
+        ON ledger_events(event_hash)
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_no_update
+    BEFORE UPDATE ON ledger_events
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_no_delete
+    BEFORE DELETE ON ledger_events
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events is append-only: DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_ledger_events_contiguous_insert
+    BEFORE INSERT ON ledger_events
+    WHEN NEW.event_seq <> (
+        SELECT COALESCE(MAX(event_seq), 0) + 1 FROM ledger_events
+    )
+    BEGIN
+        SELECT RAISE(ABORT, 'ledger_events.event_seq must be contiguous');
+    END
+    """,
+)
+
+_V5_TABLE_STATEMENTS: tuple[str, ...] = (
+    f"""
+    CREATE TABLE external_anchors (
+        anchor_id TEXT PRIMARY KEY,
+        provider_id TEXT NOT NULL,
+        status TEXT NOT NULL,
+        research_lineage_id TEXT NOT NULL,
+        final_event_seq INTEGER NOT NULL,
+        final_event_hash TEXT NOT NULL,
+        checkpoint_id TEXT,
+        database_snapshot_hash TEXT,
+        artifact_aggregate_root TEXT,
+        external_ref TEXT,
+        registration_event_seq INTEGER NOT NULL,
+        attested_at TEXT NOT NULL,
+        detail_json TEXT NOT NULL,
+        CHECK (length(trim(anchor_id)) > 0),
+        CHECK (length(trim(provider_id)) > 0),
+        CHECK ({_ANCHOR_STATUS_CHECK}),
+        CHECK (final_event_seq >= 1),
+        CHECK ({_sha256_check("final_event_hash")}),
+        CHECK (
+            database_snapshot_hash IS NULL
+            OR ({_sha256_check("database_snapshot_hash")})
+        ),
+        CHECK (
+            artifact_aggregate_root IS NULL
+            OR ({_sha256_check("artifact_aggregate_root")})
+        ),
+        CHECK (length(trim(detail_json)) > 0),
+        CHECK ({_utc_timestamp_check("attested_at")}),
+        UNIQUE (registration_event_seq),
+        FOREIGN KEY (registration_event_seq)
+            REFERENCES ledger_events(event_seq),
+        FOREIGN KEY (research_lineage_id)
+            REFERENCES research_lineages(research_lineage_id)
+    )
+    """,
+    f"""
+    CREATE TABLE off_machine_backups (
+        backup_id TEXT PRIMARY KEY,
+        provider_id TEXT NOT NULL,
+        status TEXT NOT NULL,
+        research_lineage_id TEXT NOT NULL,
+        snapshot_relative_path TEXT NOT NULL,
+        snapshot_sha256 TEXT NOT NULL,
+        snapshot_size_bytes INTEGER NOT NULL,
+        final_event_seq INTEGER NOT NULL,
+        final_event_hash TEXT NOT NULL,
+        registration_event_seq INTEGER NOT NULL,
+        verified_at TEXT NOT NULL,
+        detail_json TEXT NOT NULL,
+        CHECK (length(trim(backup_id)) > 0),
+        CHECK (length(trim(provider_id)) > 0),
+        CHECK ({_BACKUP_STATUS_CHECK}),
+        CHECK (length(trim(snapshot_relative_path)) > 0),
+        CHECK (snapshot_size_bytes >= 0),
+        CHECK (final_event_seq >= 1),
+        CHECK ({_sha256_check("snapshot_sha256")}),
+        CHECK ({_sha256_check("final_event_hash")}),
+        CHECK (length(trim(detail_json)) > 0),
+        CHECK ({_utc_timestamp_check("verified_at")}),
+        UNIQUE (registration_event_seq),
+        FOREIGN KEY (registration_event_seq)
+            REFERENCES ledger_events(event_seq),
+        FOREIGN KEY (research_lineage_id)
+            REFERENCES research_lineages(research_lineage_id)
+    )
+    """,
+    """
+    CREATE INDEX idx_external_anchors_tip
+        ON external_anchors(research_lineage_id, final_event_seq)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_external_anchors_event
+        ON external_anchors(registration_event_seq)
+    """,
+    """
+    CREATE INDEX idx_off_machine_backups_tip
+        ON off_machine_backups(research_lineage_id, final_event_seq)
+    """,
+    """
+    CREATE UNIQUE INDEX idx_off_machine_backups_event
+        ON off_machine_backups(registration_event_seq)
+    """,
+)
+
+_V5_TRIGGER_STATEMENTS: tuple[str, ...] = (
+    """
+    CREATE TRIGGER trg_external_anchors_no_update
+    BEFORE UPDATE ON external_anchors
+    BEGIN
+        SELECT RAISE(ABORT, 'external_anchors is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_external_anchors_no_delete
+    BEFORE DELETE ON external_anchors
+    BEGIN
+        SELECT RAISE(ABORT, 'external_anchors is append-only: DELETE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_off_machine_backups_no_update
+    BEFORE UPDATE ON off_machine_backups
+    BEGIN
+        SELECT RAISE(ABORT, 'off_machine_backups is append-only: UPDATE forbidden');
+    END
+    """,
+    """
+    CREATE TRIGGER trg_off_machine_backups_no_delete
+    BEFORE DELETE ON off_machine_backups
+    BEGIN
+        SELECT RAISE(ABORT, 'off_machine_backups is append-only: DELETE forbidden');
+    END
+    """,
+)
+
+_V5_STATEMENTS: tuple[str, ...] = (
+    _V5_LEDGER_EVENTS_REBUILD + _V5_TABLE_STATEMENTS + _V5_TRIGGER_STATEMENTS
+)
+
+P1_V5_TRIGGER_SQL: dict[str, str] = {
+    _trigger_name_from_create(stmt): _normalize_sql(stmt)
+    for stmt in _V5_TRIGGER_STATEMENTS
+}
+
+P1_V5_TRIGGERS: dict[str, str] = {}
+for _name, _norm in P1_V5_TRIGGER_SQL.items():
+    import re as _re
+
+    _match = _re.search(r"\bON\s+([A-Z_][A-Z0-9_]*)\b", _norm)
+    if not _match:
+        raise RuntimeError(f"cannot parse table for trigger {_name}")
+    P1_V5_TRIGGERS[_name] = _match.group(1).lower()
+
+
+def _v5_external_anchor_foundation(conn: sqlite3.Connection) -> None:
+    """Expand ledger event types; create external anchor + backup tables."""
+    for stmt in _V5_STATEMENTS:
+        conn.execute(stmt)
+
+
 MIGRATIONS: list[tuple[int, MigrationFn]] = [
     (1, _v1_p1_foundation),
     (2, _v2_holdout_foundation),
     (3, _v3_trial_ledger_foundation),
+    (4, _v4_artifact_checkpoint_foundation),
+    (5, _v5_external_anchor_foundation),
 ]
 
 MIGRATION_STATEMENTS: dict[int, tuple[str, ...]] = {
     1: _V1_STATEMENTS,
     2: _V2_STATEMENTS,
     3: _V3_STATEMENTS,
+    4: _V4_STATEMENTS,
+    5: _V5_STATEMENTS,
 }

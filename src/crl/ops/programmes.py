@@ -79,6 +79,8 @@ def list_programmes(batch_root: Path | None = None) -> list[ProgrammeInfo]:
             "breakout": "PROGRAMME_BREAKOUT_V1.md",
             "volume": "PROGRAMME_VOLUME_V1.md",
             "fade": "PROGRAMME_FADE_V1.md",
+            "herding": "PROGRAMME_HERDING_V1.md",
+            "risk_off": "PROGRAMME_RISK_OFF_V1.md",
         }
         if p.name in special:
             candidates.insert(0, root / "docs" / special[p.name])

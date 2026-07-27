@@ -1,3 +1,10 @@
-"""Approved strategies only (empty in Phase 1)."""
+"""Approved strategies only — empty until promotion earns entries."""
 
-APPROVED: list[str] = []
+from crl.production.strategies.registry import (
+    APPROVED,
+    assert_approved,
+    is_approved,
+    list_approved,
+)
+
+__all__ = ["APPROVED", "assert_approved", "is_approved", "list_approved"]

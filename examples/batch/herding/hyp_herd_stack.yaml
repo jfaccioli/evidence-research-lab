@@ -1,0 +1,17 @@
+id: hyp_herd_stack
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_herding
+entry:
+  expression: above_sma_50 == 1 and above_sma_200 == 1 and sma_50_above_200 == 1
+exit:
+  expression: above_sma_50 == 0 or above_sma_200 == 0
+rationale: >
+  Stacked trend alignment. herding_trend.
+expected_outcome: Exploratory under frozen gates.
+feature_tags: [herding_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

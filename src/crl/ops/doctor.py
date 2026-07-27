@@ -65,6 +65,16 @@ def run_doctor(config_path: str | None = None) -> DoctorReport:
             f"{LIVE_ENV_FLAG} and phase5 flags must both be set for LIVE; currently live_on={live_on}",
         )
     )
+    from crl.production.kill_switch import is_kill_switch_engaged
+
+    ks = is_kill_switch_engaged()
+    checks.append(
+        Check(
+            "kill_switch_readable",
+            True,
+            f"engaged={ks} (ops latch; paper refuses if engaged)",
+        )
+    )
 
     # Datasets
     mdir = root / cfg.get("data", {}).get("manifest_dir", "data/manifests")

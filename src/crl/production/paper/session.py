@@ -15,6 +15,8 @@ from typing import Any, Optional
 import pandas as pd
 
 from crl.production.execution.broker import OrderIntent, PaperBroker
+from crl.production.kill_switch import is_kill_switch_engaged
+from crl.production.risk_envelope import RiskEnvelope, check_order
 from crl.research.hypotheses.rules import eval_rule
 from crl.risk.constraints import RiskLimits, clamp_position
 from crl.shared.types import HypothesisSpec
@@ -59,10 +61,18 @@ def run_paper_session(
     price_col: str = "close",
     journal_dir: Path | None = None,
     burn_in_cols: tuple[str, ...] = ("sma_200", "atr_14"),
+    mandate_limits: bool = False,
+    envelope: RiskEnvelope | None = None,
 ) -> PaperSessionResult:
-    """Simulate paper trading on historical features (research path)."""
+    """Simulate paper trading on historical features (research path).
+
+    ``mandate_limits=True`` applies tiny-live envelope (1 trade/day, notional cap).
+    Historical research paper uses relaxed trade count unless mandate_limits set.
+    """
     if price_col not in features.columns:
         raise ValueError(f"missing price column {price_col}")
+    if is_kill_switch_engaged():
+        raise RuntimeError("Kill switch engaged — paper session refused")
     work = features.copy()
     need = [c for c in burn_in_cols if c in work.columns]
     if need:
@@ -72,67 +82,116 @@ def run_paper_session(
         fee_bps_rt=fee_bps_rt,
         starting_cash=starting_cash,
     )
-    # Position unit = fraction of equity notionally 1.0 full long in "units"
-    # Mark-to-market uses price; we trade unit size = cash/price when going long.
+    env = envelope or RiskEnvelope(
+        max_notional_aud=max(starting_cash, 50.0),
+        max_trades_per_day=1 if mandate_limits else 10_000,
+        kill_switch=False,
+    )
     pos_flag = 0.0
     journal: list[dict[str, Any]] = []
     equity_series: list[float] = []
+    trades_today = 0
+    last_day: str | None = None
+    n_blocked = 0
 
     for ts, row_s in work.iterrows():
         row = row_s.to_dict()
-        # inject close alias
         row.setdefault("close", float(row_s[price_col]))
         px = float(row_s[price_col])
         if px <= 0 or pd.isna(px):
             continue
+        day = str(ts)[:10]
+        if day != last_day:
+            trades_today = 0
+            last_day = day
         desired = desired_long_only(
             spec.entry.expression, spec.exit.expression, row, pos_flag
         )
         desired = clamp_position(desired, broker.limits)
         if desired > pos_flag + 1e-12:
-            # buy to full long: size so notional ≈ cash (tiny capital full-or-flat)
             qty = max(broker.cash / px, 0.0) * 0.99
-            if qty > 0:
+            decision = check_order(
+                side="buy",
+                qty=qty,
+                mark_price=px,
+                trades_today=trades_today,
+                current_position=broker.position(),
+                envelope=env,
+            )
+            if decision.allowed and decision.clipped_qty > 0:
                 fill = broker.place_order(
                     OrderIntent(
                         symbol=spec.asset.replace("/", ""),
                         side="buy",
-                        qty=qty,
+                        qty=decision.clipped_qty,
                         client_tag=spec.id,
                     ),
                     mark_price=px,
                 )
+                trades_today += 1
                 journal.append(
                     {
                         "ts": str(ts),
                         "event": "fill",
                         "fill": asdict(fill),
                         "desired": desired,
+                        "risk": decision.reason,
                     }
                 )
-            pos_flag = 1.0 if broker.position() > 0 else 0.0
+                pos_flag = 1.0 if broker.position() > 0 else 0.0
+            else:
+                n_blocked += 1
+                journal.append(
+                    {
+                        "ts": str(ts),
+                        "event": "blocked",
+                        "side": "buy",
+                        "reason": decision.reason,
+                        "desired": desired,
+                    }
+                )
         elif desired < pos_flag - 1e-12:
             qty = abs(broker.position())
-            if qty > 0:
+            decision = check_order(
+                side="sell",
+                qty=qty,
+                mark_price=px,
+                trades_today=trades_today,
+                current_position=broker.position(),
+                envelope=env,
+            )
+            if decision.allowed and decision.clipped_qty > 0:
                 fill = broker.place_order(
                     OrderIntent(
                         symbol=spec.asset.replace("/", ""),
                         side="sell",
-                        qty=qty,
+                        qty=decision.clipped_qty,
                         client_tag=spec.id,
                     ),
                     mark_price=px,
                 )
+                trades_today += 1
                 journal.append(
                     {
                         "ts": str(ts),
                         "event": "fill",
                         "fill": asdict(fill),
                         "desired": desired,
+                        "risk": decision.reason,
                     }
                 )
-            pos_flag = 0.0 if broker.position() <= 1e-12 else 1.0
-        # MTM equity
+                pos_flag = 0.0 if broker.position() <= 1e-12 else 1.0
+            else:
+                n_blocked += 1
+                journal.append(
+                    {
+                        "ts": str(ts),
+                        "event": "blocked",
+                        "side": "sell",
+                        "reason": decision.reason,
+                        "desired": desired,
+                    }
+                )
         equity = broker.cash + broker.position() * px
         equity_series.append(equity)
         journal.append(
@@ -179,5 +238,7 @@ def run_paper_session(
             "historical bar walk; not live clock",
             "LIVE disabled by design",
             "NOT a substitute for train/val/test research gates",
+            f"mandate_limits={mandate_limits}",
+            f"risk_blocks={n_blocked}",
         ],
     )

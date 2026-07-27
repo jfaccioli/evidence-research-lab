@@ -1,8 +1,16 @@
-"""Production surface — intentionally empty of execution in Phase 1.
+"""Production surface — paper/shadow scaffolding; LIVE fail-closed.
 
-Research code may be messy over time. Production stays boring and stable.
-Only strategies that pass promotion gates may be copied here in later phases.
-No order placement, no live API keys, no broker adapters in Phase 1.
+Research may explore freely under frozen gates. Production stays boring:
+only APPROVED strategies may later be clocked; bare place_order stays disabled;
+LIVE needs Phase-5 dual human flags + exchange adapter (not implemented).
 """
 
-PHASE1_EXECUTION_ENABLED = False
+from crl.production.modes import ExecutionMode, live_explicitly_enabled
+
+PHASE1_EXECUTION_ENABLED = False  # legacy name; LIVE still dual-flag gated
+
+__all__ = [
+    "ExecutionMode",
+    "PHASE1_EXECUTION_ENABLED",
+    "live_explicitly_enabled",
+]

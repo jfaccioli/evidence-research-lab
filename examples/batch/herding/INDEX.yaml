@@ -1,0 +1,6 @@
+programme: herding_v1
+hypotheses:
+  - hyp_herd_sma200_volok.yaml
+  - hyp_herd_stack.yaml
+  - hyp_herd_ema_stack.yaml
+  - hyp_herd_mom_trend.yaml

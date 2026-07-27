@@ -29,6 +29,7 @@ python -m crl doctor
 | `python -m crl learn` | Refresh KB from registry |
 | `python -m crl thesis` | Print Thesis Tree |
 | `python -m crl programmes` | Inventory programme dirs + hyp counts |
+| `python -m crl status` | Compact doctor + programmes + kill/LIVE |
 | `python -m crl batch --hyp-dir … --temp-registry` | Programme batch with auto temp sqlite |
 
 ### Programme batch pattern (recommended)

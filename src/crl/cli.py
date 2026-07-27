@@ -238,7 +238,18 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Default: data/paper_journal/",
     )
+    p_paper.add_argument(
+        "--mandate-limits",
+        action="store_true",
+        help="Apply tiny-live envelope (1 trade/day, notional cap)",
+    )
     p_paper.set_defaults(func=cmd_paper)
+
+    p_status = sub.add_parser(
+        "status",
+        help="Compact lab status (doctor + programmes + LIVE/kill)",
+    )
+    p_status.set_defaults(func=cmd_status)
 
     p_shadow = sub.add_parser(
         "shadow",
@@ -412,6 +423,14 @@ def cmd_programmes(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_status(args: argparse.Namespace) -> int:
+    from crl.ops.status import lab_status
+
+    st = lab_status(args.config)
+    print(json.dumps(st, indent=2))
+    return 0 if st.get("doctor_ok") and not st.get("live_enabled") else 1
+
+
 def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):
     from crl.shared.data.feature_store import load_or_build_features
     from crl.shared.data.store import load_dataset, latest_manifest
@@ -486,6 +505,7 @@ def cmd_paper(args: argparse.Namespace) -> int:
         starting_cash=float(args.cash),
         fee_bps_rt=fee_rt,
         journal_dir=jdir,
+        mandate_limits=bool(getattr(args, "mandate_limits", False)),
     )
     print(json.dumps({
         "hypothesis_id": res.hypothesis_id,

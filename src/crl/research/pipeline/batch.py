@@ -47,6 +47,9 @@ def run_batch(
     limit: int | None = None,
     write_hyps: bool = True,
     config_path: str | None = None,
+    funding_events: Any | None = None,
+    funding_series_id: str | None = None,
+    registry_path: str | Path | None = None,
 ) -> dict[str, Any]:
     cfg = load_config(config_path)
     root = project_root()
@@ -78,6 +81,9 @@ def run_batch(
                 spec,
                 cfg,
                 dataset_id=dataset_id,
+                funding_events=funding_events,
+                funding_series_id=funding_series_id,
+                registry_path=registry_path,
                 mode=ResearchMode.EXPLORATORY,
             )
             row = {

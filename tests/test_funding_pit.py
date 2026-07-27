@@ -99,18 +99,31 @@ def test_add_funding_features_no_lookahead_on_mock_ohlcv():
 
 
 def test_pre_registered_funding_hyps_count_and_parse():
-    from crl.cli import load_config  # may not exist
     import yaml
     from pathlib import Path
-    from crl.shared.types import HypothesisSpec
 
     d = Path("examples/batch/funding")
     files = sorted(d.glob("hyp_funding_*.yaml"))
     assert len(files) == 10
     for f in files:
         raw = yaml.safe_load(f.read_text())
-        # taxonomy valid
         assert raw["taxonomy"] == "funding_proxy"
         assert "funding_pit_v1" in raw.get("feature_tags", [])
-        # expressions reference funding features where intended
         assert "expression" in raw["entry"]
+
+
+def test_offline_binance_fixture_parses_and_asof():
+    import json
+    from pathlib import Path
+
+    from crl.shared.data.sources.binance_funding import events_from_binance_json_records
+
+    path = Path("tests/fixtures/binance_btcusdt_funding_sample.json")
+    if not path.exists():
+        pytest.skip("offline fixture missing")
+    records = json.loads(path.read_text())
+    ev = events_from_binance_json_records(records)
+    assert len(ev) == len(records)
+    bars = pd.date_range(ev["funding_time"].iloc[0], periods=10, freq="1D", tz="UTC")
+    asof = asof_funding_at_bar_close(bars, ev)
+    assert asof["funding_last"].notna().any()

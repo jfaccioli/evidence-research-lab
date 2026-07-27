@@ -70,9 +70,15 @@ def asof_funding_at_bar_close(
     if not isinstance(bar_index, pd.DatetimeIndex):
         raise FundingPITError("bar_index must be DatetimeIndex")
     bars = bar_index.tz_convert("UTC") if bar_index.tz is not None else bar_index.tz_localize("UTC")
+    # Normalize timezone-aware dtype units (ns) so merge_asof keys match.
+    bars = pd.to_datetime(bars, utc=True).as_unit("ns")
     left = pd.DataFrame({"bar_close": bars}).sort_values("bar_close")
-    right = ev.rename(columns={"funding_time": "funding_time_used", "funding_rate": "funding_last"})
-    # merge_asof requires sorted keys
+    right = ev.rename(
+        columns={"funding_time": "funding_time_used", "funding_rate": "funding_last"}
+    ).copy()
+    right["funding_time_used"] = pd.DatetimeIndex(
+        pd.to_datetime(right["funding_time_used"], utc=True)
+    ).as_unit("ns")
     merged = pd.merge_asof(
         left,
         right,
@@ -81,7 +87,6 @@ def asof_funding_at_bar_close(
         direction="backward",
     )
     merged = merged.set_index("bar_close")
-    # Reindex to original order
     out = merged.reindex(bars)
     out.index = bar_index
     return out[["funding_last", "funding_time_used"]]

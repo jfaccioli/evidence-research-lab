@@ -76,8 +76,15 @@ def run_hypothesis_pipeline(
     mode: ResearchMode = ResearchMode.EXPLORATORY,
     df: pd.DataFrame | None = None,
     manifest: Any | None = None,
+    funding_events: pd.DataFrame | None = None,
+    funding_series_id: str | None = None,
+    registry_path: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Run full research path. Exploratory never promotes off test metrics."""
+    """Run full research path. Exploratory never promotes off test metrics.
+
+    Optional ``funding_events`` joins PIT funding features (programme lock).
+    Optional ``registry_path`` overrides live registry for isolated runs.
+    """
     root = project_root()
     assert_phase1_universe(spec.model_dump())
     assert_hypothesis_admissible(spec)
@@ -88,7 +95,9 @@ def run_hypothesis_pipeline(
     stats_cfg = cfg.get("stats", {})
     seed = int(stats_cfg.get("seed", 42))
 
-    reg_path = root / cfg.get("registry", {}).get("path", "registry/crl.sqlite")
+    reg_path = Path(registry_path) if registry_path is not None else (
+        root / cfg.get("registry", {}).get("path", "registry/crl.sqlite")
+    )
     registry = HypothesisRegistry(reg_path)
     try:
         registry.upsert_hypothesis(spec, status=HypothesisStatus.DRAFT)
@@ -119,7 +128,13 @@ def run_hypothesis_pipeline(
         registry.register_data_asset(manifest.model_dump() if hasattr(manifest, "model_dump") else dict(manifest))
 
     cache_dir = root / cfg.get("data", {}).get("cache_dir", "data/processed") / "features"
-    frame = load_or_build_features(df, dataset_id=str(dataset_id), cache_dir=cache_dir)
+    frame = load_or_build_features(
+        df,
+        dataset_id=str(dataset_id),
+        cache_dir=cache_dir,
+        funding_events=funding_events,
+        funding_series_id=funding_series_id,
+    )
     # Drop burn-in where core features unknown
     need = [
         c

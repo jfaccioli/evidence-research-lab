@@ -1,0 +1,22 @@
+id: hyp_funding_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_level
+entry:
+  expression: above_sma_200 == 1 and funding_high == 0
+exit:
+  expression: above_sma_200 == 0 or funding_high == 1
+rationale: >
+  True funding: avoid longs when causal funding_last is above expanding median (crowding/pay-longs regime). Programme lock: docs/PROGRAMME_FUNDING_PIT_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy.
+expected_outcome: >
+  If null, high-funding avoid filter does not help daily long-only after costs. Mock funding must never be used for promotion.
+feature_tags:
+  - funding_pit_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

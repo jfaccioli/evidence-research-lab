@@ -1,0 +1,22 @@
+id: hyp_funding_z_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_level
+entry:
+  expression: mom_pos_20 == 1 and funding_z_60 <= 1
+exit:
+  expression: mom_pos_20 == 0 or funding_z_60 > 1
+rationale: >
+  Avoid momentum longs when funding z-score is extremely high (60d causal window). Programme lock: docs/PROGRAMME_FUNDING_PIT_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy.
+expected_outcome: >
+  Tests extreme crowding beyond median split. Mock funding must never be used for promotion.
+feature_tags:
+  - funding_pit_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

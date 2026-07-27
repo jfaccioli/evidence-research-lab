@@ -1,0 +1,16 @@
+# Pre-registered funding PIT programme v1 — max 10 hyps. Do not expand without new programme version.
+programme: funding_btc_usdt_m_daily_v1
+design: docs/PROGRAMME_FUNDING_PIT_V1.md
+mode: exploratory_only_until_gates
+live_fetch_authorized: false
+hypotheses:
+  - hyp_funding_high_flat.yaml
+  - hyp_funding_pos_flat.yaml
+  - hyp_funding_neg_long.yaml
+  - hyp_funding_z_high_flat.yaml
+  - hyp_funding_z_low_long.yaml
+  - hyp_funding_chg_up_flat.yaml
+  - hyp_funding_sum24_high_flat.yaml
+  - hyp_funding_trend_and_not_high.yaml
+  - hyp_funding_only_neg_mom.yaml
+  - hyp_funding_high_exit_only.yaml

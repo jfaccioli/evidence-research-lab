@@ -1,0 +1,22 @@
+id: hyp_funding_pos_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_level
+entry:
+  expression: above_sma_200 == 1 and funding_pos == 0
+exit:
+  expression: above_sma_200 == 0 or funding_pos == 1
+rationale: >
+  Coarser sign filter: flat when last known funding rate is positive. Programme lock: docs/PROGRAMME_FUNDING_PIT_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy.
+expected_outcome: >
+  Null likely; falsifies simple 'positive funding = no long' story. Mock funding must never be used for promotion.
+feature_tags:
+  - funding_pit_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

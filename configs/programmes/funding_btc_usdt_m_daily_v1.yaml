@@ -1,0 +1,26 @@
+# Funding PIT programme v1 — documentation + lock stub (not live cutover).
+# Real programme split seal is separate P1 cutover work.
+
+programme_version_id: funding_btc_usdt_m_daily_v1
+programme_lineage_id: funding_btc_usdt_m
+research_lineage_id: crl_btc_research_v0
+version_reason: "PIT USDT-M BTC funding pre-registered exploratory programme"
+prior_results_available_at_creation: true
+
+asset: BTC/USDT
+perp_symbol: BTCUSDT
+interval: 1d
+timezone: UTC
+
+funding:
+  source_class_live: exchange_native
+  source_class_mock: mock
+  max_hypotheses: 10
+  join_rule: asof_funding_time_le_bar_close
+  signal_lag: next_open
+  min_trust_score: 0.70
+
+hypothesis_dir: examples/batch/funding
+status: designed_scaffold_only
+live_fetch_authorized: false
+paper_trading: false

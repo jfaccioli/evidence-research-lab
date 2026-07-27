@@ -1,0 +1,22 @@
+id: hyp_funding_only_neg_mom
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_mean_revert
+entry:
+  expression: funding_neg == 1 and mom_pos_20 == 1
+exit:
+  expression: funding_neg == 0 or mom_pos_20 == 0
+rationale: >
+  Composite: negative funding + 20d momentum only. Programme lock: docs/PROGRAMME_FUNDING_PIT_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy.
+expected_outcome: >
+  One composite only; no further composites without new programme version. Mock funding must never be used for promotion.
+feature_tags:
+  - funding_pit_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

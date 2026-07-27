@@ -111,7 +111,9 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     out["close_minus_2atr"] = c - 2.0 * out["atr_14"]
     out["above_atr_trail"] = (c > out["close_minus_2atr"].shift(1)).astype(float)
 
-    # Optional external columns (funding, etc.) left as-is if present
+    # Optional external columns (funding, etc.) left as-is if present.
+    # True funding features must be joined via crl.shared.data.funding.add_funding_features
+    # (PIT as-of bar close) before/after this call — never invent future funding here.
     # Sentiment/on-chain: only if joined with trust-scored PIT series
 
     return out

@@ -1,0 +1,22 @@
+id: hyp_funding_z_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: funding_proxy
+family_id: family_funding_mean_revert
+entry:
+  expression: funding_z_60 < -1 and mom_pos_20 == 1
+exit:
+  expression: funding_z_60 >= -1 or mom_pos_20 == 0
+rationale: >
+  Long only when funding is extremely negative and short-term mom positive. Programme lock: docs/PROGRAMME_FUNDING_PIT_V1.md.
+  TRUE exchange funding via PIT join — not OHLCV proxy.
+expected_outcome: >
+  May fail min_trades; economic null still informative. Mock funding must never be used for promotion.
+feature_tags:
+  - funding_pit_v1
+  - true_funding
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates or 2x cost stress; or pure single-regime artefact.

@@ -50,6 +50,7 @@ Only then: tiny live as a **system** test, not a profit mandate.
 
 - Expand pre-registered catalog in waves (trend, mom, vol, volume, calendar, structure).  
 - Crypto-specific (funding, OI) only with **PIT historical series** + trust scores — no proxy laundering.  
+- **Funding PIT programme v1 designed:** `docs/PROGRAMME_FUNDING_PIT_V1.md` + `examples/batch/funding/` (≤10 hyps). Real exchange history fetch still required before scientific runs.  
 - Track survival rates via `crl meta`.  
 - Confirmatory runs only after exploratory pass + budget.
 

@@ -1,22 +1,32 @@
 # Autonomous operating charter (human-light)
 
-**Effective:** 2026-07-27  
-**Authority:** Human standing order — agent may proceed without per-step confirmation until the lab is **operationally usable for Phase 2 research**, except hard stops below.
+**Effective:** 2026-07-27 (updated: long-horizon **live-ready** destination)  
+**Authority:** Human standing order — agent may proceed without per-step confirmation along the **promotion ladder toward live automated trading**, except hard stops below.
 
 ---
 
-## 1. What “operationally usable” means here
+## 1. Destination vs honesty
 
-This project is a **research lab**, not a trading bot.
+**Agreed destination:** a system that *can* do tiny live automated trading (AUD 10–20, spot BTC, kill-switch) when **earned**.
 
-| Usable | Not the goal yet |
-|--------|------------------|
-| `crl plan` / `run` / `batch` / `learn` / `thesis` work on pinned data | Live orders / exchange API trading |
-| Frozen gates + registry + reports | Softening gates to force a candidate |
-| Clear Thesis Tree + programme docs after batches | Paper/shadow/live (blocked until promotion ladder) |
-| Pre-reg programmes for new mechanisms without babysitting | “App that makes money” |
+**Not allowed:** skip research / soften gates / enable live early so it “feels done.”
 
-**Phase 2 target:** reduce uncertainty until **2–3 independent confirmatory survivors** from **different** mechanisms — or honest null that the daily long-only space is exhausted under these gates. Paper trading only after that + human go (`docs/PROMOTION_LADDER.md`).
+| Horizon | Meaning |
+|---------|---------|
+| **Now** | Phase 2 discovery + build paper/shadow **scaffolding** (LIVE hard-disabled) |
+| **Before paper capital clock** | ≥2–3 **independent confirmatory survivors** (different mechanisms) under frozen gates |
+| **Paper** | Clock-synced sim, fees, ≥1 month stability |
+| **Shadow** | Live signals, **no orders**, reconcile would-have path |
+| **Tiny live** | Human opens Phase 5 (`CRL_PHASE5_LIVE_ENABLED` + config) + keys + independent safety review |
+
+See `docs/PROMOTION_LADDER.md` and `src/crl/production/`.
+
+| Usable milestone | Not success |
+|------------------|-------------|
+| Research loop solid | Impressive backtests alone |
+| Paper broker + shadow logger tested | Softening gates to invent candidates |
+| LIVE path exists but **fail-closed** | Silent live orders |
+| Thesis Tree current | “Ship trading app” without survivors |
 
 ---
 
@@ -61,16 +71,21 @@ Codex automation status may be **PAUSED** — do not block research. For P1 free
 
 ---
 
-## 5. Research priority queue (default)
+## 5. Priority queue (default) — dual track
 
-When idle, pick the next item **in order**, skip exhausted lines:
-
-1. Underrepresented mechanisms with **existing** features (`capacity_tiny_friction`, etc.).  
+**Track A — Discovery (required for live)**  
+1. Underrepresented / open mechanisms with **existing** features.  
 2. Confirmatory only for true exploratory survivors (budget-aware).  
 3. Autopsy + thesis (never skip).  
-4. Operator UX (runbook, CLI clarity) if research is blocked on usability.  
-5. New external PIT series only with design-first programme (no proxy laundering).  
-6. **Never:** re-mine funding/OI thresholds on spent programme data.
+4. New external PIT series only design-first (no proxy laundering).  
+5. **Never:** re-mine funding/OI/capacity thresholds on spent locks.
+
+**Track B — Live-readiness scaffolding (parallel, no capital)**  
+1. Paper broker + journal (sim fills, fees).  
+2. Shadow signal logger (no orders).  
+3. Risk envelope + kill-switch design; LIVE remains dual-flag + stub adapter.  
+4. Operator runbook for paper/shadow once Track A has candidates.  
+5. **Never:** wire real API keys or enable LIVE without human Phase-5 open.
 
 ---
 

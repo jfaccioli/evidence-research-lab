@@ -1,0 +1,21 @@
+id: hyp_asy_mom_flat_extension
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_asymmetric_extension
+entry:
+  expression: mom_pos_20 == 1 and price_z_20 < 1.5
+exit:
+  expression: mom_pos_20 == 0 or price_z_20 >= 1.5
+rationale: >
+  Long mom but flat when price stretched (price_z) — keep upside without euphoria extension. asymmetric_capture.
+expected_outcome: >
+  Exploratory only. Fail if no after-cost edge vs B&H or gates. Not a clone of prior SMA-only insurance hyp.
+feature_tags:
+  - asymmetric_capture_v2
+  - non_sma_only
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates; or shallower DD without economic excess.

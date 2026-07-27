@@ -1,0 +1,8 @@
+programme: asymmetric_capture_v2
+design: docs/PROGRAMME_ASYMMETRIC_CAPTURE_V2.md
+hypotheses:
+  - hyp_asy_trend_cut_highvol.yaml
+  - hyp_asy_mom_flat_extension.yaml
+  - hyp_asy_trail_in_trend.yaml
+  - hyp_asy_donch_quiet.yaml
+  - hyp_asy_avoid_underwater_vol.yaml

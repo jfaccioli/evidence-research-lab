@@ -1,0 +1,5 @@
+programme_version_id: asymmetric_capture_v2
+hypothesis_dir: examples/batch/asymmetric
+max_hypotheses: 5
+status: ready
+paper_trading: false

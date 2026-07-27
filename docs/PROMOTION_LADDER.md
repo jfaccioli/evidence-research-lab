@@ -48,11 +48,20 @@ Only then: tiny live as a **system** test, not a profit mandate.
 
 ## Phase 2 current targets
 
-- Expand pre-registered catalog in waves (trend, mom, vol, volume, calendar, structure).  
-- Crypto-specific (funding, OI) only with **PIT historical series** + trust scores — no proxy laundering.  
-- **Funding PIT programme v1 designed:** `docs/PROGRAMME_FUNDING_PIT_V1.md` + `examples/batch/funding/` (≤10 hyps). Real exchange history fetch still required before scientific runs.  
-- Track survival rates via `crl meta`.  
-- Confirmatory runs only after exploratory pass + budget.
+- Expand **distinct** economic mechanisms (not SMA clone spam).  
+- Crypto-specific (funding, OI) only with **PIT** series — **done for v1 locks** (funding daily+4h null; OI confirmatory kill). Do not re-mine spent locks.  
+- Track survival rates via `crl meta` / Thesis Tree.  
+- Confirmatory only after exploratory pass + budget.  
+- **Parallel:** paper/shadow **scaffolding** in `src/crl/production/` — LIVE hard-disabled until Phase 5 dual human flags + adapter review.
+
+## Live-readiness (Track B) — code may advance; capital may not
+
+| Component | Status |
+|-----------|--------|
+| Paper broker (sim fills) | Scaffolded |
+| Shadow broker (log intents) | Scaffolded |
+| LIVE place_order | **Fail-closed** (env+config flags + no exchange adapter) |
+| API keys / venue client | Human only |
 
 ## Deferred external-signal programmes (do not skip; do not jump the queue)
 

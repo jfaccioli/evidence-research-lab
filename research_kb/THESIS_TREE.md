@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T15:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] Funding/OI/capacity programmes null or confirmatory-killed; zero candidates.
+**Updated:** `2026-07-27T16:00:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] Zero candidates. Funding/OI/capacity/asymmetric v2 nulls. Paper/shadow scaffolded; LIVE disabled.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -175,10 +175,10 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `asymmetric_capture` — Asymmetric upside/downside capture vs B&H
 
-- **Stance:** `active` (confidence 0.45)
+- **Stance:** `active` (confidence 0.55)
 - **Recommendation:** `pivot`
 - **Claim:** Rule aims to cut left-tail BTC path while keeping right-tail (insurance-like).
-- **Evidence mass:** n_tests=1, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=6, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
@@ -189,6 +189,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Insurance claim unsupported for this formulation: val excess vs B&H ≈ -0.95; failed min_trades and bootstrap CI. Shallower DD without economic value is not an edge.
 - Early failure(s) — formulation-specific; mechanism not fully closed.
 - plan_asymmetric_capture_vol_gate: val excess vs B&H strongly negative despite lower DD — insurance claim not supported for that formulation.
+- Asymmetric v2 (non-SMA): 0/5 passed_val — sparse filters + bootstrap (examples/batch/asymmetric/GATE_AUTOPSY_V1.md).
 
 **Remaining unknowns**
 
@@ -199,23 +200,25 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `capacity_tiny_friction` — Tiny-capital friction realism
 
-- **Stance:** `active` (confidence 0.5)
-- **Recommendation:** `pivot`
+- **Stance:** `untested` (confidence 0.1)
+- **Recommendation:** `observe`
 - **Claim:** Edges that only work with zero friction are invalid for 10–50 AUD.
-- **Evidence mass:** n_tests=5, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
-- Process: elevated-cost programme with frozen gates (stricter friction).
+- _(none logged)_
 
 **Refuting**
 
-- Capacity tiny-friction v1: 0/5 passed_val under elevated costs; all fail min_trades and/or bootstrap (examples/batch/capacity/GATE_AUTOPSY_V1.md).
-- Sparse high point-Sharpe stories rejected by reality few-trades — binding for 10-50 AUD narrative.
+- _(none logged)_
 
 **Remaining unknowns**
 
-- Higher-frequency capacity tests only as separate programme; no gate softening.
+- OOS confirmatory not earned or not run.
+- Multiple-testing burden grows with family size.
+- No direct tests yet — high IG if economically distinct.
+- Underrepresented in catalog — remaining uncertainty high.
 
 ### `oi_leverage_stock` — Open interest / leverage stock (true series)
 

@@ -1,0 +1,21 @@
+id: hyp_asy_trend_cut_highvol
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_asymmetric_vol_cut
+entry:
+  expression: above_sma_200 == 1 and rvol_below_median == 1
+exit:
+  expression: above_sma_200 == 0 or rvol_above_median == 1
+rationale: >
+  Asymmetric capture: stay long only in quiet regimes of an uptrend — cut left-tail vol regimes. Non-grid. Programme docs/PROGRAMME_ASYMMETRIC_CAPTURE_V2.md. Mechanism asymmetric_capture.
+expected_outcome: >
+  Exploratory only. Fail if no after-cost edge vs B&H or gates. Not a clone of prior SMA-only insurance hyp.
+feature_tags:
+  - asymmetric_capture_v2
+  - non_sma_only
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail val gates; or shallower DD without economic excess.

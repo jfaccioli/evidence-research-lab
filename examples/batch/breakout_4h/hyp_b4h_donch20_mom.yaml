@@ -1,0 +1,17 @@
+id: hyp_b4h_donch20_mom
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: momentum
+family_id: family_breakout_4h
+entry:
+  expression: above_donch_20 == 1 and mom_pos_20 == 1
+exit:
+  expression: below_donch_20 == 1 or mom_pos_20 == 0
+rationale: >
+  4h power: Donch20+mom.
+expected_outcome: Power study only; no new thresholds.
+feature_tags: [breakout_4h_power_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

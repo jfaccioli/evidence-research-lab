@@ -31,3 +31,7 @@ Softening gates would produce false live readiness.
 2. **Different claim classes** not yet stressed (e.g. multi-day hold constraints, explicit cost-aware low-turnover with 4h bars).  
 3. **Meta-conclusion draft:** daily BTC long-only public technical space may be **near-saturated** under these costs/gates — still open for true alternative data with PIT.  
 4. Continue paper/shadow ops maturity without LIVE.
+
+## Addendum: breakout 4h power
+
+0/4 exploratory; trade count rescued for several rules but **not** gate survival.

@@ -1,0 +1,6 @@
+programme: breakout_4h_power_v1
+hypotheses:
+  - hyp_b4h_donch20_vol.yaml
+  - hyp_b4h_donch55_trend.yaml
+  - hyp_b4h_donch20_mom.yaml
+  - hyp_b4h_donch20_quiet.yaml

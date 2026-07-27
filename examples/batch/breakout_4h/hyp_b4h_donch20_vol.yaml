@@ -1,0 +1,17 @@
+id: hyp_b4h_donch20_vol
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: trend
+family_id: family_breakout_4h
+entry:
+  expression: above_donch_20 == 1 and vol_ratio_20 > 1.0
+exit:
+  expression: below_donch_20 == 1 or vol_ratio_20 <= 0.8
+rationale: >
+  4h power: Donch20+volume. breakout_attention power study after daily min_trades fails.
+expected_outcome: Power study only; no new thresholds.
+feature_tags: [breakout_4h_power_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

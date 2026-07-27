@@ -1,0 +1,17 @@
+id: hyp_b4h_donch20_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: trend
+family_id: family_breakout_4h
+entry:
+  expression: above_donch_20 == 1 and rvol_below_median == 1
+exit:
+  expression: below_donch_20 == 1 or rvol_above_median == 1
+rationale: >
+  4h power: quiet breakout.
+expected_outcome: Power study only; no new thresholds.
+feature_tags: [breakout_4h_power_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

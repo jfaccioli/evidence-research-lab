@@ -53,3 +53,6 @@ The framework, validation pipeline, and promotion gates are **stable** unless a 
 ## Success metric (repeat)
 
 Reduce uncertainty. A high-quality **null** that retires a mechanism is success.
+
+15. Product: strong **rejection engine** (`docs/MANDATE_CURRENT_SCOPE.md`); reliability over forced autotrading.
+

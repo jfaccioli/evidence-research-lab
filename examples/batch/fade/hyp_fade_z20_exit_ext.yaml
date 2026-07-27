@@ -1,0 +1,17 @@
+id: hyp_fade_z20_exit_ext
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_fade
+entry:
+  expression: mom_pos_20 == 1 and price_z_20 < 2
+exit:
+  expression: mom_pos_20 == 0 or price_z_20 >= 2
+rationale: >
+  Ride mom but flat extreme extension (z>2) — asymmetric fade of euphoria.
+expected_outcome: Exploratory only; frozen gates.
+feature_tags: [fade_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

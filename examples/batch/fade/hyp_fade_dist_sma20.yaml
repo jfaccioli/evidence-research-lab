@@ -1,0 +1,17 @@
+id: hyp_fade_dist_sma20
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_fade
+entry:
+  expression: dist_sma_20 < -0.08 and above_sma_50 == 1
+exit:
+  expression: dist_sma_20 >= -0.02 or above_sma_50 == 0
+rationale: >
+  Distance-from-SMA20 fade with mild trend filter.
+expected_outcome: Exploratory only; frozen gates.
+feature_tags: [fade_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

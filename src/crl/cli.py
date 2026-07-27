@@ -163,7 +163,23 @@ def main(argv: list[str] | None = None) -> int:
     p_batch.add_argument("--limit", type=int, default=None, help="Max hypotheses to run")
     p_batch.add_argument("--dataset-id", default=None)
     p_batch.add_argument("--no-write", action="store_true", help="Do not rewrite YAML catalog")
+    p_batch.add_argument(
+        "--write-catalog",
+        action="store_true",
+        help="Force catalog write even when --hyp-dir is set (default: no write for programme dirs)",
+    )
+    p_batch.add_argument(
+        "--registry-path",
+        default=None,
+        help="Override registry sqlite (use temp path for programme batches)",
+    )
     p_batch.set_defaults(func=cmd_batch)
+
+    p_doctor = sub.add_parser(
+        "doctor",
+        help="Lab health check (configs, LIVE disabled, data, programmes)",
+    )
+    p_doctor.set_defaults(func=cmd_doctor)
 
     p_catalog = sub.add_parser("catalog", help="Write hypothesis YAMLs from catalog")
     p_catalog.set_defaults(func=cmd_catalog)
@@ -335,12 +351,20 @@ def cmd_batch(args: argparse.Namespace) -> int:
     from crl.research.pipeline.batch import run_batch
 
     hyp_dir = Path(args.hyp_dir) if getattr(args, "hyp_dir", None) else None
+    # Programme dirs: never rewrite catalog by default (avoids clobbering locked hyps).
+    if hyp_dir is not None:
+        write_hyps = bool(getattr(args, "write_catalog", False))
+    else:
+        write_hyps = not args.no_write
+    if args.no_write:
+        write_hyps = False
     summary = run_batch(
         hyp_dir=hyp_dir,
         dataset_id=args.dataset_id,
         limit=args.limit,
-        write_hyps=not args.no_write,
+        write_hyps=write_hyps,
         config_path=args.config,
+        registry_path=getattr(args, "registry_path", None),
     )
     print(
         f"Done. passed_val={summary['n_passed_val']} "
@@ -348,6 +372,14 @@ def cmd_batch(args: argparse.Namespace) -> int:
     )
     print(f"Summary: {summary['summary_md']}")
     return 0 if summary["n_errors"] == 0 else 1
+
+
+def cmd_doctor(args: argparse.Namespace) -> int:
+    from crl.ops.doctor import run_doctor
+
+    rep = run_doctor(args.config)
+    print(json.dumps(rep.to_dict(), indent=2))
+    return 0 if rep.ok else 1
 
 
 def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):

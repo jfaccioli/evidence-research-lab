@@ -3,6 +3,8 @@
 **Updated:** 2026-07-27 (breakout/volume/paper-replay)  
 **Branch tip:** see `git log -1`
 
+See also: `docs/MANDATE_CURRENT_SCOPE.md`, `crl doctor`.
+
 ## Destination
 
 Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only after** promotion ladder.

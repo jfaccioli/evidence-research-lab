@@ -1,0 +1,6 @@
+programme: fade_v1
+hypotheses:
+  - hyp_fade_z20.yaml
+  - hyp_fade_dist_sma20.yaml
+  - hyp_fade_z20_exit_ext.yaml
+  - hyp_fade_dist50.yaml

@@ -1,0 +1,7 @@
+programme: breakout
+hypotheses:
+  - hyp_bo_donch20_vol.yaml
+  - hyp_bo_donch55_trend.yaml
+  - hyp_bo_donch20_quiet.yaml
+  - hyp_bo_donch100.yaml
+  - hyp_bo_donch20_mom.yaml

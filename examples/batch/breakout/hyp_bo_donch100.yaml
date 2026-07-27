@@ -1,0 +1,17 @@
+id: hyp_bo_donch100
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_breakout
+entry:
+  expression: above_donch_100 == 1
+exit:
+  expression: below_donch_100 == 1
+rationale: >
+  Slow Donch100 breakout. breakout_attention.
+expected_outcome: Exploratory only under frozen gates.
+feature_tags: [breakout_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

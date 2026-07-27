@@ -196,15 +196,30 @@ def main(argv: list[str] | None = None) -> int:
         "paper",
         help="Historical paper session for one hyp (no exchange; LIVE disabled)",
     )
-    p_paper.add_argument("--hypothesis", "-H", required=True)
+    p_paper.add_argument("--hypothesis", "-H", default=None)
+    p_paper.add_argument(
+        "--hyp-dir",
+        default=None,
+        help="Replay all hyp_*.yaml in directory (paper batch)",
+    )
     p_paper.add_argument("--dataset-id", default=None)
     p_paper.add_argument("--cash", type=float, default=50.0)
+    p_paper.add_argument("--limit", type=int, default=None)
     p_paper.add_argument(
         "--journal-dir",
         default=None,
         help="Default: data/paper_journal/",
     )
     p_paper.set_defaults(func=cmd_paper)
+
+    p_shadow = sub.add_parser(
+        "shadow",
+        help="Historical shadow walk (signals only; no orders)",
+    )
+    p_shadow.add_argument("--hypothesis", "-H", required=True)
+    p_shadow.add_argument("--dataset-id", default=None)
+    p_shadow.add_argument("--log-dir", default=None, help="Default: data/shadow/")
+    p_shadow.set_defaults(func=cmd_shadow)
 
     p_batch.add_argument(
         "--hyp-dir",
@@ -335,37 +350,74 @@ def cmd_batch(args: argparse.Namespace) -> int:
     return 0 if summary["n_errors"] == 0 else 1
 
 
-def cmd_paper(args: argparse.Namespace) -> int:
-    """Run a historical paper session (sim fills only)."""
-    from crl.production.paper.session import run_paper_session
-    from crl.research.pipeline.batch import load_hypothesis_yaml
+def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):
     from crl.shared.data.feature_store import load_or_build_features
     from crl.shared.data.store import load_dataset, latest_manifest
 
     cfg = load_config(args.config)
     root = project_root()
-    spec = load_hypothesis_yaml(Path(args.hypothesis))
     mdir = root / cfg.get("data", {}).get("manifest_dir", "data/manifests")
     dataset_id = args.dataset_id
     if dataset_id is None:
         m = latest_manifest(
             mdir,
             symbol=cfg.get("symbol_binance", "BTCUSDT"),
-            interval=spec.timeframe if spec.timeframe in ("1d", "4h") else "1d",
+            interval=timeframe if timeframe in ("1d", "4h") else "1d",
             source="binance_public",
         )
         if m is None:
-            print("No dataset. Run: crl fetch --interval 1d", file=sys.stderr)
-            return 1
+            return None, None, "No dataset. Run: crl fetch --interval 1d"
         dataset_id = m.dataset_id
     df, _ = load_dataset(dataset_id, manifest_dir=mdir, verify_hash=True)
     cache = root / cfg.get("data", {}).get("cache_dir", "data/processed") / "features"
     feat = load_or_build_features(df, dataset_id=str(dataset_id), cache_dir=cache)
-    jdir = Path(args.journal_dir) if args.journal_dir else (root / "data" / "paper_journal")
+    return cfg, feat, None
+
+
+def _fee_rt(cfg: dict) -> float:
     costs = cfg.get("costs", {})
-    fee_rt = float(costs.get("fee_bps_per_side", 10)) * 2 + float(
-        costs.get("slippage_bps_per_side", 5)
-    ) * 2 + float(costs.get("half_spread_bps", 1.5)) * 2
+    return (
+        float(costs.get("fee_bps_per_side", 10)) * 2
+        + float(costs.get("slippage_bps_per_side", 5)) * 2
+        + float(costs.get("half_spread_bps", 1.5)) * 2
+    )
+
+
+def cmd_paper(args: argparse.Namespace) -> int:
+    """Run a historical paper session (sim fills only)."""
+    from crl.production.paper.replay import replay_hyp_dir, write_replay_summary
+    from crl.production.paper.session import run_paper_session
+    from crl.research.pipeline.batch import load_hypothesis_yaml
+
+    root = project_root()
+    if not args.hypothesis and not args.hyp_dir:
+        print("Need --hypothesis or --hyp-dir", file=sys.stderr)
+        return 2
+    tf = "1d"
+    if args.hypothesis:
+        spec0 = load_hypothesis_yaml(Path(args.hypothesis))
+        tf = spec0.timeframe if spec0.timeframe in ("1d", "4h") else "1d"
+    cfg, feat, err = _load_feat_for_cli(args, tf)
+    if err:
+        print(err, file=sys.stderr)
+        return 1
+    assert cfg is not None and feat is not None
+    jdir = Path(args.journal_dir) if args.journal_dir else (root / "data" / "paper_journal")
+    fee_rt = _fee_rt(cfg)
+    if args.hyp_dir:
+        rows = replay_hyp_dir(
+            Path(args.hyp_dir),
+            feat,
+            starting_cash=float(args.cash),
+            fee_bps_rt=fee_rt,
+            journal_dir=jdir,
+            limit=args.limit,
+        )
+        out = root / "data" / "paper_journal" / "replay_summary.json"
+        write_replay_summary(rows, out)
+        print(json.dumps({"n": len(rows), "summary": str(out), "results": rows}, indent=2, default=str))
+        return 0
+    spec = load_hypothesis_yaml(Path(args.hypothesis))
     res = run_paper_session(
         spec,
         feat,
@@ -383,6 +435,25 @@ def cmd_paper(args: argparse.Namespace) -> int:
         "journal_path": res.journal_path,
         "notes": res.notes,
     }, indent=2))
+    return 0
+
+
+def cmd_shadow(args: argparse.Namespace) -> int:
+    """Historical shadow walk — intents only."""
+    from crl.production.shadow.walk import shadow_walk
+    from crl.research.pipeline.batch import load_hypothesis_yaml
+
+    root = project_root()
+    spec = load_hypothesis_yaml(Path(args.hypothesis))
+    tf = spec.timeframe if spec.timeframe in ("1d", "4h") else "1d"
+    cfg, feat, err = _load_feat_for_cli(args, tf)
+    if err:
+        print(err, file=sys.stderr)
+        return 1
+    assert feat is not None
+    log_dir = Path(args.log_dir) if args.log_dir else (root / "data" / "shadow")
+    out = shadow_walk(spec, feat, log_dir=log_dir)
+    print(json.dumps(out, indent=2))
     return 0
 
 

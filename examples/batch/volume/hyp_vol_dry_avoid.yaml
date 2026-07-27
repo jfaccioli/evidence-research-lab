@@ -1,0 +1,17 @@
+id: hyp_vol_dry_avoid
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: vol_ratio_20 >= 0.8 and mom_pos_20 == 1
+exit:
+  expression: vol_ratio_20 < 0.8 or mom_pos_20 == 0
+rationale: >
+  Avoid mom when activity dry. volume_confirmation.
+expected_outcome: Exploratory only under frozen gates.
+feature_tags: [volume_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

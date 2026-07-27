@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T17:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] Zero candidates. Multiple programme nulls + confirmatory kills. Paper/shadow path scaffolded; LIVE disabled.
+**Updated:** `2026-07-27T18:00:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] Zero candidates after broad daily programme wave. Paper/shadow path ready; LIVE disabled.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -66,7 +66,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `slow_fast_disagreement` — Slow vs fast signal disagreement
 
-- **Stance:** `active` (confidence 0.5)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** When short-horizon mom disagrees with long trend, edge may be in resolution.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -79,7 +79,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 - Failed exploratory gates: n_trades 22 < min_trades 30; bootstrap sharpe CI lo -0.469 < 0.0 Val excess vs B&H = -0.733.
 - Failures dominate (failed≈4, n=4); no exploratory survival yet.
-- Slow/fast v1: 0/5 passed_val.
 
 **Remaining unknowns**
 
@@ -90,7 +89,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `vol_regime_shift` — Volatility regime-shift risk
 
-- **Stance:** `active` (confidence 0.5)
+- **Stance:** `active` (confidence 0.4)
 - **Recommendation:** `pivot`
 - **Claim:** Rising vol marks stress transitions; reduce exposure.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -103,7 +102,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 - Insurance claim unsupported for this formulation: val excess vs B&H ≈ -0.95; failed min_trades and bootstrap CI. Shallower DD without economic value is not an edge.
 - Failures dominate (failed≈4, n=4); no exploratory survival yet.
-- Vol regime v1: 1 val tease (exit on volspike) confirmatory failed_test.
 
 **Remaining unknowns**
 
@@ -135,7 +133,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `atr_risk_trail` — Volatility-scaled risk trailing
 
-- **Stance:** `active` (confidence 0.5)
+- **Stance:** `active` (confidence 0.35)
 - **Recommendation:** `pivot`
 - **Claim:** Position held only when price respects ATR-based risk budget.
 - **Evidence mass:** n_tests=2, passed_val=0, failed_test=0, candidate=0
@@ -147,7 +145,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - Early failure(s) — formulation-specific; mechanism not fully closed.
-- ATR trail v1: 0/5 passed_val.
 
 **Remaining unknowns**
 
@@ -288,7 +285,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 ### `volume_confirmation` — Volume confirmation of price moves
 
 - **Stance:** `exhausted_null` (confidence 0.7)
-- **Recommendation:** `retire`
+- **Recommendation:** `pivot`
 - **Claim:** Moves without volume are less reliable; thrust needs participation.
 - **Evidence mass:** n_tests=18, passed_val=0, failed_test=0, candidate=0
 
@@ -299,6 +296,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - Large null body (n≈18) with no exploratory survival.
+- Volume confirmation v1: 0/5 passed_val (bootstrap/WF).
 
 **Remaining unknowns**
 
@@ -339,6 +337,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - All 11 tests failed exploratory/gates under current design class.
+- Breakout v1: 0/5 passed_val (min_trades/bootstrap).
 
 **Remaining unknowns**
 

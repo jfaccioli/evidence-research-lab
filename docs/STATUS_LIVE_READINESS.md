@@ -1,6 +1,6 @@
 # Live-readiness status (honest)
 
-**Updated:** 2026-07-27  
+**Updated:** 2026-07-27 (breakout/volume/paper-replay)  
 **Branch tip:** see `git log -1`
 
 ## Destination
@@ -41,6 +41,8 @@ Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only aft
 | Slow/fast | 0/5 | — |
 | Vol regime | 1/5 | failed_test |
 | Calendar | 0/5 | — |
+| Breakout | 0/5 | — |
+| Volume | 0/5 | — |
 
 **Scientific reading:** Daily long-only public technical + leverage-state filters under frozen gates are **hard**. Val teases die on test. That is progress (uncertainty reduction), not a reason to soften gates.
 

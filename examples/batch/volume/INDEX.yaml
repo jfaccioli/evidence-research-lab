@@ -1,0 +1,7 @@
+programme: volume
+hypotheses:
+  - hyp_vol_high_trend.yaml
+  - hyp_vol_z_trend.yaml
+  - hyp_vol_dry_avoid.yaml
+  - hyp_vol_thrust_mom.yaml
+  - hyp_vol_z60_trend.yaml

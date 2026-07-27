@@ -1,0 +1,17 @@
+id: hyp_vol_z60_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: vol_z_60 > 0 and above_sma_200 == 1
+exit:
+  expression: vol_z_60 <= 0 or above_sma_200 == 0
+rationale: >
+  Longer vol z + trend. volume_confirmation.
+expected_outcome: Exploratory only under frozen gates.
+feature_tags: [volume_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

@@ -1,0 +1,17 @@
+id: hyp_vol_high_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_volume
+entry:
+  expression: vol_ratio_20 > 1.2 and above_sma_200 == 1
+exit:
+  expression: vol_ratio_20 <= 1.0 or above_sma_200 == 0
+rationale: >
+  High activity + trend. volume_confirmation.
+expected_outcome: Exploratory only under frozen gates.
+feature_tags: [volume_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

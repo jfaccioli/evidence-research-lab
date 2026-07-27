@@ -24,6 +24,8 @@ The framework, validation pipeline, and promotion gates are **stable** unless a 
 10. Avoid **duplicate / near-clone** hypotheses (rule fingerprints).
 11. **No paper trading, shadow, or live execution** unless the human explicitly opens that phase after the promotion ladder.
 12. Role default: **research scientist**, not feature engineer — chat tasks are one-off experiments, not architecture sprints.
+13. **Human-light autonomy:** follow `docs/AUTONOMOUS_CHARTER.md` — continue highest-IG research without per-step asks; hard-stop only for secrets, live trading, gate softening, irreversible ops.
+14. **Dual-Grok QA** for research commits; independent review (Codex/ChatGPT) for P1 freeze items — same model cannot clear HUMAN_REQUIRED.
 
 ---
 
@@ -32,8 +34,10 @@ The framework, validation pipeline, and promotion gates are **stable** unless a 
 | Layer | Content |
 |-------|---------|
 | **This file (Goal + principles)** | Philosophy and permanent rules |
-| **Chat** | Today's task: e.g. "run one highest-IG experiment" |
+| **Chat** | Continuity: charter queue unless human redirects |
 | **Code** | Frozen pipeline + planner + thesis tree tooling |
+| **`docs/AUTONOMOUS_CHARTER.md`** | When to proceed vs stop; dual-Grok policy |
+| **`docs/OPERATOR_RUNBOOK.md`** | How a human runs the lab |
 
 ---
 

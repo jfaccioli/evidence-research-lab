@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T14:30:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] Funding daily+4h nulls; OI confirmatory kill; zero candidates. Success = uncertainty reduction.
+**Updated:** `2026-07-27T15:00:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] Funding/OI/capacity programmes null or confirmatory-killed; zero candidates.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -13,7 +13,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Daily BTC long-only space may be saturated with public technical rules.
 - True funding/OI/on-chain PIT series not yet in evidence base.
 - Whether *any* low-frequency BTC spot edge survives costs + multiple testing is open.
-- Funding level filters: daily 0/10 and 4h power 0/6 — not rescued by trade count; line exhausted for long-only filters on these locks.
 
 ## Mechanisms
 
@@ -155,7 +154,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `funding_crowding` — Perpetual funding / leverage crowding (true series)
 
-- **Stance:** `active` (confidence 0.65)
+- **Stance:** `active` (confidence 0.35)
 - **Recommendation:** `pivot`
 - **Claim:** Funding rate as cost of leverage and crowded positioning; PIT exchange series only.
 - **Evidence mass:** n_tests=2, passed_val=0, failed_test=0, candidate=0
@@ -167,14 +166,12 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - Early failure(s) — formulation-specific; mechanism not fully closed.
-- Funding 4h power v1: 0/6 passed_val with n_trades≥63 — daily min_trades near-misses were not latent edges (examples/batch/funding_4h/GATE_AUTOPSY_V1.md).
 
 **Remaining unknowns**
 
 - OOS confirmatory not earned or not run.
 - Multiple-testing burden grows with family size.
 - Underrepresented in catalog — remaining uncertainty high.
-- Daily + 4h long-only funding filter locks closed without candidate; stop mining this family.
 
 ### `asymmetric_capture` — Asymmetric upside/downside capture vs B&H
 
@@ -202,25 +199,23 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `capacity_tiny_friction` — Tiny-capital friction realism
 
-- **Stance:** `untested` (confidence 0.1)
-- **Recommendation:** `observe`
+- **Stance:** `active` (confidence 0.5)
+- **Recommendation:** `pivot`
 - **Claim:** Edges that only work with zero friction are invalid for 10–50 AUD.
-- **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=5, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
-- _(none logged)_
+- Process: elevated-cost programme with frozen gates (stricter friction).
 
 **Refuting**
 
-- _(none logged)_
+- Capacity tiny-friction v1: 0/5 passed_val under elevated costs; all fail min_trades and/or bootstrap (examples/batch/capacity/GATE_AUTOPSY_V1.md).
+- Sparse high point-Sharpe stories rejected by reality few-trades — binding for 10-50 AUD narrative.
 
 **Remaining unknowns**
 
-- OOS confirmatory not earned or not run.
-- Multiple-testing burden grows with family size.
-- No direct tests yet — high IG if economically distinct.
-- Underrepresented in catalog — remaining uncertainty high.
+- Higher-frequency capacity tests only as separate programme; no gate softening.
 
 ### `oi_leverage_stock` — Open interest / leverage stock (true series)
 

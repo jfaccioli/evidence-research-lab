@@ -21,12 +21,13 @@ class SensitivityResult:
     mode: str  # "sma_neighborhood" | "numeric_literals" | "none"
 
 
-_SMA_RE = re.compile(r"(?<![A-Za-z0-9_])sma_(\d+)(?!\d)")
+# Match bare sma_N tokens only — not compound names like sma_50_above_200.
+_SMA_RE = re.compile(r"(?<![A-Za-z0-9_])sma_(\d+)(?![A-Za-z0-9_])")
 _NUM_RE = re.compile(r"(?<![A-Za-z0-9_])(-?\d+\.?\d*)(?!\w)")
 
 
 def _swap_sma(expr: str, old: int, new: int) -> str:
-    pattern = re.compile(rf"(?<![A-Za-z0-9_])sma_{old}(?!\d)")
+    pattern = re.compile(rf"(?<![A-Za-z0-9_])sma_{old}(?![A-Za-z0-9_])")
     return pattern.sub(f"sma_{new}", expr)
 
 
@@ -65,8 +66,21 @@ def sma_neighborhood_sensitivity(
                     "exit": RuleSpec(expression=exit_),
                 }
             )
-            res = run_backtest(work, hyp, costs)
-            m = compute_metrics(res, timeframe=timeframe)
+            try:
+                res = run_backtest(work, hyp, costs)
+                m = compute_metrics(res, timeframe=timeframe)
+            except Exception:
+                neighbors.append(
+                    {
+                        "sma": nw,
+                        "sharpe": None,
+                        "n_trades": 0,
+                        "max_dd": None,
+                        "pass": False,
+                        "skipped": True,
+                    }
+                )
+                continue
             ok = (
                 m.n_trades >= max(5, gates.min_trades // 3)
                 and m.sharpe_after_cost >= gates.sharpe_min

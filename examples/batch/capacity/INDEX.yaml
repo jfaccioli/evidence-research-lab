@@ -1,0 +1,10 @@
+programme: capacity_tiny_friction_v1
+design: docs/PROGRAMME_CAPACITY_TINY_FRICTION_V1.md
+config: configs/capacity_tiny_friction_v1.yaml
+mode: exploratory_elevated_costs
+hypotheses:
+  - hyp_cap_sma200_hold.yaml
+  - hyp_cap_ema200_hold.yaml
+  - hyp_cap_sma50_200_cross.yaml
+  - hyp_cap_mom20_trend.yaml
+  - hyp_cap_lowvol_sma50.yaml

@@ -1,0 +1,7 @@
+programme_version_id: capacity_tiny_friction_v1
+research_lineage_id: crl_btc_research_v0
+hypothesis_dir: examples/batch/capacity
+runtime_config: configs/capacity_tiny_friction_v1.yaml
+max_hypotheses: 5
+status: ready
+paper_trading: false

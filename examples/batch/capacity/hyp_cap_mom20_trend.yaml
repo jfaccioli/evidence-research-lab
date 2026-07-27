@@ -1,0 +1,23 @@
+id: hyp_cap_mom20_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: momentum
+family_id: family_capacity_high_turnover
+entry:
+  expression: mom_pos_20 == 1 and above_sma_200 == 1
+exit:
+  expression: mom_pos_20 == 0 or above_sma_200 == 0
+rationale: >
+  Mom+trend under elevated costs — higher turnover stress for tiny capital friction.
+expected_outcome: >
+  If fails only under elevated costs, friction is binding for tiny capital.
+  Exploratory only; confirmatory uses same elevated config.
+feature_tags:
+  - capacity_tiny_friction_v1
+  - friction_realism
+  - tiny_capital
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail under elevated costs or confirmatory kill.

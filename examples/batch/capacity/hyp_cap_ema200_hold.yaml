@@ -1,0 +1,23 @@
+id: hyp_cap_ema200_hold
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_capacity_low_turnover
+entry:
+  expression: close > ema_200
+exit:
+  expression: close < ema_200
+rationale: >
+  EMA200 hold under elevated tiny-capital costs. Tiny-capital friction realism programme.
+expected_outcome: >
+  If fails only under elevated costs, friction is binding for tiny capital.
+  Exploratory only; confirmatory uses same elevated config.
+feature_tags:
+  - capacity_tiny_friction_v1
+  - friction_realism
+  - tiny_capital
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail under elevated costs or confirmatory kill.

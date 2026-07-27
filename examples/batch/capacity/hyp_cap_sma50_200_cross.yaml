@@ -1,0 +1,23 @@
+id: hyp_cap_sma50_200_cross
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_capacity_moderate_turnover
+entry:
+  expression: sma_50_above_200 == 1
+exit:
+  expression: sma_50_above_200 == 0
+rationale: >
+  SMA50/200 cross under elevated costs — moderate turnover capacity test.
+expected_outcome: >
+  If fails only under elevated costs, friction is binding for tiny capital.
+  Exploratory only; confirmatory uses same elevated config.
+feature_tags:
+  - capacity_tiny_friction_v1
+  - friction_realism
+  - tiny_capital
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail under elevated costs or confirmatory kill.

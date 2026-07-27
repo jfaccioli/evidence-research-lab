@@ -1,0 +1,23 @@
+id: hyp_cap_lowvol_sma50
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_capacity_medium
+entry:
+  expression: above_sma_50 == 1 and rvol_below_median == 1
+exit:
+  expression: above_sma_50 == 0 or rvol_below_median == 0
+rationale: >
+  Low-vol + mild trend under elevated costs — capacity/friction realism.
+expected_outcome: >
+  If fails only under elevated costs, friction is binding for tiny capital.
+  Exploratory only; confirmatory uses same elevated config.
+feature_tags:
+  - capacity_tiny_friction_v1
+  - friction_realism
+  - tiny_capital
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail under elevated costs or confirmatory kill.

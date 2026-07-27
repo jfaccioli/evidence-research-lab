@@ -1,0 +1,23 @@
+id: hyp_cap_sma200_hold
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_capacity_low_turnover
+entry:
+  expression: above_sma_200 == 1
+exit:
+  expression: above_sma_200 == 0
+rationale: >
+  Slow SMA200 hold under elevated tiny-capital costs. Programme: docs/PROGRAMME_CAPACITY_TINY_FRICTION_V1.md. Mechanism capacity_tiny_friction / friction realism for 10-50 AUD.
+expected_outcome: >
+  If fails only under elevated costs, friction is binding for tiny capital.
+  Exploratory only; confirmatory uses same elevated config.
+feature_tags:
+  - capacity_tiny_friction_v1
+  - friction_realism
+  - tiny_capital
+literature_refs: []
+falsification:
+  min_trades: 30
+  note: Fail under elevated costs or confirmatory kill.

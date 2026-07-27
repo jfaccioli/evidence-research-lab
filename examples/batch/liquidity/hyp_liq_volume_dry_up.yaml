@@ -1,0 +1,19 @@
+id: hyp_liq_volume_dry_up
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_liquidity_panic
+entry:
+  expression: vol_ratio_20 < 0.7 and above_sma_50 == 1
+exit:
+  expression: vol_ratio_20 >= 1.0 or above_sma_50 == 0
+rationale: >
+  Activity dry-up in mild trend — forced sellers exhausted proxy. Programme: docs/PROGRAMME_LIQUIDITY_PANIC_V1.md.
+expected_outcome: >
+  Exploratory only. Null is success if clean.
+feature_tags:
+  - liquidity_panic_rebound_v1
+literature_refs: []
+falsification:
+  min_trades: 30

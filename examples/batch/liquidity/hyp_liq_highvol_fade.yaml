@@ -1,0 +1,19 @@
+id: hyp_liq_highvol_fade
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_liquidity_panic
+entry:
+  expression: rvol_above_median == 1 and mom_pos_20 == 0
+exit:
+  expression: rvol_below_median == 1 or mom_pos_20 == 1
+rationale: >
+  Flat risk-on when vol high and mom already weak — avoid forced-selling continuation. Related liquidity stress (defensive). Programme: docs/PROGRAMME_LIQUIDITY_PANIC_V1.md.
+expected_outcome: >
+  Exploratory only. Null is success if clean.
+feature_tags:
+  - liquidity_panic_rebound_v1
+literature_refs: []
+falsification:
+  min_trades: 30

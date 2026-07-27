@@ -1,0 +1,7 @@
+programme: liquidity_panic_v1
+hypotheses:
+  - hyp_liq_dip3_rebound.yaml
+  - hyp_liq_dip5_rebound.yaml
+  - hyp_liq_highvol_fade.yaml
+  - hyp_liq_donch_panic_recover.yaml
+  - hyp_liq_volume_dry_up.yaml

@@ -1,0 +1,19 @@
+id: hyp_liq_dip3_rebound
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: mean_reversion
+family_id: family_liquidity_panic
+entry:
+  expression: ret_3 < -0.05 and above_sma_200 == 1
+exit:
+  expression: ret_3 >= 0 or above_sma_200 == 0
+rationale: >
+  Panic dip in uptrend: temporary liquidity demand fades. liquidity_panic_rebound. Programme: docs/PROGRAMME_LIQUIDITY_PANIC_V1.md.
+expected_outcome: >
+  Exploratory only. Null is success if clean.
+feature_tags:
+  - liquidity_panic_rebound_v1
+literature_refs: []
+falsification:
+  min_trades: 30

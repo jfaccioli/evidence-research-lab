@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T16:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] Zero candidates. Funding/OI/capacity/asymmetric v2 nulls. Paper/shadow scaffolded; LIVE disabled.
+**Updated:** `2026-07-27T16:30:00+00:00`  
+**Summary:** [NON-AUTHORITATIVE] Zero candidates. Recent nulls: funding, OI, capacity, asymmetric v2, liquidity panic v1. LIVE disabled.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -112,10 +112,10 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `liquidity_panic_rebound` — Forced selling / panic rebound
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.5)
 - **Recommendation:** `pivot`
 - **Claim:** Sharp selloffs reverse when temporary liquidity demand fades.
-- **Evidence mass:** n_tests=3, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=5, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
@@ -124,6 +124,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - Failures dominate (failed≈3, n=3); no exploratory survival yet.
+- Liquidity panic v1: 0/5 passed_val (min_trades / WF / bootstrap).
 
 **Remaining unknowns**
 
@@ -175,10 +176,10 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `asymmetric_capture` — Asymmetric upside/downside capture vs B&H
 
-- **Stance:** `active` (confidence 0.55)
+- **Stance:** `active` (confidence 0.45)
 - **Recommendation:** `pivot`
 - **Claim:** Rule aims to cut left-tail BTC path while keeping right-tail (insurance-like).
-- **Evidence mass:** n_tests=6, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=1, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
@@ -189,7 +190,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Insurance claim unsupported for this formulation: val excess vs B&H ≈ -0.95; failed min_trades and bootstrap CI. Shallower DD without economic value is not an edge.
 - Early failure(s) — formulation-specific; mechanism not fully closed.
 - plan_asymmetric_capture_vol_gate: val excess vs B&H strongly negative despite lower DD — insurance claim not supported for that formulation.
-- Asymmetric v2 (non-SMA): 0/5 passed_val — sparse filters + bootstrap (examples/batch/asymmetric/GATE_AUTOPSY_V1.md).
 
 **Remaining unknowns**
 

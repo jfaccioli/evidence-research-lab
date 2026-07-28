@@ -1,7 +1,11 @@
 # Autonomous operating charter (human-light)
 
-**Effective:** 2026-07-27 (updated: long-horizon **live-ready** destination)  
+**Effective:** 2026-07-27 (updated: 2026-07-28 **Standing Autonomy Directive**)  
 **Authority:** Human standing order — agent may proceed without per-step confirmation along the **promotion ladder toward live automated trading**, except hard stops below.
+
+**Also see:** `docs/STANDING_AUTONOMY_DIRECTIVE.md`, `docs/RESEARCH_DIRECTOR_DIRECTIVE.md`, `docs/ROADMAP_AUTOTrading_V1.md`.
+
+**Default after any milestone:** choose next highest-EV roadmap task and continue — do not wait for routine “what next?” approval.
 
 ---
 

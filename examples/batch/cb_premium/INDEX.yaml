@@ -1,0 +1,9 @@
+programme: cb_premium_v1
+design: docs/PROGRAMME_CB_PREMIUM_V1.md
+live_data: true
+hypotheses:
+  - hyp_cbp_pos_trend.yaml
+  - hyp_cbp_neg_flat.yaml
+  - hyp_cbp_hi_ext_flat.yaml
+  - hyp_cbp_lo_ext_long.yaml
+  - hyp_cbp_z_high_flat.yaml

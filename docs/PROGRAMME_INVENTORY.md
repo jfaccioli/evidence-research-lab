@@ -10,8 +10,10 @@
 | `breakout_4h` | 4 | Y | Y | docs/PROGRAMME_BREAKOUT_4H_POWER_V1.md | 0/4 passed_val |
 | `calendar` | 5 | Y | Y | docs/PROGRAMME_CALENDAR_V1.md | 0/5 passed_val |
 | `capacity` | 5 | Y | Y | docs/PROGRAMME_CAPACITY_TINY_FRICTION_V1.md | passed_val` | **0** | |
+| `cb_premium` | 5 | Y | Y | docs/PROGRAMME_CB_PREMIUM_V1.md | 0/5 passed_val |
+| `eth` | 1 | Y | N | — | see EXPLORATORY_NOTE |
 | `fade` | 4 | Y | Y | docs/PROGRAMME_FADE_V1.md | 0/4 passed_val |
-| `flow` | 8 | Y | N | docs/PROGRAMME_FLOW_WHALE_V1.md | null (see note) |
+| `flow` | 8 | Y | Y | docs/PROGRAMME_FLOW_WHALE_V1.md | passed_val` | |
 | `funding` | 10 | Y | Y | docs/PROGRAMME_FUNDING_PIT_V1.md | passed_val` | **0** | |
 | `funding_4h` | 6 | Y | Y | docs/PROGRAMME_FUNDING_4H_POWER_V1.md | passed_val` | **0** | |
 | `herding` | 4 | Y | Y | docs/PROGRAMME_HERDING_V1.md | 0/4 passed_val |

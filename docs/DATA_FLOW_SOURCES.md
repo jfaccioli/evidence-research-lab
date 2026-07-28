@@ -69,17 +69,24 @@ Columns:
 
 Then: locked batch under `examples/batch/flow/` only.
 
-## When I will ask you for access
+## Free path (in use for Q1 exploratory)
+
+| Source | Role |
+|--------|------|
+| [crypto-market-data](https://github.com/ErcinDedeoglu/crypto-market-data) BTC Exchange Netflow | Free CC BY 4.0 daily mirror; adapter `flow_cmd_github.py` |
+| PIT | Fixed `publish_lag_days=1` (vendor revision journal not available) |
+| series_id | `cmd_btc_exchange_netflow_v1` |
+
+**Attribution required** in notes/reports. Not vendor-grade PIT; still valid **exploratory** evidence class vs pure technicals.
+
+## Paid / export path (optional upgrade)
 
 | Stage | Your action |
 |-------|-------------|
-| **Now** | Nothing for flow — multi-asset OHLCV uses free Binance public |
-| **Ready for flow science** | Choose vendor (default CryptoQuant) **or** hand us a parquet export |
-| **If API** | Create read-only API key; paste into env **you** control (never commit keys) |
-| **If export** | Drop file under `data/processed/flow/` and tell us `series_id` |
+| Want vendor-grade history | CryptoQuant/Glassnode export or API (human keys/cost) |
+| Drop file | `data/processed/flow/<series_id>.parquet` |
 
-Agent will say explicitly: **“Time for real flow data — please provide CryptoQuant (or export).”**  
-Until then, flow stays scaffold-only.
+CryptoQuant is **optional upgrade**, not required to start Q1 if free series is already ingested.
 
 ## Cost / privacy
 

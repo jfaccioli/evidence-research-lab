@@ -1,6 +1,8 @@
 # Programme: Exchange flow / large-player positioning (v1)
 
-**Status:** **Scaffolded** (PIT join + mock + 8 locked hyps). **No real flow science batch until versioned real history is ingested.**  
+**Status:** **Exploratory + confirmatory complete (2026-07-28)** on free CMD netflow.  
+Exploratory **6/8** passed_val → confirmatory **0/6** (all failed_test). Mechanism operationalisation retired under this lock.  
+
 **Related closeout:** `docs/PHASE2_CLOSEOUT.md`  
 **Deferred sketch:** superseded for design detail by this file; old DEFERRED doc remains historical pointer.
 

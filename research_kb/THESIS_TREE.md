@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-28T02:26:46.442500+00:00`  
-**Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=123. Success = uncertainty reduction, not alpha discovery.
+**Updated:** `2026-07-28T04:58:06.441949+00:00`  
+**Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=124. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -268,7 +268,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Stance:** `exhausted_null` (confidence 0.75)
 - **Recommendation:** `retire`
 - **Claim:** Capital chases established price trends; SMA/EMA as flow proxies.
-- **Evidence mass:** n_tests=63, passed_val=0, failed_test=0, candidate=0
+- **Evidence mass:** n_tests=64, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**
 
@@ -276,7 +276,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 **Refuting**
 
-- Large null body (n≈63) with no exploratory survival.
+- Large null body (n≈64) with no exploratory survival.
 - Heavy testing of SMA/EMA trend class; no confirmatory path so far.
 
 **Remaining unknowns**

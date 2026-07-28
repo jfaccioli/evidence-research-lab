@@ -1,0 +1,19 @@
+id: hyp_cbp_neg_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cb_premium
+direction: long_only
+entry:
+  expression: cbp_neg == 1
+exit:
+  expression: cbp_neg == 0
+rationale: >
+  Flat when US premium negative (risk-off proxy). Programme: docs/PROGRAMME_CB_PREMIUM_V1.md. Free CMD series; fixed publish lag.
+expected_outcome: Exploratory only; confirmatory if earned.
+feature_tags:
+  - cbp
+  - coinbase_premium
+  - external_pit
+literature_refs: []

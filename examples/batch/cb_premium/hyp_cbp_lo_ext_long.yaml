@@ -1,0 +1,19 @@
+id: hyp_cbp_lo_ext_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cb_premium
+direction: long_only
+entry:
+  expression: cbp_lo_ext == 1 and above_sma_200 == 1
+exit:
+  expression: cbp_lo_ext == 0 or above_sma_200 == 0
+rationale: >
+  Long extreme low premium + long trend. Programme: docs/PROGRAMME_CB_PREMIUM_V1.md. Free CMD series; fixed publish lag.
+expected_outcome: Exploratory only; confirmatory if earned.
+feature_tags:
+  - cbp
+  - coinbase_premium
+  - external_pit
+literature_refs: []

@@ -82,12 +82,15 @@ def run_hypothesis_pipeline(
     oi_series_id: str | None = None,
     flow_events: pd.DataFrame | None = None,
     flow_series_id: str | None = None,
+    external_events: pd.DataFrame | None = None,
+    external_series_id: str | None = None,
+    external_prefix: str = "xser",
     registry_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Run full research path. Exploratory never promotes off test metrics.
 
-    Optional ``funding_events`` / ``oi_events`` / ``flow_events`` join PIT features.
-    Optional ``registry_path`` overrides live registry for isolated runs.
+    Optional ``funding_events`` / ``oi_events`` / ``flow_events`` / ``external_events``
+    join PIT features. Optional ``registry_path`` overrides live registry for isolated runs.
     """
     root = project_root()
     assert_phase1_universe(spec.model_dump(), cfg=cfg)
@@ -142,6 +145,9 @@ def run_hypothesis_pipeline(
         oi_series_id=oi_series_id,
         flow_events=flow_events,
         flow_series_id=flow_series_id,
+        external_events=external_events,
+        external_series_id=external_series_id,
+        external_prefix=external_prefix,
     )
     # Drop burn-in where core features unknown
     need = [

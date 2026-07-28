@@ -129,3 +129,18 @@ def test_load_real_flow_parquet(tmp_path: Path):
     events, h = resolve_flow_series("demo", flow_dir=tmp_path)
     assert len(h) == 64
     assert len(events) == len(ev)
+
+
+def test_cmd_netflow_publish_lag_no_same_day():
+    from crl.shared.data.sources.flow_cmd_github import cmd_json_to_flow_events
+
+    payload = {
+        "data": [
+            {"timestamp": 1_670_025_600_000, "value": -100.0, "last_modified": 1_800_000_000_000},
+        ]
+    }
+    ev = cmd_json_to_flow_events(payload, publish_lag_days=1)
+    assert len(ev) == 1
+    # obs day 2022-12-03 → end day + 1d lag
+    ft = ev["flow_time"].iloc[0]
+    assert ft.day >= 4  # lag pushes past obs day

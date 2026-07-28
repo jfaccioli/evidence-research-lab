@@ -53,6 +53,9 @@ def run_batch(
     oi_series_id: str | None = None,
     flow_events: Any | None = None,
     flow_series_id: str | None = None,
+    external_events: Any | None = None,
+    external_series_id: str | None = None,
+    external_prefix: str = "xser",
     registry_path: str | Path | None = None,
 ) -> dict[str, Any]:
     cfg = load_config(config_path)
@@ -99,6 +102,9 @@ def run_batch(
                 oi_series_id=oi_series_id,
                 flow_events=flow_events,
                 flow_series_id=flow_series_id,
+                external_events=external_events,
+                external_series_id=external_series_id,
+                external_prefix=external_prefix,
                 registry_path=registry_path,
                 mode=ResearchMode.EXPLORATORY,
             )

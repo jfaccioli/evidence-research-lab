@@ -259,6 +259,11 @@ def main(argv: list[str] | None = None) -> int:
         "status",
         help="Compact lab status (doctor + programmes + LIVE/kill)",
     )
+    p_status.add_argument(
+        "--write-md",
+        action="store_true",
+        help="Write docs/LAB_STATUS.md",
+    )
     p_status.set_defaults(func=cmd_status)
 
     p_runp = sub.add_parser(
@@ -463,10 +468,13 @@ def cmd_programmes(args: argparse.Namespace) -> int:
 
 
 def cmd_status(args: argparse.Namespace) -> int:
-    from crl.ops.status import lab_status
+    from crl.ops.status import lab_status, write_status_md
 
     st = lab_status(args.config)
     print(json.dumps(st, indent=2))
+    if getattr(args, "write_md", False):
+        path = write_status_md(config_path=args.config)
+        print(f"wrote {path}", flush=True)
     return 0 if st.get("doctor_ok") and not st.get("live_enabled") else 1
 
 

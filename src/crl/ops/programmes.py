@@ -83,6 +83,8 @@ def list_programmes(batch_root: Path | None = None) -> list[ProgrammeInfo]:
             "risk_off": "PROGRAMME_RISK_OFF_V1.md",
             "mr_trend": "PROGRAMME_MR_TREND_V1.md",
             "trend_quality": "PROGRAMME_TREND_QUALITY_V1.md",
+            "participation": "PROGRAMME_PARTICIPATION_V1.md",
+            "volume_4h": "PROGRAMME_VOLUME_4H_V1.md",
         }
         if p.name in special:
             candidates.insert(0, root / "docs" / special[p.name])

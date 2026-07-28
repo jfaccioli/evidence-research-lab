@@ -1,0 +1,17 @@
+id: hyp_part_quiet_not
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: vol_filter
+family_id: family_participation
+entry:
+  expression: rvol_above_median == 0 and vol_ratio_20 > 1.0 and above_sma_50 == 1
+exit:
+  expression: rvol_above_median == 1 or vol_ratio_20 <= 0.8 or above_sma_50 == 0
+rationale: >
+  Quiet price-vol but active volume + mild trend.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [participation_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

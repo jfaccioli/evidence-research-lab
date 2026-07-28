@@ -18,6 +18,7 @@
 | `liquidity` | 5 | Y | Y | docs/PROGRAMME_LIQUIDITY_PANIC_V1.md | 0/5 `passed_val` |
 | `mr_trend` | 4 | Y | Y | docs/PROGRAMME_MR_TREND_V1.md | 0/4 passed_val |
 | `oi` | 10 | Y | Y | docs/PROGRAMME_OI_PIT_V1.md | passed_val` | **1** (`hyp_oi_chg_pct_high_flat`) | |
+| `participation` | 4 | Y | Y | docs/PROGRAMME_PARTICIPATION_V1.md | 0/4 passed_val |
 | `risk_off` | 4 | Y | Y | docs/PROGRAMME_RISK_OFF_V1.md | 0/4 passed_val |
 | `slow_fast` | 5 | Y | Y | docs/PROGRAMME_SLOW_FAST_V1.md | 0/5 passed_val |
 | `trend_quality` | 4 | Y | Y | docs/PROGRAMME_TREND_QUALITY_V1.md | 0/4 passed_val |

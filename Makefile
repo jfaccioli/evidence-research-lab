@@ -10,7 +10,7 @@ doctor:
 	$(PY) -m crl doctor
 
 status:
-	$(PY) -m crl status
+	$(PY) -m crl status --write-md
 
 programmes:
 	$(PY) -m crl programmes

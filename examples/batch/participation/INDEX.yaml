@@ -1,0 +1,6 @@
+programme: participation_v1
+hypotheses:
+  - hyp_part_vol_trend.yaml
+  - hyp_part_thrust_trend.yaml
+  - hyp_part_quiet_not.yaml
+  - hyp_part_break_vol.yaml

@@ -1,0 +1,17 @@
+id: hyp_part_vol_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: volume
+family_id: family_participation
+entry:
+  expression: vol_z_20 > 0.5 and above_sma_200 == 1 and mom_pos_20 == 1
+exit:
+  expression: vol_z_20 <= 0 or above_sma_200 == 0 or mom_pos_20 == 0
+rationale: >
+  Participation: elevated activity + trend + mom. Distinct composite.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [participation_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

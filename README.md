@@ -1,27 +1,9 @@
-# Crypto Research Laboratory (Phase 1)
+# Crypto Research Laboratory
 
-Personal **research-only** lab for discovering and falsifying BTC/USDT spot trading edges.
+Personal **research-first** lab for falsifying BTC/USDT spot trading ideas under frozen validation gates.
 
-**Not a trading bot.** No live keys, no order placement, no leverage, no shorts.
-
-> Finding zero edges is still Phase 1 success.
-
-## Layout
-
-```
-src/crl/
-  shared/          # data, features, types, config, reproducibility
-  research/        # hypotheses, backtest, stats, regimes, reports, journal, pipeline
-  production/      # empty execution surface (disabled)
-  risk/            # deterministic constraints + promotion gates
-  xai/             # mock client + cache + rate limit + cost ledger
-configs/           # default fees, gates, splits
-examples/          # example hypothesis YAML
-journal/           # research journal (human lessons)
-docs/              # architecture & skeptical review
-```
-
-Research stays messy; production stays boring. They are separated on purpose.
+**Product identity:** a **strong rejection engine** + paper/shadow path toward tiny live **only if** confirmatory survivors exist.  
+**Not** a bot that trades noise. Finding zero edges is success.
 
 ## Quick start
 
@@ -30,85 +12,79 @@ cd crypto-research-lab
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
+export PYTHONPATH=src   # or: pip install -e .
 
-# Offline demo (synthetic data)
-crl run -H examples/hyp_sma200_vol_filter.yaml --mock
+make doctor          # health check
+make status          # LIVE/kill/programmes snapshot
+make check           # doctor + tests + status
 
-# Real BTC/USDT daily data (public Binance, no API key)
-crl fetch --interval 1d
-crl run -H examples/hyp_sma200_vol_filter.yaml
+# Public OHLCV (no API key)
+python -m crl fetch --interval 1d
+python -m crl fetch --interval 4h
 
-# List registry
-crl list
+# Locked programme (temp registry, notes + autopsy)
+python -m crl run-programme examples/batch/fade
+
+# Paper / shadow (no capital; LIVE disabled)
+python -m crl paper -H examples/batch/hyp_sma200_long.yaml --cash 50
+python -m crl shadow -H examples/batch/hyp_sma200_long.yaml
 ```
 
-Reports land in `reports/`. Registry is SQLite at `registry/crl.sqlite`.  
-Journal appends to `journal/RESEARCH_JOURNAL.md`.
+## Operator CLI
 
-## Validation standards (Phase 1)
+| Command | Role |
+|---------|------|
+| `crl doctor` | Config, data, LIVE off, programmes |
+| `crl status` / `--write-md` | Compact snapshot → `docs/LAB_STATUS.md` |
+| `crl programmes` / `--write-md` | Inventory → `docs/PROGRAMME_INVENTORY.md` |
+| `crl run-programme <dir>` | Doctor + temp batch + confirmatory on passes + autopsy |
+| `crl autopsy <dir>` | GATE_AUTOPSY from report JSON |
+| `crl batch --hyp-dir … --temp-registry` | Exploratory batch without clobbering catalog |
+| `crl paper` / `crl shadow` | Historical sim / signal log |
+| `crl plan` / `learn` / `thesis` | Planner + knowledge base |
+| `crl fetch` | Pin OHLCV |
 
-- Signal on closed bar `t` → position starts bar `t+1` (no look-ahead)
-- Causal features only (expanding/rolling — **no full-sample medians**)
-- Conservative costs + 2× stress
-- Chronological train/val/test + walk-forward on train+val
-- Baselines: buy-and-hold, cash, SMA 50/200
-- Excess vs buy-and-hold, regime 2×2 slices
-- Block bootstrap + trade-sequence Monte Carlo + SMA neighborhood sensitivity
-- **Reality Checker** — economic/execution plausibility (human-executable, latency, liquidity, fee fragility, crowding, noise)
-- **Single primary metric:** after-cost Sharpe (no metric shopping)
-- Exploratory vs confirmatory modes (test set locked until confirmatory; one-shot)
+Full runbook: `docs/OPERATOR_RUNBOOK.md`.  
+Mandate: `docs/MANDATE_CURRENT_SCOPE.md`.  
+Live ladder: `docs/PROMOTION_LADDER.md`.  
+Build checklist: `docs/LAB_BUILD_CHECKLIST.md`.
 
-```bash
-crl catalog              # write catalog YAMLs → examples/batch/
-crl batch                # exploratory evaluate (also updates research_kb/)
-crl meta                 # taxonomy survival rates
-crl plan                 # evidence-driven research plan (what to test next)
-crl learn                # refresh knowledge base + thesis tree from registry
-crl thesis               # Research Thesis Tree (mechanism evidence map)
+## Layout
+
+```
+src/crl/
+  shared/       # data, features, config
+  research/     # pipeline, stats, planner, registry
+  production/   # paper/shadow/risk/kill-switch; LIVE fail-closed
+  ops/          # doctor, programmes, run-programme, autopsy, status
+  risk/         # constraints + promotion gates
+configs/
+examples/batch/ # pre-registered programmes (see PROGRAMME_INVENTORY.md)
+docs/
+research_kb/    # thesis + learnings
 ```
 
-Batch results: `reports/batch_summary.md`.  
-Research planner: `research_kb/latest_plan.md`, `research_kb/LEARNINGS.md`.  
-Thesis tree: `research_kb/THESIS_TREE.md`.  
-Persistent CRS role: root `AGENTS.md`.
+## Validation standards
 
-Rejecting almost all ideas is expected — and healthy. **Plan maximises information gain, not win rate.**
+- Closed-bar signal → next-open position (no look-ahead)
+- Causal features only
+- Costs + 2× stress; chronological splits + walk-forward
+- Bootstrap CI, reality checker, exploratory vs confirmatory
+- **Never soften gates** to invent candidates
 
-## Example hypothesis
+## Current science state
 
-`examples/hyp_sma200_vol_filter.yaml` — long when `close > sma_200` and realized vol below expanding median; exit when `close < sma_200`.
-
-This is a **pipeline vehicle**, not claimed alpha. Rejection is a valid outcome.
+Broad pre-registered wave under frozen gates → **zero confirmatory candidates**.  
+Ops path (paper/shadow) is built; **LIVE stays off** until Phase 5 + human keys + survivors.
 
 ## Tests
 
 ```bash
+make test
+# or
 pytest -q
 ```
 
-## Phase ladder
+## Philosophy
 
-See `docs/PROMOTION_LADDER.md` (authoritative for “when real money?”).
-
-Research lab (Phase 1) → **Signal discovery (Phase 2, current)** → paper → shadow → tiny live  
-
-**Not ready for live trading or paper trading.** Even exploratory `passed_val` is not a buy signal; confirmatory + paper + shadow required before AUD risk.
-
-**Standing orders:** `docs/STANDING_ORDERS.md` — framework frozen; success = evidence quality; never weaken gates.
-
-## Docs
-
-- `docs/PHASE1_PLAN.md` — scope, methodology, success criteria  
-- `docs/SKEPTICAL_REVIEW.md` — adversarial architecture review  
-- `docs/PHASE1_QUANT_REVIEW.md` — world-class quant self-review + material fixes  
-
-### Post–batch scientific hardening (not feature theater)
-
-- Single PnL identity (trades = bar-net segments)
-- Bootstrap of **primary** bar Sharpe (not a parallel trade fantasy)
-- Multiple-testing hygiene (family N, DSR/Bonferroni) + confirmatory monthly budget
-- Fragility fail-closed; feature matrix cache; data hash verify; frozen registry specs
-
-## Safety
-
-`crl.production.execution.place_order` **always raises** in Phase 1.
+Root `AGENTS.md` + `docs/AUTONOMOUS_CHARTER.md`: maximise **knowledge per research budget**, not win rate or hyp count.

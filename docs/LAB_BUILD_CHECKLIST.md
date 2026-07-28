@@ -14,6 +14,8 @@
 - [x] Risk envelope + APPROVED registry (empty)
 - [x] LIVE dual-flag fail-closed (no exchange adapter)
 - [x] Makefile `check`
+- [x] Private GitHub remote + Phase 2 stance docs
+- [x] Framework generalization note (`docs/FRAMEWORK_GENERALIZATION.md`)
 
 ## Open (needs human or survivors)
 

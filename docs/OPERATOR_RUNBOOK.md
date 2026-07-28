@@ -1,22 +1,29 @@
-# Operator runbook — Crypto Research Lab
+# Operator runbook — Evidence Research Lab
 
 Minimal commands for a **reliable research lab** (not a forced trading bot).
+
+**GitHub (private):** https://github.com/jfaccioli/evidence-research-lab  
+**Stance:** `docs/PHASE2_STANCE.md` (pause daily technical clones; ops/reliability default)
 
 ## Setup
 
 ```bash
-cd /path/to/crypto-research-lab
-source .venv/bin/activate   # or use .venv/bin/python
+cd /path/to/crypto-research-lab   # local folder name may differ from GitHub name
+source .venv/bin/activate
 export PYTHONPATH=src
-# or: python -m crl …
+# or: pip install -e ".[dev]"
 ```
 
 ## Health check (start here)
 
 ```bash
+make check
+# or:
 python -m crl doctor
-# exit 0 = hard checks pass; LIVE should report disabled
+python -m crl status --write-md
 ```
+
+Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_origin` should point at GitHub.
 
 ## Core research loop
 
@@ -24,27 +31,24 @@ python -m crl doctor
 |---------|---------|
 | `python -m crl fetch --interval 1d` | Pin BTC daily OHLCV |
 | `python -m crl fetch --interval 4h` | Pin 4h OHLCV |
-| `python -m crl plan` | Evidence-driven next IG suggestions |
-| `python -m crl batch --hyp-dir examples/batch/<prog> --registry-path data/processed/tmp_prog.sqlite` | Run **locked** programme (no catalog rewrite) |
-| `python -m crl learn` | Refresh KB from registry |
-| `python -m crl thesis` | Print Thesis Tree |
-| `python -m crl programmes` | Inventory programme dirs + hyp counts |
-| `python -m crl status` | Compact doctor + programmes + kill/LIVE |
-| `python -m crl batch --hyp-dir … --temp-registry` | Programme batch with auto temp sqlite |
-| `python -m crl run-programme examples/batch/<prog>` | Doctor + temp registry + update EXPLORATORY_NOTE |
+| `python -m crl plan` | Evidence-driven research plan |
+| `python -m crl run-programme examples/batch/<prog>` | Doctor + temp registry + note + autopsy |
+| `python -m crl batch --hyp-dir … --temp-registry` | Exploratory batch only |
+| `python -m crl autopsy examples/batch/<prog>` | Rebuild GATE_AUTOPSY from reports |
+| `python -m crl programmes --write-md` | Inventory → `docs/PROGRAMME_INVENTORY.md` |
+| `python -m crl learn` / `thesis` | Knowledge base + thesis tree |
 
-### Programme batch pattern (recommended)
+### Programme batch pattern
 
 ```bash
+python -m crl run-programme examples/batch/fade
+# or
 python -m crl batch \
   --hyp-dir examples/batch/funding \
-  --dataset-id binance_public_BTCUSDT_1d_79cfad335046 \
-  --registry-path data/processed/tmp_funding.sqlite \
-  --no-write
+  --temp-registry
 ```
 
-- **Do not** use live `registry/crl.sqlite` for speculative programmes until you mean it.  
-- `--hyp-dir` defaults to **not** rewriting the hyp catalog (avoids clobbering locks).
+Do **not** use live `registry/crl.sqlite` for speculative programmes until intentional.
 
 ## Paper / shadow (no capital)
 
@@ -55,32 +59,30 @@ python -m crl shadow -H examples/batch/hyp_sma200_long.yaml
 ```
 
 Journals: `data/paper_journal/`, `data/shadow/`.  
-**Paper equity is not a promotion gate** — research gates are.
+Paper equity is **not** a promotion gate.
+
+Kill switch: `data/ops/KILL_SWITCH` or `CRL_KILL_SWITCH=1`.
+
+## Push backup
+
+```bash
+git push origin HEAD
+```
 
 ## Frozen rules
 
 | Doc | Role |
 |-----|------|
 | `AGENTS.md` | Philosophy |
+| `docs/PHASE2_STANCE.md` | Current phase decision |
 | `docs/AUTONOMOUS_CHARTER.md` | Autonomy + dual track |
 | `docs/PROMOTION_LADDER.md` | Path to tiny live |
-| `docs/STATUS_LIVE_READINESS.md` | Honest distance to live |
-| `docs/MANDATE_CURRENT_SCOPE.md` | What “strong tool” means |
-| `docs/META_NULL_SYNTHESIS_2026-07-27.md` | Null wave summary |
+| `docs/FRAMEWORK_GENERALIZATION.md` | Beyond crypto |
+| `docs/MANDATE_CURRENT_SCOPE.md` | Strong tool definition |
 | `configs/default.yaml` | **Do not soften gates** |
-
-## Programme inventory (examples)
-
-| Dir | Notes |
-|-----|--------|
-| `funding/`, `funding_4h/` | True funding PIT; nulls |
-| `oi/` | True OI; val tease confirmatory-killed |
-| `capacity/` | Elevated friction |
-| `asymmetric/`, `liquidity/`, `atr_trail/`, `slow_fast/`, `vol_regime/`, `calendar/`, `breakout/`, `volume/`, `hold_4h/`, `breakout_4h/` | See each EXPLORATORY_NOTE |
 
 ## Human-only
 
-API keys, LIVE Phase-5 flags, paid data, gate policy changes, git remote/push if desired.
+API keys, LIVE Phase-5 flags, paid data, gate policy changes.
 
-See `docs/PROGRAMME_INVENTORY.md` for the full programme table.
-
+See `docs/PROGRAMME_INVENTORY.md` for programme table.

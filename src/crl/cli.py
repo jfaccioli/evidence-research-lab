@@ -470,16 +470,18 @@ def cmd_run_programme(args: argparse.Namespace) -> int:
             "dataset_id",
             "registry_path",
             "summary_json",
+            "confirmatory",
             "ran_at",
         )
         if k in out
-    }, indent=2))
-    # Print compact per-hyp lines
+    }, indent=2, default=str))
     for r in out.get("results") or []:
         print(
             f"  {r.get('id')}: {r.get('status')} n={r.get('val_trades')} "
             f"sh={r.get('val_sharpe')} {r.get('reasons')}"
         )
+    for c in out.get("confirmatory") or []:
+        print(f"  CONF {c.get('id')}: {c.get('status')} {c.get('reasons') or c.get('error')}")
     return 0 if int(out.get("n_errors") or 0) == 0 else 1
 
 

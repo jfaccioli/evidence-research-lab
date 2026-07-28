@@ -65,7 +65,8 @@ Codex automation status may be **PAUSED** — do not block research. For P1 free
 | Enabling live / paper / shadow execution | Promotion ladder + human authority |
 | Softening gates or costs to create survivors | Scientific integrity |
 | Force-push, delete remote history, destructive infra | Irreversible |
-| Pushing to remote if no remote / unclear | Needs remote URL once |
+| Force-push or rewrite published history | Irreversible; confirm first |
+| First-time remote create (done: `evidence-research-lab`) | Was human; now `git push` is routine |
 | Spending paid third-party APIs (X, Polymarket premium, etc.) | Cost + keys |
 | Writing science results into **live** registry as authoritative without noting temp vs live | Evidence governance |
 
@@ -73,18 +74,18 @@ Codex automation status may be **PAUSED** — do not block research. For P1 free
 
 ## 5. Priority queue (default) — dual track
 
-**Track A — Discovery (required for live)**  
-1. Underrepresented / open mechanisms with **existing** features.  
-2. Confirmatory only for true exploratory survivors (budget-aware).  
-3. Autopsy + thesis (never skip).  
-4. New external PIT series only design-first (no proxy laundering).  
-5. **Never:** re-mine funding/OI/capacity thresholds on spent locks.
+**Track A — Discovery (required for live)** — **selective only**  
+1. **Paused:** clone-style daily long-only technical programmes (see `docs/PHASE2_STANCE.md`).  
+2. Allowed: **new economic claim** or **new PIT data class**, pre-registered, ≤ small hyp budget.  
+3. Confirmatory only for true exploratory survivors (budget-aware).  
+4. Autopsy + thesis when any experiment runs (never skip).  
+5. **Never:** re-mine spent programme locks / threshold grids on same data.
 
-**Track B — Live-readiness scaffolding (parallel, no capital)**  
-1. Paper broker + journal (sim fills, fees).  
-2. Shadow signal logger (no orders).  
-3. Risk envelope + kill-switch design; LIVE remains dual-flag + stub adapter.  
-4. Operator runbook for paper/shadow once Track A has candidates.  
+**Track B — Lab reliability + live-readiness scaffolding (default focus)**  
+1. Doctor / status / run-programme / autopsy / tests (`make check`).  
+2. Paper + shadow path hardening (no capital).  
+3. Risk envelope + kill-switch; LIVE dual-flag + no exchange adapter.  
+4. Docs and inventory accuracy.  
 5. **Never:** wire real API keys or enable LIVE without human Phase-5 open.
 
 ---

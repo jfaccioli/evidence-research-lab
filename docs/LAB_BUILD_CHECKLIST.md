@@ -17,11 +17,12 @@
 
 ## Open (needs human or survivors)
 
-- [ ] Git remote + push (human)
+- [x] Git remote + push — `https://github.com/jfaccioli/evidence-research-lab` (private)
 - [ ] Confirmatory survivors → populate APPROVED
 - [ ] Paper clock on survivors ≥1 month
 - [ ] Live market feed for shadow (may need keys)
 - [ ] Phase-5 LIVE open + venue adapter + keys (human)
+- [x] Pause daily technical clone discovery (`docs/PHASE2_STANCE.md`)
 
 ## Honest science state
 

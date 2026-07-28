@@ -26,6 +26,9 @@ The framework, validation pipeline, and promotion gates are **stable** unless a 
 12. Role default: **research scientist**, not feature engineer — chat tasks are one-off experiments, not architecture sprints.
 13. **Human-light autonomy:** follow `docs/AUTONOMOUS_CHARTER.md` — continue highest-IG research without per-step asks; hard-stop only for secrets, live trading, gate softening, irreversible ops.
 14. **Dual-Grok QA** for research commits; independent review (Codex/ChatGPT) for P1 freeze items — same model cannot clear HUMAN_REQUIRED.
+15. Product: strong **rejection engine** (`docs/MANDATE_CURRENT_SCOPE.md`); reliability over forced autotrading.
+16. **Phase 2 stance:** `docs/PHASE2_STANCE.md` — no daily technical clone spam; GitHub `jfaccioli/evidence-research-lab` (private).
+17. Prefer **ops/reliability** work unless a *new* scientific claim or PIT series is explicitly designed.
 
 ---
 

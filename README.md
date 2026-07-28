@@ -1,9 +1,16 @@
-# Crypto Research Laboratory
+# Evidence Research Lab
 
-Personal **research-first** lab for falsifying BTC/USDT spot trading ideas under frozen validation gates.
+Fail-closed **scientific research lab**: pre-registered hypotheses, frozen validation gates, paper/shadow path.
 
-**Product identity:** a **strong rejection engine** + paper/shadow path toward tiny live **only if** confirmatory survivors exist.  
+**First application:** BTC/USDT spot ideas (this repo’s data + cost model).  
+**Framework:** domain-general evidence / rejection engine — not crypto-only.
+
+**GitHub (private):** https://github.com/jfaccioli/evidence-research-lab  
+
+**Product identity:** strong rejection engine + paper/shadow path toward tiny live **only if** confirmatory survivors exist.  
 **Not** a bot that trades noise. Finding zero edges is success.
+
+**Phase 2 stance:** `docs/PHASE2_STANCE.md` (no more daily technical clone spam).
 
 ## Quick start
 

@@ -1,7 +1,8 @@
 # Research mandate — current scope (strong tool, not forced alpha)
 
-**Updated:** 2026-07-27  
-**Product intent:** A **reliable rejection / evidence engine** for personal BTC research, with paper/shadow path toward tiny live **if and only if** evidence clears frozen gates.
+**Updated:** 2026-07-28  
+**Product name:** Evidence Research Lab (GitHub: `jfaccioli/evidence-research-lab`, private).  
+**Product intent:** A **reliable rejection / evidence engine** (first application: BTC/USDT), with paper/shadow path toward tiny live **if and only if** evidence clears frozen gates. Framework is domain-general; crypto is not the only future use.
 
 ## What “strong & reliable” means here
 
@@ -37,5 +38,8 @@ Broad pre-reg wave → **zero confirmatory candidates**.
 ## Explicit non-goals (until survivors)
 
 - Softening gates to “get something trading”  
-- SMA clone spam for hyp count  
+- **Daily long-only technical clone spam** (SMA / volume / breakout near-duplicates) — **paused** after broad null wave  
 - Unversioned alt-data / social signals without PIT  
+- Re-opening spent programme locks without a new programme version + multiplicity  
+
+See `docs/PHASE2_STANCE.md`.

@@ -153,6 +153,34 @@ def run_doctor(config_path: str | None = None) -> DoctorReport:
         "not forced alpha. See docs/META_NULL_SYNTHESIS_2026-07-27.md."
     )
     notes.append("Use temp registry for exploratory programme batches; do not soften gates.")
+    notes.append(
+        "Phase 2: pause daily technical clones — docs/PHASE2_STANCE.md. "
+        "Remote: github.com/jfaccioli/evidence-research-lab (private)."
+    )
+
+    # Git remote present (backup hygiene)
+    git_dir = root / ".git"
+    if git_dir.exists():
+        try:
+            import subprocess
+
+            rem = subprocess.run(
+                ["git", "remote", "get-url", "origin"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            has_origin = rem.returncode == 0 and bool(rem.stdout.strip())
+            checks.append(
+                Check(
+                    "git_origin",
+                    has_origin,
+                    rem.stdout.strip() if has_origin else "no origin remote",
+                )
+            )
+        except Exception as e:
+            checks.append(Check("git_origin", False, str(e)))
 
     ok = all(c.ok for c in checks if c.name != "ohlcv_4h_manifest")  # 4h optional soft
     # soft-fail 4h: still overall ok if only 4h missing

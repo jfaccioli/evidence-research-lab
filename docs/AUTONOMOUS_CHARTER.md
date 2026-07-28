@@ -75,11 +75,12 @@ Codex automation status may be **PAUSED** — do not block research. For P1 free
 ## 5. Priority queue (default) — dual track
 
 **Track A — Discovery (required for live)** — **selective only**  
-1. **Paused:** clone-style daily long-only technical programmes (see `docs/PHASE2_STANCE.md`).  
-2. Allowed: **new economic claim** or **new PIT data class**, pre-registered, ≤ small hyp budget.  
+1. **Closed for clone wave:** `docs/PHASE2_CLOSEOUT.md`.  
+2. **Next classes (when opened, design-first):** flow/whale → X PIT → Polymarket (deferred programme docs).  
 3. Confirmatory only for true exploratory survivors (budget-aware).  
 4. Autopsy + thesis when any experiment runs (never skip).  
-5. **Never:** re-mine spent programme locks / threshold grids on same data.
+5. **Never:** re-mine spent locks; **never leverage** as vehicle (`docs/POLICY_NO_LEVERAGE.md`).  
+6. **Notify human when close to tiny live** (closeout §6 criteria) — not before.
 
 **Track B — Lab reliability + live-readiness scaffolding (default focus)**  
 1. Doctor / status / run-programme / autopsy / tests (`make check`).  

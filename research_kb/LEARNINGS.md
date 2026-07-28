@@ -2173,3 +2173,10 @@ Elevated costs, frozen gates, 0/5 passed_val. Pipeline fix: SMA sensitivity no l
 - README matches current CLI surface
 - status --write-md → docs/LAB_STATUS.md
 - participation v1: 0/4 (bootstrap; one near-miss CI lo ≈ 0)
+
+## 2026-07-28 — Phase 2 closeout + deferred flow/X/Polymarket + no leverage
+
+- Closeout: public-rule daily/4h mandate has 0 confirmatory candidates; lab remains product
+- Deferred designs: flow/whale, X, Polymarket (PIT only)
+- Leverage forbidden as trading vehicle; AU high-risk context noted (not legal advice)
+- Agent will flag when close to tiny live (not now)

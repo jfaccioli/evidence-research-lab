@@ -10,7 +10,7 @@ Fail-closed **scientific research lab**: pre-registered hypotheses, frozen valid
 **Product identity:** strong rejection engine + paper/shadow path toward tiny live **only if** confirmatory survivors exist.  
 **Not** a bot that trades noise. Finding zero edges is success.
 
-**Phase 2 stance:** `docs/PHASE2_STANCE.md` (no more daily technical clone spam).
+**Phase 2 closeout:** `docs/PHASE2_CLOSEOUT.md` · stance: `docs/PHASE2_STANCE.md` · **no leverage:** `docs/POLICY_NO_LEVERAGE.md`.
 
 ## Quick start
 

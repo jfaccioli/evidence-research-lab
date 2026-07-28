@@ -1,10 +1,14 @@
 # Phase 2 stance (2026-07-28)
 
+**Closeout:** see `docs/PHASE2_CLOSEOUT.md` (mandate exhausted for daily technical clones; roadmap for flow / X / Polymarket).
+
 ## Decision
 
 1. **Repo backup:** GitHub private remote is active — see § Remote.  
 2. **Discovery:** **Pause clone-style daily long-only technical programmes** (SMA / volume / breakout / calendar near-duplicates). Evidence shows this mandate is hard under frozen gates; further clones burn budget for low IG.  
-3. **Product:** The deliverable is a **strong evidence / rejection lab**, not forced autotrading. Tiny live remains a **possible** later phase if confirmatory survivors ever appear.
+3. **Product:** The deliverable is a **strong evidence / rejection lab**, not forced autotrading. Tiny live remains a **possible** later phase if confirmatory survivors ever appear.  
+4. **Leverage:** **Forbidden** for trading vehicle — `docs/POLICY_NO_LEVERAGE.md`.  
+5. **Deferred signals:** Flow/whale, X sentiment, Polymarket — designed as deferred programmes; open only with PIT data + human keys if paid.
 
 ## Remote
 

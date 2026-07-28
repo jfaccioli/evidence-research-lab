@@ -48,11 +48,12 @@ Only then: tiny live as a **system** test, not a profit mandate.
 
 ## Phase 2 current targets
 
-- Expand **distinct** economic mechanisms (not SMA clone spam).  
-- Crypto-specific (funding, OI) only with **PIT** series — **done for v1 locks** (funding daily+4h null; OI confirmatory kill). Do not re-mine spent locks.  
-- Track survival rates via `crl meta` / Thesis Tree.  
-- Confirmatory only after exploratory pass + budget.  
-- **Parallel:** paper/shadow **scaffolding** in `src/crl/production/` — LIVE hard-disabled until Phase 5 dual human flags + adapter review.
+- **Closeout of public-rule daily/4h clone wave:** `docs/PHASE2_CLOSEOUT.md` — **0 confirmatory candidates**.  
+- **Do not** expand SMA/volume/breakout clone grids.  
+- Funding/OI v1 locks closed — do not re-mine without new programme version.  
+- **Next research classes (when opened):** flow/whale → X PIT archive → Polymarket (see deferred programme docs).  
+- **Parallel:** paper/shadow scaffolding — LIVE hard-disabled until Phase 5 + **no leverage**.  
+- Agent notifies human when **close** to small-money autotrading (criteria in closeout §6).
 
 ## Live-readiness (Track B) — code may advance; capital may not
 
@@ -65,29 +66,42 @@ Only then: tiny live as a **system** test, not a profit mandate.
 
 ## Deferred external-signal programmes (do not skip; do not jump the queue)
 
-These can make the **research base** stronger later. They are **not** reliability infrastructure and **not** current Phase 2 primary work. Primary non-price programme remains **exchange-native funding / OI** (PIT) once P1 integrity lands. Softening gates or proxy-laundering social/prediction feeds is forbidden.
+Softening gates or proxy-laundering social/prediction feeds is **forbidden**.  
+Design sketches (not yet executable science batches):
+
+| Programme | Doc |
+|-----------|-----|
+| Flow / whale / large-player | `docs/PROGRAMME_FLOW_WHALE_V1_DEFERRED.md` |
+| X sentiment / attention | `docs/PROGRAMME_X_SENTIMENT_V1_DEFERRED.md` |
+| Polymarket event odds | `docs/PROGRAMME_POLYMARKET_V1_DEFERRED.md` |
 
 ### X (Twitter) / social
 
 | When | Role |
 |------|------|
-| **Now** | OHLCV **sentiment_proxy** only; live X **not** a backtest feature |
-| **Phase 2+ research** | Only with a **versioned, point-in-time historical** archive (paid or frozen snapshot), trust score, lag rules |
-| **Phase 4–5 ops (optional)** | Live X as **non-signal** monitoring (outages, regulatory shocks) — never silently fed into untested rules |
+| **Now** | Deferred design only; OHLCV sentiment_proxy is **not** a substitute for true X |
+| **Next research wave** | Versioned PIT archive + lag + pre-reg hyps |
+| **Phase 4–5 ops (optional)** | Monitoring only unless a programme has passed gates |
 
-**Value if done right:** attention / narrative regime as an *independent* mechanism class after price+funding space is honestly explored.  
-**Harm if done early:** look-ahead fiction, non-reproducible “tweets said so,” burned confirmatory budget on untrustworthy series.
+**Harm if early:** look-ahead fiction, non-reproducible scrapes, burned confirmatory budget.
 
 ### Polymarket (prediction markets)
 
 | When | Role |
 |------|------|
-| **Now** | **Out of scope** — no pipeline, no hyps, no promotion claims |
-| **Phase 2+ research (after funding PIT programme design is locked or blocked)** | Optional bounded programme: crypto-relevant market odds as **market-implied probability / event risk** features, only if history is reconstructible with timestamps and join lag |
-| **Never without** | Dataset hash + trust class, pre-registered ≤ small hyp budget, same frozen validation gates |
+| **Now** | Deferred design only |
+| **Next research wave** | Timestamped odds history + as-of join + pre-reg hyps |
+| **Never without** | Dataset hash, trust class, frozen gates |
 
-**Value if done right:** independent event-odds information orthogonal to OHLCV technicals.  
-**Harm if done early:** another un-versioned scrape, selection bias on which markets, and distraction from P1 + funding science.
+**Harm if early:** sparse/illiquid markets, selection bias, non-reproducible APIs.
+
+### Flow / whale tracking
+
+| When | Role |
+|------|------|
+| **Now** | Deferred design (`PROGRAMME_FLOW_WHALE_V1_DEFERRED.md`) |
+| **Next research wave** | Preferred **before** social if clean PIT flow data is available |
+| **Never without** | Publish-time timestamps (when *we* could know), not “wallet later labeled smart” |
 
 ### Ordering (do not reorder casually)
 

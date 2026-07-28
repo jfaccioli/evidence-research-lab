@@ -225,3 +225,11 @@ Scores are **judgemental**, not market prices of alpha. Treat as hypotheses.
 ## 8. One-sentence conclusion
 
 **Maximise science per dollar by testing free macro regime information before any paid on-chain vendor; commercial netflow is not justified while that free alternative remains untried.**
+
+---
+
+## 9. Post-result addendum (same day)
+
+**MACRO_REGIME_V1 executed** with FRED **DTWEXBGS** + **DGS2**, lag +1 day: exploratory **0/5** under frozen gates (see `examples/batch/macro_regime/`).
+
+Free macro operationalisation is **no longer untried**. Next cash spend still requires a **fresh** investment ranking (ETF free source vs vendor export); do not auto-buy.

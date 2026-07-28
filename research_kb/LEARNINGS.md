@@ -2799,3 +2799,93 @@ Gates unchanged. No APPROVED. No tiny-live path opened.
 - Free macro/ETF acquisition blocked without keys.
 - **Human Action Packet** issued; autonomous science paused until new information (prefer vendor netflow export or FRED/ETF unlock).
 - Still **0** confirmatory candidates. Gates unchanged.
+
+## 2026-07-28 07:42 UTC
+
+- Registry hypotheses: **124** (runs=241)
+- Unique rule fingerprints: **73**
+
+### What we learned
+
+- Zero confirmatory candidates in registry.
+- Underrepresented mechanisms: oi_leverage_stock, flow_whale, capacity_tiny_friction, liquidity_panic_rebound, funding_crowding, asymmetric_capture
+
+### Repeating failure modes
+
+- **low_sample** (n=198): Rules too sparse on daily bars — need more trades or different horizon.
+- **weak_sharpe** (n=36): No risk-adjusted edge after costs on evaluated splits.
+- **reality** (n=2): Statistically cute but economically/executionally weak.
+
+### Mechanism coverage
+
+- `oi_leverage_stock`: 0 ← underrepresented
+- `flow_whale`: 0 ← underrepresented
+- `capacity_tiny_friction`: 0 ← underrepresented
+- `liquidity_panic_rebound`: 1 ← underrepresented
+- `funding_crowding`: 1 ← underrepresented
+- `asymmetric_capture`: 1 ← underrepresented
+- `atr_risk_trail`: 2 ← underrepresented
+- `crowding_proxy`: 3
+- `vol_regime_shift`: 4
+- `slow_fast_disagreement`: 4
+- `breakout_attention`: 10
+- `calendar_seasonality`: 10
+- `mean_reversion_cross_section_proxy`: 14
+- `volume_confirmation`: 18
+- `tsmom_underreaction`: 31
+- `vol_risk_premium`: 37
+- `herding_trend`: 64
+
+### Family recommendations
+
+- `family_trend` [retire] n=20 — Large family (20) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_momentum` [retire] n=16 — Large family (16) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_composite` [retire] n=13 — Large family (13) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_vol_filter` [retire] n=12 — Large family (12) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_mean_reversion` [retire] n=12 — Large family (12) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_calendar` [retire] n=10 — Large family (10) nearly all failed, dominant tag=weak_sharpe; diminishing returns.
+- `family_volume` [retire] n=10 — Large family (10) nearly all failed, dominant tag=low_sample; diminishing returns.
+- `family_sentiment_proxy` [pivot] n=4 — All failed — try different mechanism, not nearby params.
+- `family_onchain_proxy` [pivot] n=3 — All failed — try different mechanism, not nearby params.
+- `family_funding_proxy` [pivot] n=3 — All failed — try different mechanism, not nearby params.
+- `hyp_e2e_mock_1784522180` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `family_trend_vol_filter` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784522240` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784523788` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+- `hyp_e2e_mock_1784524120` [continue] n=1 — Thin evidence — one more *distinct* test may still inform.
+
+### Retire (exhausted) families
+
+`family_trend`, `family_momentum`, `family_composite`, `family_vol_filter`, `family_mean_reversion`, `family_calendar`, `family_volume`
+
+### Latest batch snapshot
+
+- run=5 passed_val=0 failed=5 errors=0
+
+### Planner stance
+
+- Prefer underrepresented mechanisms with high information gain.
+- Do not clone exhausted families.
+- Null results that cleanly retire a mechanism are valuable.
+
+
+---
+
+## 2026-07-28 — MACRO_REGIME_V1 (FRED)
+
+### Series locked
+- **DTWEXBGS** (broad USD index): risk-off when USD strong.
+- **DGS2** (2Y Treasury): tightening pulse / policy path.
+- Excluded DFF/DGS10/VIX in v1 (multiplicity / scope).
+
+### PIT
+- `publish_lag_days=1` on FRED date → no same-day use.
+- Snapshot download (not ALFRED vintages).
+
+### Results
+- Exploratory **0/5** under frozen gates (mostly n_trades < 30 or negative Sharpe / fee_fragile).
+- Confirmatory not earned. **0 candidates.**
+
+### Implication
+- Free macro regime operationalisation does **not** clear bar.
+- EIR next tier (ETF free source or vendor export) may be reconsidered with fresh investment review.

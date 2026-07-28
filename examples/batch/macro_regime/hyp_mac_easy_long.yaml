@@ -1,0 +1,16 @@
+id: hyp_mac_easy_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_macro_regime
+direction: long_only
+entry:
+  expression: mac_easy == 1 and above_sma_200 == 1
+exit:
+  expression: mac_easy == 0 or above_sma_200 == 0
+rationale: >
+  Long when USD soft and 2Y not elevated + long trend. Programme: docs/PROGRAMME_MACRO_REGIME_V1.md. FRED DTWEXBGS+DGS2 lag+1.
+expected_outcome: Exploratory; confirmatory if earned under frozen gates.
+feature_tags: [macro, mac, fred, external_pit]
+literature_refs: []

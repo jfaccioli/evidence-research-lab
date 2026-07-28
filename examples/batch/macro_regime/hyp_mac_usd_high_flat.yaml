@@ -1,0 +1,16 @@
+id: hyp_mac_usd_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_macro_regime
+direction: long_only
+entry:
+  expression: mac_usd_high == 1
+exit:
+  expression: mac_usd_high == 0
+rationale: >
+  Flat when broad USD above expanding median. Programme: docs/PROGRAMME_MACRO_REGIME_V1.md. FRED DTWEXBGS+DGS2 lag+1.
+expected_outcome: Exploratory; confirmatory if earned under frozen gates.
+feature_tags: [macro, mac, fred, external_pit]
+literature_refs: []

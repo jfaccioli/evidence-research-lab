@@ -1,0 +1,13 @@
+programme: macro_regime_v1
+design: docs/PROGRAMME_MACRO_REGIME_V1.md
+live_data: true
+# Composite mac_* features built at run time from DTWEXBGS + DGS2
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+hypotheses:
+  - hyp_mac_stress_flat.yaml
+  - hyp_mac_easy_long.yaml
+  - hyp_mac_usd_high_flat.yaml
+  - hyp_mac_y2_up_flat.yaml
+  - hyp_mac_easy_trend.yaml

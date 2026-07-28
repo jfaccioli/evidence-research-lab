@@ -20,6 +20,7 @@
 | `hold_4h` | 4 | Y | Y | docs/PROGRAMME_HOLD_4H_V1.md | 0/4 passed_val |
 | `liquidations` | 5 | Y | Y | docs/PROGRAMME_LIQUIDATIONS_V1.md | passed_val | |
 | `liquidity` | 5 | Y | Y | docs/PROGRAMME_LIQUIDITY_PANIC_V1.md | 0/5 `passed_val` |
+| `macro_regime` | 5 | Y | Y | docs/PROGRAMME_MACRO_REGIME_V1.md | passed_val | |
 | `mr_trend` | 4 | Y | Y | docs/PROGRAMME_MR_TREND_V1.md | 0/4 passed_val |
 | `mvrv` | 5 | Y | Y | docs/PROGRAMME_MVRV_V1.md | see EXPLORATORY_NOTE |
 | `oi` | 10 | Y | Y | docs/PROGRAMME_OI_PIT_V1.md | passed_val` | **1** (`hyp_oi_chg_pct_high_flat`) | |

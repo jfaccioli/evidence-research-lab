@@ -29,17 +29,19 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| **0** | **EIR** | Evidence Investment Review | Done | `EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md` |
-| **1** | **A2** | Macro regime via **free FRED** | Highest $/science | Free key or CSV (**not paid**) |
-| 2 | **A1** | PM path panel | Done null 0/5 | — |
-| 3 | **A4** | ETF flows | After A2 | free source or later |
-| 4 | **A3** | Vendor netflow export | **Only after A2** | human $ |
-| 5 | **F** | Meta-research | Maintain | — |
+| Rank | ID | Action | Status |
+|------|-----|--------|--------|
+| — | **A2** | Macro regime FRED (DTWEXBGS+DGS2) | **Done null** explor 0/5 |
+| — | **A1** | PM path panel | Done null 0/5 |
+| **1** | **EIR-revisit** | Fresh evidence investment after free macro null | Next (autonomous doc) |
+| 2 | **A4** | Spot ETF flows (free source if any) | Candidate free tier |
+| 3 | **A3** | Vendor netflow **export** | Paid — only if EIR still ranks it first |
+| 4 | **F** | Meta-research | Maintain |
 
-**Do not spend money** until free macro (A2) is tested or truly blocked.  
-**Reject:** free on-chain clones; L2; pay-for-browse subscriptions.
+**Free macro (A2) is now tested.** Re-run EIR before any cash spend.  
+**Reject:** free on-chain clones; L2; open-ended data subs without EIR.
 
-See `docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md`, updated HAP.
+See `docs/PROGRAMME_MACRO_REGIME_V1.md`, `docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md`.
 
 See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 

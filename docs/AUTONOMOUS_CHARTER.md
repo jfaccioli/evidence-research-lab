@@ -3,9 +3,11 @@
 **Effective:** 2026-07-27 (updated: 2026-07-28 **Standing Autonomy Directive**)  
 **Authority:** Human standing order — agent may proceed without per-step confirmation along the **promotion ladder toward live automated trading**, except hard stops below.
 
-**Also see:** `docs/STANDING_AUTONOMY_DIRECTIVE.md`, `docs/RESEARCH_DIRECTOR_DIRECTIVE.md`, `docs/ROADMAP_AUTOTrading_V1.md`.
+**Also see (superseding where conflict):**  
+`docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md` — primary Research Director mandate.  
+Also: `docs/STANDING_AUTONOMY_DIRECTIVE.md`, `docs/RESEARCH_QUEUE.md`, `docs/ROADMAP_AUTOTrading_V1.md`.
 
-**Default after any milestone:** choose next highest-EV roadmap task and continue — do not wait for routine “what next?” approval.
+**Default after any milestone:** re-rank `docs/RESEARCH_QUEUE.md` and execute next highest-EV programme — do not wait for routine “what next?” approval.
 
 ---
 

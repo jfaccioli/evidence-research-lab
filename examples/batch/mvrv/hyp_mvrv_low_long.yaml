@@ -1,0 +1,15 @@
+id: hyp_mvrv_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_mvrv
+direction: long_only
+entry:
+  expression: mvrv_low == 1 and above_sma_200 == 1
+exit:
+  expression: mvrv_low == 0 or above_sma_200 == 0
+rationale: Long cheap MVRV + long trend. docs/PROGRAMME_MVRV_V1.md
+expected_outcome: Exploratory only until confirmatory.
+feature_tags: [mvrv, external_pit]
+literature_refs: []

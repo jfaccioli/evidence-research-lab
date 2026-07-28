@@ -1,0 +1,15 @@
+id: hyp_mvrv_mid_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_mvrv
+direction: long_only
+entry:
+  expression: mvrv_pos == 1 and above_sma_50 == 1
+exit:
+  expression: mvrv_pos == 0 or above_sma_50 == 0
+rationale: Long MVRV>0 proxy with mild trend (loose). docs/PROGRAMME_MVRV_V1.md
+expected_outcome: Exploratory only until confirmatory.
+feature_tags: [mvrv, external_pit]
+literature_refs: []

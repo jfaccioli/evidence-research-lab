@@ -1,0 +1,9 @@
+programme: liquidations_v1
+design: docs/PROGRAMME_LIQUIDATIONS_V1.md
+live_data: true
+hypotheses:
+  - hyp_liq_hi_flat.yaml
+  - hyp_liq_ext_flat.yaml
+  - hyp_liq_z_high_flat.yaml
+  - hyp_liq_low_long.yaml
+  - hyp_liq_after_ext_long.yaml

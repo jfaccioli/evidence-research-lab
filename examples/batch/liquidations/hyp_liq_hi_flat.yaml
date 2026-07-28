@@ -1,0 +1,16 @@
+id: hyp_liq_hi_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_liquidations
+direction: long_only
+entry:
+  expression: liq_high == 1
+exit:
+  expression: liq_high == 0
+rationale: >
+  Flat when long liquidations above expanding median (stress). Programme: docs/PROGRAMME_LIQUIDATIONS_V1.md.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [liquidations, liq, external_pit]
+literature_refs: []

@@ -1,0 +1,16 @@
+id: hyp_sc_neg_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_stablecoin_flow
+direction: long_only
+entry:
+  expression: sc_neg == 1
+exit:
+  expression: sc_neg == 0
+rationale: >
+  Flat when stablecoins leave exchanges (risk-off proxy). Programme: docs/PROGRAMME_STABLECOIN_FLOW_V1.md.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [stablecoin_flow, sc, external_pit]
+literature_refs: []

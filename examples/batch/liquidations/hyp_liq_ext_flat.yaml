@@ -1,0 +1,16 @@
+id: hyp_liq_ext_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_liquidations
+direction: long_only
+entry:
+  expression: liq_hi_ext == 1
+exit:
+  expression: liq_hi_ext == 0
+rationale: >
+  Flat on extreme long liquidation intensity. Programme: docs/PROGRAMME_LIQUIDATIONS_V1.md.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [liquidations, liq, external_pit]
+literature_refs: []

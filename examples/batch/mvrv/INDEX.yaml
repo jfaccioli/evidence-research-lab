@@ -1,0 +1,9 @@
+programme: mvrv_v1
+design: docs/PROGRAMME_MVRV_V1.md
+live_data: true
+hypotheses:
+  - hyp_mvrv_high_flat.yaml
+  - hyp_mvrv_low_long.yaml
+  - hyp_mvrv_z_high_flat.yaml
+  - hyp_mvrv_z_low_long.yaml
+  - hyp_mvrv_mid_trend.yaml

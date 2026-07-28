@@ -1,0 +1,16 @@
+id: hyp_liq_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_liquidations
+direction: long_only
+entry:
+  expression: liq_low == 1 and above_sma_50 == 1
+exit:
+  expression: liq_low == 0 or above_sma_50 == 0
+rationale: >
+  Long when liquidations subdued + mild trend. Programme: docs/PROGRAMME_LIQUIDATIONS_V1.md.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [liquidations, liq, external_pit]
+literature_refs: []

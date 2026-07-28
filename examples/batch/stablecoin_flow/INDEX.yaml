@@ -1,0 +1,9 @@
+programme: stablecoin_flow_v1
+design: docs/PROGRAMME_STABLECOIN_FLOW_V1.md
+live_data: true
+hypotheses:
+  - hyp_sc_pos_trend.yaml
+  - hyp_sc_neg_flat.yaml
+  - hyp_sc_hi_ext_long.yaml
+  - hyp_sc_lo_ext_flat.yaml
+  - hyp_sc_z_high_long.yaml

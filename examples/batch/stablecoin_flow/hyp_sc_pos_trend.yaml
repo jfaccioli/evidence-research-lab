@@ -1,0 +1,16 @@
+id: hyp_sc_pos_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_stablecoin_flow
+direction: long_only
+entry:
+  expression: sc_pos == 1 and above_sma_50 == 1
+exit:
+  expression: sc_pos == 0 or above_sma_50 == 0
+rationale: >
+  Long when stablecoin netflow positive (into exchanges) + mild trend. Programme: docs/PROGRAMME_STABLECOIN_FLOW_V1.md.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [stablecoin_flow, sc, external_pit]
+literature_refs: []

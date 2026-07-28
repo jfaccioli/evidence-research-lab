@@ -1,0 +1,15 @@
+id: hyp_mvrv_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_mvrv
+direction: long_only
+entry:
+  expression: mvrv_high == 1
+exit:
+  expression: mvrv_high == 0
+rationale: Flat when MVRV above expanding median (rich). docs/PROGRAMME_MVRV_V1.md
+expected_outcome: Exploratory only until confirmatory.
+feature_tags: [mvrv, external_pit]
+literature_refs: []

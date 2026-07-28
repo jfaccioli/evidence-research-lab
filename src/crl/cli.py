@@ -398,6 +398,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_eacq.set_defaults(func=cmd_evidence_acq)
 
+    p_alpha = sub.add_parser(
+        "alpha-discovery",
+        help="Rank information advantages (not vendors); Alpha Discovery Directive",
+    )
+    p_alpha.add_argument("--sync", action="store_true", help="Rewrite alpha_discovery_catalog.json")
+    p_alpha.set_defaults(func=cmd_alpha_discovery)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -711,6 +718,48 @@ def cmd_evidence_acq(args: argparse.Namespace) -> int:
                         "human_required": i.get("human_required"),
                     }
                     for i in ranked_items()
+                ],
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
+def cmd_alpha_discovery(args: argparse.Namespace) -> int:
+    """Information advantages first — Alpha Discovery Directive."""
+    from crl.research.meta.alpha_discovery import (
+        discovery_summary,
+        ranked_advantages,
+        self_critique_prompt,
+        sync_catalog,
+    )
+
+    path = sync_catalog()
+    if getattr(args, "sync", False):
+        print(f"wrote {path}", flush=True)
+    print(
+        json.dumps(
+            {
+                "directive": "docs/ALPHA_DISCOVERY_DIRECTIVE.md",
+                "question": (
+                    "What information advantage might exist that this laboratory "
+                    "cannot currently observe?"
+                ),
+                "summary": discovery_summary(),
+                "self_critique": self_critique_prompt(),
+                "advantages": [
+                    {
+                        "rank": a["rank"],
+                        "id": a["id"],
+                        "name": a["name"],
+                        "mechanism": a["mechanism"],
+                        "ev": a["ev"],
+                        "action": a["action"],
+                        "currently_observable": a["currently_observable"],
+                        "cost_class": a["cost_class"],
+                    }
+                    for a in ranked_advantages()
                 ],
             },
             indent=2,

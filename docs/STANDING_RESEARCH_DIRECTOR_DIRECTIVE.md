@@ -59,6 +59,8 @@ Reduce uncertainty; move toward justified tiny-live **or** intelligent continued
 
 ## Permanent parallel workstreams
 
-**Evidence acquisition (primary while data-bound):** maximise novel predictive information — living roadmap `docs/EVIDENCE_ACQUISITION_ROADMAP.md`, CLI `crl evidence-acq`. Prefer free archives; recommend paid only when EV > cost and programme is pre-registered.
+**Alpha Discovery (primary):** maximise P(genuine predictive information) — `docs/ALPHA_DISCOVERY_DIRECTIVE.md`, `docs/ALPHA_DISCOVERY_ROADMAP.md`, CLI `crl alpha-discovery`. Think in **information advantages**, not dataset shopping.
+
+**Evidence acquisition (vehicles):** `docs/EVIDENCE_ACQUISITION_ROADMAP.md`, `crl evidence-acq`. Prefer free; paid only when EV > cost and programme pre-registered.
 
 **Workstream F — Scientific Meta-Research** (`docs/WORKSTREAM_F_META_RESEARCH.md`): improve *how* the lab discovers. Does not invent signals from “what funds claim.”

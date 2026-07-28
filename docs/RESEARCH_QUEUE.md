@@ -29,15 +29,16 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| 0 | **ACQ** | **Evidence acquisition** — novel predictive info (primary objective) | **Highest** | living roadmap |
-| 0b | **F** | Scientific meta-research (permanent) | High | active |
-| 1 | **ACQ-1** | Free Polymarket/Kalshi **panel** (not single binary) | 4.5 | design + free data |
-| 2 | **ACQ-4** | Free macro (DXY/rates) risk-off filter programme | 3.5 | free public series |
-| 3 | **ACQ-2** | Vendor netflow export | 4.0 | **Human $** + pre-reg |
-| 4 | **F2** | Deflated-Sharpe annotation | Med | optional |
+| **0** | **ALPHA** | **Information advantages** (primary) — not more code | **Highest** | `docs/ALPHA_DISCOVERY_ROADMAP.md` |
+| 1 | **A1** | Cross-event **implied state** (PM/Kalshi **panel**) | 4.5 | free design+ingest |
+| 2 | **A2** | Macro risk **regime** conditioner | 3.5 | free series path |
+| 3 | **A3** | Labeled inventory flow (vendor PIT) | 4.0 | **Human $** + pre-reg |
+| 4 | **F** | Meta-research (how we discover) | High | permanent |
 | 5 | LIVE polish | Parked | Zero | survivors |
 
-See `docs/EVIDENCE_ACQUISITION_ROADMAP.md` and `crl evidence-acq`.
+**Reject:** free on-chain metric clones; L2; engineering busywork.
+
+See `crl alpha-discovery`, `docs/ALPHA_DISCOVERY_DIRECTIVE.md`, `docs/EVIDENCE_ACQUISITION_ROADMAP.md`.
 
 See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 

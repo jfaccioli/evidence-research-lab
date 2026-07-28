@@ -28,18 +28,23 @@ See `examples/batch/flow/`. **Do not expand without new programme version.**
 | Path | Role |
 |------|------|
 | Mock | `sources/flow_mock.py` — tests only |
-| Real | Future: versioned parquet under `data/processed/flow/` with hash; paid or free APIs only with human OK |
+| Real | `data/processed/flow/<series_id>.parquet` columns `flow_time`, `net_flow` |
+| Loader | `crl.shared.data.sources.flow_ingest.resolve_flow_series` — **fail-closed** if missing |
 
 **Mock results are never promotion evidence.**
+
+Sign convention: **positive net_flow = net into exchanges**.
 
 ## Non-goals
 
 - Live Telegram whale bots without PIT  
 - Leverage / copy-trading perps  
 - Gate softening  
+- Silent fallback to mock in science batches  
 
 ## Execution when real data lands
 
-1. Ingest + hash real series.  
-2. `crl batch` / `run-programme` with `flow_events=…` on temp registry.  
-3. Autopsy + thesis; confirmatory only if earned.
+1. Human places versioned parquet under `data/processed/flow/<series_id>.parquet` (or OK paid API ingest).  
+2. `resolve_flow_series(series_id)` → events + content hash.  
+3. `crl batch` / pipeline with `flow_events=` / `flow_series_id=` on **temp registry**.  
+4. Autopsy + thesis; confirmatory only if earned.

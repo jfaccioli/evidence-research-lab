@@ -107,3 +107,25 @@ def test_pre_registered_flow_hyps_count():
         assert "flow" in raw.get("feature_tags", []) or "flow_pit" in str(
             raw.get("feature_tags")
         )
+
+
+def test_real_flow_ingest_fail_closed(tmp_path: Path):
+    from crl.shared.data.sources.flow_ingest import load_flow_events, resolve_flow_series
+
+    with pytest.raises(FlowPITError, match="not found"):
+        load_flow_events(tmp_path / "nope.parquet")
+    with pytest.raises(FlowPITError, match="No real flow"):
+        resolve_flow_series("does_not_exist", flow_dir=tmp_path)
+
+
+def test_load_real_flow_parquet(tmp_path: Path):
+    from crl.shared.data.sources.flow_ingest import load_flow_events, resolve_flow_series
+
+    ev = generate_mock_flow_events(start="2020-01-01", end="2020-02-01", seed=1)
+    path = tmp_path / "demo.parquet"
+    ev.to_parquet(path, index=False)
+    loaded = load_flow_events(path)
+    assert len(loaded) == len(ev)
+    events, h = resolve_flow_series("demo", flow_dir=tmp_path)
+    assert len(h) == 64
+    assert len(events) == len(ev)

@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-28T06:46:43.310030+00:00",
+  "total_exploratory_trials": 33,
+  "families": {
+    "family_flow_level": {
+      "n_trials": 8,
+      "n_programmes": 1,
+      "last_programme": "flow_whale_v1"
+    },
+    "family_cb_premium": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "cb_premium_v1"
+    },
+    "family_polymarket_odds": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "polymarket_btc_odds_v1"
+    },
+    "family_stablecoin_flow": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "stablecoin_flow_v1"
+    },
+    "family_liquidations": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "liquidations_v1"
+    },
+    "family_mvrv": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "mvrv_v1"
+    }
+  },
+  "programmes": {
+    "flow_whale_v1": {
+      "n_trials": 8,
+      "family_counts": {
+        "family_flow_level": 8
+      },
+      "n_passed_val": 6,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.295196+00:00"
+    },
+    "cb_premium_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_cb_premium": 5
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.298222+00:00"
+    },
+    "polymarket_btc_odds_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_polymarket_odds": 5
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.300849+00:00"
+    },
+    "stablecoin_flow_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_stablecoin_flow": 5
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.303527+00:00"
+    },
+    "liquidations_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_liquidations": 5
+      },
+      "n_passed_val": 1,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.306856+00:00"
+    },
+    "mvrv_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_mvrv": 5
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T06:46:43.309748+00:00"
+    }
+  },
+  "events": [
+    {
+      "at": "2026-07-28T06:46:43.295915+00:00",
+      "programme": "flow_whale_v1",
+      "n_trials": 8,
+      "n_passed_val": 6,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T06:46:43.298235+00:00",
+      "programme": "cb_premium_v1",
+      "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T06:46:43.300866+00:00",
+      "programme": "polymarket_btc_odds_v1",
+      "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T06:46:43.303540+00:00",
+      "programme": "stablecoin_flow_v1",
+      "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T06:46:43.306874+00:00",
+      "programme": "liquidations_v1",
+      "n_trials": 5,
+      "n_passed_val": 1,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T06:46:43.309777+00:00",
+      "programme": "mvrv_v1",
+      "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    }
+  ]
+}

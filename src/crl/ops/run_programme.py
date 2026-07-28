@@ -231,4 +231,33 @@ def run_programme(
         except Exception as e:
             out["queue_record_error"] = str(e)
 
+    # Workstream F P3 — family trial ledger (informational multiplicity)
+    try:
+        from collections import Counter
+
+        from crl.research.meta.family_trials import record_programme_trials
+        from crl.research.pipeline.batch import load_hypothesis_yaml
+
+        fam_counts: Counter[str] = Counter()
+        for r in summary.get("results") or []:
+            hid = r.get("id")
+            if not hid:
+                continue
+            yml = hyp_dir / f"{hid}.yaml"
+            if yml.exists():
+                sp = load_hypothesis_yaml(yml)
+                fam_counts[sp.family_id or sp.id] += 1
+            else:
+                fam_counts[str(hid)] += 1
+        if fam_counts:
+            out["family_trials"] = record_programme_trials(
+                programme=idx.name,
+                family_counts=dict(fam_counts),
+                n_passed_val=int(out.get("n_passed_val") or 0),
+                n_candidates=int(n_candidates),
+                dataset_id=str(out.get("dataset_id") or ""),
+            )
+    except Exception as e:
+        out["family_trials_error"] = str(e)
+
     return out

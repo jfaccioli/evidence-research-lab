@@ -56,3 +56,7 @@ As listed in the human directive (implementation through roadmap maintenance; in
 ## Success
 
 Reduce uncertainty; move toward justified tiny-live **or** intelligent continued search—not milestone theatre or code volume.
+
+## Permanent parallel workstream
+
+**Workstream F — Scientific Meta-Research** (`docs/WORKSTREAM_F_META_RESEARCH.md`) runs continuously: extract public research-process principles, score against the lab, implement only justified capability upgrades. Does not invent signals from “what funds claim.”

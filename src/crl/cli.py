@@ -354,6 +354,17 @@ def main(argv: list[str] | None = None) -> int:
     p_newp.add_argument("--n-hyps", type=int, default=3)
     p_newp.set_defaults(func=cmd_new_programme)
 
+    p_metaf = sub.add_parser(
+        "meta-research",
+        help="Workstream F: principles ledger + family trial multiplicity snapshot",
+    )
+    p_metaf.add_argument(
+        "--sync",
+        action="store_true",
+        help="Rewrite research_kb/meta_research_principles.json from code",
+    )
+    p_metaf.set_defaults(func=cmd_meta_research)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -596,6 +607,31 @@ def cmd_new_programme(args: argparse.Namespace) -> int:
         print(f"new-programme failed: {e}", file=sys.stderr)
         return 1
     print(json.dumps(out, indent=2))
+    return 0
+
+
+def cmd_meta_research(args: argparse.Namespace) -> int:
+    """Workstream F — improve how the lab thinks (not invent signals)."""
+    from crl.research.meta.family_trials import multiplicity_snapshot
+    from crl.research.meta.workstream_f import principles_report, sync_principles_file
+
+    if getattr(args, "sync", False):
+        path = sync_principles_file()
+        print(f"wrote {path}", flush=True)
+    else:
+        # keep file fresh on every read
+        sync_principles_file()
+    print(
+        json.dumps(
+            {
+                "workstream": "F_scientific_meta_research",
+                "principles": principles_report(),
+                "multiplicity": multiplicity_snapshot(),
+            },
+            indent=2,
+            default=str,
+        )
+    )
     return 0
 
 

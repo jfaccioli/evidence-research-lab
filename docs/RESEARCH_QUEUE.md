@@ -29,13 +29,15 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| 1 | **CAP** | Research capability tooling (INDEX series attach, series CLI, new-programme, queue state) | **High** while waiting | — done/expand |
-| 2 | **Q8** | X/social PIT **only** if free reconstructible archive found | Medium | Archive |
-| 3 | **Q7** | Polymarket **panel** redesign only with pre-reg design | Medium | Design + history |
-| 4 | **HUMAN** | Vendor-grade non-revised flow/on-chain | Unknown | **You** — paid/export |
-| 5 | Product LIVE polish | Parked | Zero without APPROVED | Survivors |
+| 0 | **F** | Scientific meta-research (permanent) — improve *how* we discover | **High** | — active |
+| 1 | **CAP** | Series attach / programme tooling | High | largely done |
+| 2 | **F2** | Deflated-Sharpe annotation on batch summaries (info only) | Med–High | scheduled |
+| 3 | **Q8** | X/social PIT if free archive | Medium | Archive |
+| 4 | **Q7** | Polymarket panel redesign | Medium | Design |
+| 5 | **HUMAN** | Vendor-grade PIT series | Unknown | You |
+| 6 | LIVE polish | Parked | Zero without APPROVED | Survivors |
 
-See `docs/CAPABILITY_WHEN_WAITING.md`.
+See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 
 ## Selection rule
 

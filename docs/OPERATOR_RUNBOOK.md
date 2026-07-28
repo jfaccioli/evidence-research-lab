@@ -40,6 +40,7 @@ Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_
 | `python -m crl series ready --hyp-dir examples/batch/flow` | Series readiness for a programme |
 | `python -m crl new-programme slug --kind external --series-id …` | Scaffold locked programme |
 | `python -m crl queue` | Machine research queue state |
+| `python -m crl meta-research` | Workstream F principles + family trial multiplicity |
 | `python -m crl batch --hyp-dir … --temp-registry` | Exploratory batch only |
 | `python -m crl autopsy examples/batch/<prog>` | Rebuild GATE_AUTOPSY from reports |
 | `python -m crl programmes --write-md` | Inventory → `docs/PROGRAMME_INVENTORY.md` |

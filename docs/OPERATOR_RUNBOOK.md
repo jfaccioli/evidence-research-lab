@@ -81,3 +81,6 @@ Journals: `data/paper_journal/`, `data/shadow/`.
 ## Human-only
 
 API keys, LIVE Phase-5 flags, paid data, gate policy changes, git remote/push if desired.
+
+See `docs/PROGRAMME_INVENTORY.md` for the full programme table.
+

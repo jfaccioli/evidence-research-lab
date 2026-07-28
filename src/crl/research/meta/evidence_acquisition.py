@@ -20,56 +20,57 @@ CATALOG: list[dict[str, Any]] = [
         "id": "pm_kalshi_panel_free",
         "name": "Polymarket/Kalshi multi-market historical panel",
         "class": "prediction_markets",
-        "novelty": 4,
+        "novelty": 2,
         "pit": 3,
-        "history": 4,
+        "history": 3,
         "cost_class": "free",
-        "cost_note": "Free public CLOB/archives; effort is assembly",
+        "cost_note": "Free; path panel already tested null 0/5",
         "effort": 3,
-        "ev": 4.5,
-        "rank": 1,
-        "recommendation": "acquire_free",
-        "vs_lab": "Q2 single-binary null; panel is material redesign",
+        "ev": 2.0,
+        "rank": 5,
+        "recommendation": "wait",
+        "vs_lab": "pm_panel_v1 explor 0/5; further path panels low EV",
         "min_tooling": "external series attach (exists)",
         "human_required": False,
+    },
+    {
+        "id": "macro_fred_dxy",
+        "name": "Macro risk-off (DXY / rates via free FRED registration)",
+        "class": "macro",
+        "novelty": 4,
+        "pit": 5,
+        "history": 5,
+        "cost_class": "free",
+        "cost_note": "$0; free API key ~15 min human (EIR #1 investment)",
+        "effort": 2,
+        "ev": 3.5,
+        "rank": 1,
+        "recommendation": "acquire_free",
+        "vs_lab": "Unexplored class; EIR 2026-07-28 top science-per-dollar",
+        "min_tooling": "external series + PROGRAMME_MACRO_REGIME_V1",
+        "human_required": True,
+        "buy_when": "N/A — free key only",
     },
     {
         "id": "vendor_exchange_flow",
         "name": "Vendor BTC(+ETH) exchange netflow (CryptoQuant/Glassnode)",
         "class": "onchain_flow",
-        "novelty": 3,
+        "novelty": 2.5,
         "pit": 5,
         "history": 5,
         "cost_class": "low_mid",
-        "cost_note": "~USD 30–100+/mo public tiers; prefer one-time export",
+        "cost_note": "~USD 30–100+/mo; prefer one-time export AFTER free macro",
         "effort": 2,
-        "ev": 4.0,
-        "rank": 2,
+        "ev": 3.0,
+        "rank": 4,
         "recommendation": "buy_if_programme_ready",
-        "vs_lab": "Free CMD netflow conf-null; vendor PIT may differ",
+        "vs_lab": "Same family as free netflow conf-null; EIR: do not buy before macro",
         "min_tooling": "flow parquet drop-in (exists)",
         "human_required": True,
         "buy_when": (
-            "Pre-reg programme locked AND free panel/macro path done or "
-            "explicitly deprioritised AND prefer fixed export over open sub"
+            "Free macro programme completed (null or blocked) AND pre-reg "
+            "programme locked AND prefer fixed export over open sub"
         ),
-    },
-    {
-        "id": "macro_fred_dxy",
-        "name": "Macro risk-off (DXY / rates via FRED-class free daily)",
-        "class": "macro",
-        "novelty": 3,
-        "pit": 5,
-        "history": 5,
-        "cost_class": "free",
-        "cost_note": "Public macro series (FRED/stooq-class)",
-        "effort": 2,
-        "ev": 3.5,
-        "rank": 4,
-        "recommendation": "acquire_free",
-        "vs_lab": "Orthogonal to spent on-chain free filters",
-        "min_tooling": "external series + small programme",
-        "human_required": False,
     },
     {
         "id": "stablecoin_large_transfers",
@@ -187,6 +188,22 @@ def recommend_spend(
     reasons: list[str] = []
     buy = False
 
+    # EIR 2026-07-28: free macro must be done before paid inventory-family data
+    if item_id == "vendor_exchange_flow" and not free_alternatives_exhausted:
+        return {
+            "item_id": item_id,
+            "recommendation_base": rec,
+            "should_spend_money_now": False,
+            "reasons": [
+                "Evidence Investment Review: free FRED/macro path not exhausted — "
+                "do not buy vendor netflow yet (same family as free conf-null)"
+            ],
+            "ev": item.get("ev"),
+            "cost_note": item.get("cost_note"),
+            "human_required": True,
+            "eir_ref": "docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md",
+        }
+
     if rec == "reject":
         reasons.append("Catalog recommendation is reject (low EV / wrong mandate)")
     elif rec == "acquire_free":
@@ -195,13 +212,10 @@ def recommend_spend(
     elif rec == "buy_if_programme_ready":
         if not programme_locked:
             reasons.append("Refuse buy until programme hyps pre-registered")
-        elif not free_alternatives_exhausted and item.get("id") == "vendor_exchange_flow":
-            reasons.append(
-                "Free multi-market / macro paths still open — try free first "
-                "unless you explicitly prioritise vendor PIT"
-            )
+        elif not free_alternatives_exhausted:
+            reasons.append("Free alternatives not marked exhausted")
         else:
-            reasons.append("Programme locked and free paths addressed or overridden")
+            reasons.append("Programme locked and free paths addressed")
             buy = True
         if annual_usd_cost is not None and annual_usd_cost > 600:
             reasons.append(
@@ -212,7 +226,7 @@ def recommend_spend(
                 buy = False
                 reasons.append("Cost exceeds informal personal research threshold")
     elif rec == "wait":
-        reasons.append("Not ready — missing archive design or human keys")
+        reasons.append("Not ready — missing archive design or human keys / residual EV low")
     else:
         reasons.append(f"recommendation={rec}")
 
@@ -224,6 +238,7 @@ def recommend_spend(
         "ev": item.get("ev"),
         "cost_note": item.get("cost_note"),
         "human_required": item.get("human_required"),
+        "eir_ref": "docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md",
     }
 
 

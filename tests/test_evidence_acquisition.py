@@ -24,9 +24,10 @@ def test_reject_cmd_clones():
     assert r["recommendation_base"] == "reject"
 
 
-def test_vendor_requires_programme():
-    r = recommend_spend("vendor_exchange_flow", programme_locked=False)
+def test_vendor_blocked_until_free_exhausted():
+    r = recommend_spend("vendor_exchange_flow", programme_locked=True)
     assert r["should_spend_money_now"] is False
+    assert "macro" in r["reasons"][0].lower() or "FRED" in r["reasons"][0] or "free" in r["reasons"][0].lower()
     r2 = recommend_spend(
         "vendor_exchange_flow",
         programme_locked=True,

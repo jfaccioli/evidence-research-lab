@@ -29,16 +29,17 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| — | **PAUSE** | Autonomous science paused pending human info unlock | — | `HUMAN_ACTION_PACKET_2026-07-28.md` |
-| 1 | **A1** | PM multi-market panel | Done null 0/5 | — |
-| 2 | **A2** | Macro regime | Blocked | free API/key |
-| 3 | **A3** | Vendor inventory flow | **Next when human** | export/keys |
-| 4 | **A4** | Spot ETF flows | Blocked | API key |
-| 5 | **F** | Meta-research maintain | Low churn | — |
+| **0** | **EIR** | Evidence Investment Review | Done | `EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md` |
+| **1** | **A2** | Macro regime via **free FRED** | Highest $/science | Free key or CSV (**not paid**) |
+| 2 | **A1** | PM path panel | Done null 0/5 | — |
+| 3 | **A4** | ETF flows | After A2 | free source or later |
+| 4 | **A3** | Vendor netflow export | **Only after A2** | human $ |
+| 5 | **F** | Meta-research | Maintain | — |
 
-**Reject:** free on-chain metric clones; L2; engineering busywork; autonomous re-runs of spent classes.
+**Do not spend money** until free macro (A2) is tested or truly blocked.  
+**Reject:** free on-chain clones; L2; pay-for-browse subscriptions.
 
-See `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-28.md`, `docs/HUMAN_ACTION_PACKET_2026-07-28.md`.
+See `docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md`, updated HAP.
 
 See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 

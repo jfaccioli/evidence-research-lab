@@ -1,6 +1,13 @@
 programme: flow_whale_v1
 design: docs/PROGRAMME_FLOW_WHALE_V1.md
-live_data: false
+live_data: true
+external:
+  kind: flow
+  series_id: cmd_btc_exchange_netflow_v1
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
 hypotheses:
   - hyp_flow_inflow_flat.yaml
   - hyp_flow_outflow_long.yaml

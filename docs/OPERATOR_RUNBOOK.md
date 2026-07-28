@@ -35,7 +35,11 @@ Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_
 | `python -m crl fetch --interval 1d --symbol ETHUSDT` | Pin ETH daily (universe allow-list) |
 | `python -m crl fetch --interval 4h` | Pin 4h OHLCV |
 | `python -m crl plan` | Evidence-driven research plan |
-| `python -m crl run-programme examples/batch/<prog>` | Doctor + temp registry + note + autopsy |
+| `python -m crl run-programme examples/batch/<prog>` | Doctor + INDEX series attach + explor/conf + note + autopsy |
+| `python -m crl series list` | Inventory pinned flow/external series |
+| `python -m crl series ready --hyp-dir examples/batch/flow` | Series readiness for a programme |
+| `python -m crl new-programme slug --kind external --series-id …` | Scaffold locked programme |
+| `python -m crl queue` | Machine research queue state |
 | `python -m crl batch --hyp-dir … --temp-registry` | Exploratory batch only |
 | `python -m crl autopsy examples/batch/<prog>` | Rebuild GATE_AUTOPSY from reports |
 | `python -m crl programmes --write-md` | Inventory → `docs/PROGRAMME_INVENTORY.md` |

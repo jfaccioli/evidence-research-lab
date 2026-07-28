@@ -2,8 +2,16 @@ programme: liquidations_v1
 design: docs/PROGRAMME_LIQUIDATIONS_V1.md
 live_data: true
 hypotheses:
-  - hyp_liq_hi_flat.yaml
-  - hyp_liq_ext_flat.yaml
-  - hyp_liq_z_high_flat.yaml
-  - hyp_liq_low_long.yaml
-  - hyp_liq_after_ext_long.yaml
+- hyp_liq_hi_flat.yaml
+- hyp_liq_ext_flat.yaml
+- hyp_liq_z_high_flat.yaml
+- hyp_liq_low_long.yaml
+- hyp_liq_after_ext_long.yaml
+external:
+  kind: external
+  series_id: cmd_btc_long_liquidations_v1
+  prefix: liq
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d

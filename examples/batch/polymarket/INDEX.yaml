@@ -1,6 +1,16 @@
 programme: polymarket_btc_odds_v1
 design: docs/PROGRAMME_POLYMARKET_V1.md
 live_data: true
+external:
+  kind: external
+  series_id: pm_btc_150k_eoy2025_yes_v1
+  prefix: pm
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+  window_from_series: true
+  window_burn_in_days: 120
 hypotheses:
   - hyp_pm_high_flat.yaml
   - hyp_pm_low_long.yaml

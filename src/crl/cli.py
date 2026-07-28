@@ -298,7 +298,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p_runp = sub.add_parser(
         "run-programme",
-        help="Doctor + temp-registry exploratory batch for a programme dir",
+        help="Doctor + series attach (INDEX.yaml) + temp-registry explor/conf",
     )
     p_runp.add_argument("hyp_dir", help="Path e.g. examples/batch/fade")
     p_runp.add_argument("--dataset-id", default=None)
@@ -308,7 +308,51 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Do not require doctor ok (not recommended)",
     )
+    p_runp.add_argument(
+        "--require-series",
+        action="store_true",
+        help="Fail if INDEX external series missing/short (<180 events)",
+    )
     p_runp.set_defaults(func=cmd_run_programme)
+
+    p_series = sub.add_parser(
+        "series",
+        help="List/validate pinned PIT series under data/processed/{flow,external}",
+    )
+    p_series.add_argument(
+        "action",
+        choices=["list", "ready"],
+        help="list local series, or ready (check programme INDEX attach)",
+    )
+    p_series.add_argument(
+        "--hyp-dir",
+        default=None,
+        help="For ready: programme dir with INDEX.yaml external block",
+    )
+    p_series.set_defaults(func=cmd_series)
+
+    p_queue = sub.add_parser(
+        "queue",
+        help="Show machine research queue state (research_kb/research_queue_state.json)",
+    )
+    p_queue.set_defaults(func=cmd_queue)
+
+    p_newp = sub.add_parser(
+        "new-programme",
+        help="Scaffold locked programme dir + design stub (does not run science)",
+    )
+    p_newp.add_argument("slug", help="Directory name under examples/batch/")
+    p_newp.add_argument("--mechanism", default="TODO mechanism")
+    p_newp.add_argument(
+        "--design",
+        default=None,
+        help="Design doc path (default docs/PROGRAMME_<SLUG>_V1.md)",
+    )
+    p_newp.add_argument("--kind", default=None, choices=["flow", "external"])
+    p_newp.add_argument("--series-id", default=None)
+    p_newp.add_argument("--prefix", default="xser")
+    p_newp.add_argument("--n-hyps", type=int, default=3)
+    p_newp.set_defaults(func=cmd_new_programme)
 
     p_autopsy = sub.add_parser(
         "autopsy",
@@ -512,6 +556,49 @@ def cmd_status(args: argparse.Namespace) -> int:
     return 0 if st.get("doctor_ok") and not st.get("live_enabled") else 1
 
 
+def cmd_series(args: argparse.Namespace) -> int:
+    from crl.ops.programme_index import load_programme_index
+    from crl.ops.series_attach import list_local_series, series_readiness
+
+    if args.action == "list":
+        print(json.dumps({"series": list_local_series()}, indent=2))
+        return 0
+    if not args.hyp_dir:
+        print("--hyp-dir required for ready", file=sys.stderr)
+        return 2
+    idx = load_programme_index(Path(args.hyp_dir))
+    print(json.dumps(series_readiness(idx.external), indent=2, default=str))
+    return 0 if series_readiness(idx.external).get("ready") else 1
+
+
+def cmd_queue(args: argparse.Namespace) -> int:
+    from crl.ops.research_queue_state import load_queue_state
+
+    print(json.dumps(load_queue_state(), indent=2))
+    return 0
+
+
+def cmd_new_programme(args: argparse.Namespace) -> int:
+    from crl.ops.new_programme import scaffold_programme
+
+    design = args.design or f"docs/PROGRAMME_{args.slug.upper()}_V1.md"
+    try:
+        out = scaffold_programme(
+            args.slug,
+            design_rel=design,
+            mechanism=args.mechanism,
+            external_kind=args.kind,
+            series_id=args.series_id,
+            prefix=args.prefix,
+            placeholder_hyps=int(args.n_hyps),
+        )
+    except Exception as e:
+        print(f"new-programme failed: {e}", file=sys.stderr)
+        return 1
+    print(json.dumps(out, indent=2))
+    return 0
+
+
 def cmd_run_programme(args: argparse.Namespace) -> int:
     from crl.ops.run_programme import run_programme
 
@@ -522,6 +609,7 @@ def cmd_run_programme(args: argparse.Namespace) -> int:
             config_path=args.config,
             limit=args.limit,
             require_doctor=not args.skip_doctor,
+            require_series_ready=bool(getattr(args, "require_series", False)),
         )
     except Exception as e:
         print(f"run-programme failed: {e}", file=sys.stderr)

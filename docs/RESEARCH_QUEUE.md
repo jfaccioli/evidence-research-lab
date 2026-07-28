@@ -29,11 +29,13 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| 1 | **META** | Written synthesis + retire free-CMD daily filter wave for this mandate | High (stop waste) | — |
+| 1 | **CAP** | Research capability tooling (INDEX series attach, series CLI, new-programme, queue state) | **High** while waiting | — done/expand |
 | 2 | **Q8** | X/social PIT **only** if free reconstructible archive found | Medium | Archive |
-| 3 | **Q7** | Polymarket **panel** redesign (multi-event, non-sticky) — only with pre-reg design doc first | Medium | Design + history depth |
-| 4 | **HUMAN** | Vendor-grade non-revised flow/on-chain (CryptoQuant etc.) | Unknown | **You** — paid/export |
+| 3 | **Q7** | Polymarket **panel** redesign only with pre-reg design | Medium | Design + history |
+| 4 | **HUMAN** | Vendor-grade non-revised flow/on-chain | Unknown | **You** — paid/export |
 | 5 | Product LIVE polish | Parked | Zero without APPROVED | Survivors |
+
+See `docs/CAPABILITY_WHEN_WAITING.md`.
 
 ## Selection rule
 

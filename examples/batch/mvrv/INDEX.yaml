@@ -2,8 +2,16 @@ programme: mvrv_v1
 design: docs/PROGRAMME_MVRV_V1.md
 live_data: true
 hypotheses:
-  - hyp_mvrv_high_flat.yaml
-  - hyp_mvrv_low_long.yaml
-  - hyp_mvrv_z_high_flat.yaml
-  - hyp_mvrv_z_low_long.yaml
-  - hyp_mvrv_mid_trend.yaml
+- hyp_mvrv_high_flat.yaml
+- hyp_mvrv_low_long.yaml
+- hyp_mvrv_z_high_flat.yaml
+- hyp_mvrv_z_low_long.yaml
+- hyp_mvrv_mid_trend.yaml
+external:
+  kind: external
+  series_id: cmd_btc_mvrv_ratio_v1
+  prefix: mvrv
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d

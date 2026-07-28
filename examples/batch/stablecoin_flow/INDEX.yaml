@@ -1,6 +1,14 @@
 programme: stablecoin_flow_v1
 design: docs/PROGRAMME_STABLECOIN_FLOW_V1.md
 live_data: true
+external:
+  kind: external
+  series_id: cmd_stablecoin_exchange_netflow_v1
+  prefix: sc
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
 hypotheses:
   - hyp_sc_pos_trend.yaml
   - hyp_sc_neg_flat.yaml

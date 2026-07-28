@@ -10,6 +10,7 @@
 - [x] **Flow / whale PIT scaffold** (`flow.py`, mock, 8 locked hyps, mechanism) — science batch blocked on real history
 - [x] **Multi-asset v1** — universe allow-list BTC+ETH, `crl fetch --symbol`, paper broker (`docs/MULTI_ASSET_V1.md`)
 - [x] Flow source guidance (`docs/DATA_FLOW_SOURCES.md`) — human only when ready
+- [x] **Wait-time capability:** INDEX series attach, `crl series` / `queue` / `new-programme`, lag harness (`docs/CAPABILITY_WHEN_WAITING.md`)
 - [x] Pre-registered programme dirs + inventory
 - [x] `crl doctor` / `status` / `programmes` / `run-programme` / `autopsy`
 - [x] `crl status --readiness` — lab_ops vs autotrading dual score

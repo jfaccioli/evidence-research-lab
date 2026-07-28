@@ -1,0 +1,24 @@
+{
+  "active": [],
+  "blocked": [
+    {
+      "id": "HUMAN_VENDOR_PIT",
+      "reason": "paid/export vendor-grade series needs human"
+    },
+    {
+      "id": "X_SOCIAL_PIT",
+      "reason": "needs reconstructible archive"
+    }
+  ],
+  "capability_backlog": [
+    "done: INDEX series attach + run-programme",
+    "done: crl series / queue / new-programme",
+    "done: lag sensitivity harness",
+    "next: free X archive discovery (if any)",
+    "next: vendor series drop-in runbook (human)"
+  ],
+  "completed": [],
+  "policy": "no_low_ev_free_btc_technical_clones; wait_time_build_capability",
+  "updated_at": "2026-07-28T06:30:14.809664+00:00",
+  "version": 1
+}

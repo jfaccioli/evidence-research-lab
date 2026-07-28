@@ -1,0 +1,17 @@
+id: hyp_v4h_dry_avoid
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: volume
+family_id: family_volume_4h
+entry:
+  expression: vol_ratio_20 >= 0.8 and mom_pos_20 == 1
+exit:
+  expression: vol_ratio_20 < 0.8 or mom_pos_20 == 0
+rationale: >
+  4h avoid dry volume mom.
+expected_outcome: 4h power; frozen gates.
+feature_tags: [volume_4h_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

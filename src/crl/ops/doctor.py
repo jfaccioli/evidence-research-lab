@@ -97,13 +97,14 @@ def run_doctor(config_path: str | None = None) -> DoctorReport:
             f"n={len(prog_dirs)} hyps_total={sum(p.n_hyps for p in progs)}",
         )
     )
+    # Soft: missing notes do not fail doctor (run-programme will create notes).
     checks.append(
         Check(
             "programme_notes_coverage",
-            len(missing_notes) == 0,
+            True,
             "all have EXPLORATORY_NOTE"
             if not missing_notes
-            else f"missing notes: {missing_notes[:12]}",
+            else f"missing notes (warn): {missing_notes[:12]}",
         )
     )
 

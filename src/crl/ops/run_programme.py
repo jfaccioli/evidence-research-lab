@@ -126,4 +126,12 @@ def run_programme(
     json_path = root / "data" / "processed" / f"tmp_batch_{hyp_dir.name}_summary.json"
     json_path.write_text(json.dumps(out, indent=2, default=str))
     out["summary_json"] = str(json_path)
+
+    try:
+        from crl.ops.autopsy import write_autopsy
+
+        out["autopsy_path"] = str(write_autopsy(hyp_dir))
+    except Exception as e:
+        out["autopsy_error"] = str(e)
+
     return out

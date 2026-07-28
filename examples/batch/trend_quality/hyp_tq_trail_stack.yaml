@@ -1,0 +1,17 @@
+id: hyp_tq_trail_stack
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend_quality
+entry:
+  expression: above_sma_200 == 1 and above_atr_trail == 1 and rvol_below_median == 1
+exit:
+  expression: above_sma_200 == 0 or above_atr_trail == 0 or rvol_above_median == 1
+rationale: >
+  Trail + major trend + quiet.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [trend_quality_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

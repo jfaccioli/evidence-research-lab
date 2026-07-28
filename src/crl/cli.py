@@ -275,6 +275,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_runp.set_defaults(func=cmd_run_programme)
 
+    p_autopsy = sub.add_parser(
+        "autopsy",
+        help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
+    )
+    p_autopsy.add_argument("hyp_dir", help="Path e.g. examples/batch/fade")
+    p_autopsy.add_argument(
+        "--mode",
+        default="exploratory",
+        choices=["exploratory", "confirmatory"],
+    )
+    p_autopsy.set_defaults(func=cmd_autopsy)
+
     p_shadow = sub.add_parser(
         "shadow",
         help="Historical shadow walk (signals only; no orders)",
@@ -495,7 +507,27 @@ def cmd_run_programme(args: argparse.Namespace) -> int:
         )
     for c in out.get("confirmatory") or []:
         print(f"  CONF {c.get('id')}: {c.get('status')} {c.get('reasons') or c.get('error')}")
+    # Auto autopsy when reports exist
+    try:
+        from crl.ops.autopsy import write_autopsy
+
+        ap = write_autopsy(Path(args.hyp_dir))
+        print(f"autopsy={ap}", flush=True)
+    except Exception as e:
+        print(f"autopsy_skip: {e}", flush=True)
     return 0 if int(out.get("n_errors") or 0) == 0 else 1
+
+
+def cmd_autopsy(args: argparse.Namespace) -> int:
+    from crl.ops.autopsy import write_autopsy
+
+    try:
+        path = write_autopsy(Path(args.hyp_dir), mode=args.mode)
+    except Exception as e:
+        print(f"autopsy failed: {e}", file=sys.stderr)
+        return 1
+    print(path)
+    return 0
 
 
 def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):

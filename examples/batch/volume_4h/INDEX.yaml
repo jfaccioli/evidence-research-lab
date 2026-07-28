@@ -1,0 +1,6 @@
+programme: volume_4h_v1
+hypotheses:
+  - hyp_v4h_high_trend.yaml
+  - hyp_v4h_z_trend.yaml
+  - hyp_v4h_thrust_mom.yaml
+  - hyp_v4h_dry_avoid.yaml

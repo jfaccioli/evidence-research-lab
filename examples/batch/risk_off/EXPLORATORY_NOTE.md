@@ -1,4 +1,9 @@
-# risk_off v1 exploratory
+# risk_off exploratory
 
-**Result:** 0/4 passed_val. Bootstrap / min_trades.
+**Date:** 2026-07-28
 
+**Result:** 0/4 passed_val; failed_val=4; errors=0.
+
+Temp registry: `tmp_batch_risk_off.sqlite`. Dataset: `binance_public_BTCUSDT_1d_79cfad335046`.
+
+Not promotion evidence. Frozen gates. No threshold mining on this lock.

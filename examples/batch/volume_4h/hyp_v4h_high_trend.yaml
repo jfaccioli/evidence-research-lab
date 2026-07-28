@@ -1,0 +1,17 @@
+id: hyp_v4h_high_trend
+version: 1
+asset: BTC/USDT
+timeframe: 4h
+taxonomy: volume
+family_id: family_volume_4h
+entry:
+  expression: vol_ratio_20 > 1.2 and above_sma_200 == 1
+exit:
+  expression: vol_ratio_20 <= 1.0 or above_sma_200 == 0
+rationale: >
+  4h volume+trend power study.
+expected_outcome: 4h power; frozen gates.
+feature_tags: [volume_4h_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

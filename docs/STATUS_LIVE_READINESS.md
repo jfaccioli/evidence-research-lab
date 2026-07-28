@@ -1,6 +1,6 @@
 # Live-readiness status (honest)
 
-**Updated:** 2026-07-28  
+**Updated:** 2026-07-28 (autopsy/run-programme mature)  
 **Branch tip:** see `git log -1`
 
 See also: `docs/MANDATE_CURRENT_SCOPE.md`, `crl doctor`.

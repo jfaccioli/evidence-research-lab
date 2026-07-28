@@ -1,19 +1,18 @@
-# Capacity tiny-friction v1 — gate autopsy
+# Gate autopsy — capacity
 
-## Per-hyp (val, elevated costs)
+**Mode:** exploratory  
+**Reports found:** 5/5  
+**passed_val:** 0
 
-| Hyp | n_tr | Sharpe | Main failures |
-|-----|-----:|-------:|---------------|
-| `hyp_cap_sma200_hold` | 3 | 1.52 | min_trades; reality few-trades |
-| `hyp_cap_ema200_hold` | 9 | 1.29 | min_trades; reality few-trades |
-| `hyp_cap_sma50_200_cross` | 2 | 1.11 | min_trades; reality; bootstrap |
-| `hyp_cap_lowvol_sma50` | 21 | 0.79 | min_trades; bootstrap |
-| `hyp_cap_mom20_trend` | 25 | 1.07 | min_trades; bootstrap |
+| hypothesis | status | n_tr | sharpe | excess_bh | ci_lo | reasons |
+|------------|--------|-----:|-------:|----------:|------:|---------|
+| `hyp_cap_ema200_hold` | failed_val | 9 | 1.286 | 0.262 | 0.072 | reality: [economic_plausibility] Weak economic story / noise risk: few trades (9 |
+| `hyp_cap_lowvol_sma50` | failed_val | 21 | 0.786 | -0.615 | -0.591 | n_trades 21 < min_trades 30; bootstrap sharpe CI lo -0.591 < 0.0 |
+| `hyp_cap_mom20_trend` | failed_val | 25 | 1.072 | -0.338 | -0.313 | n_trades 25 < min_trades 30; bootstrap sharpe CI lo -0.313 < 0.0 |
+| `hyp_cap_sma200_hold` | failed_val | 3 | 1.519 | 0.788 | 0.313 | reality: [economic_plausibility] Weak economic story / noise risk: few trades (3 |
+| `hyp_cap_sma50_200_cross` | failed_val | 2 | 1.109 | -0.083 | -0.087 | reality: [economic_plausibility] Weak economic story / noise risk: few trades (2 |
 
-## Side discovery (pipeline)
+## Process
 
-Sensitivity neighborhood rewrote `sma_50_above_200` → `sma_10_above_200` (compound name bug). **Fixed** in `sensitivity.py` (bare `sma_N` tokens only). Regression covered in tests.
-
-## Conclusion
-
-Programme-level null for this 5-hyp lock under elevated costs. Do not mine more SMA windows. Mechanism `capacity_tiny_friction` stance: **active / pivot** — evidence that sparse “pretty Sharpe” rules fail honest trade-count + friction gates for tiny capital.
+- Frozen gates; no threshold mining on this lock.
+- Autopsy is observational — not a promotion decision.

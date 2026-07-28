@@ -1,0 +1,17 @@
+id: hyp_tq_stack_quiet
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_trend_quality
+entry:
+  expression: above_sma_200 == 1 and sma_50_above_200 == 1 and rvol_below_median == 1
+exit:
+  expression: above_sma_200 == 0 or sma_50_above_200 == 0 or rvol_above_median == 1
+rationale: >
+  High-quality trend: stacked SMAs + quiet vol. Not a clone of single filter.
+expected_outcome: Exploratory frozen gates.
+feature_tags: [trend_quality_v1]
+literature_refs: []
+falsification:
+  min_trades: 30

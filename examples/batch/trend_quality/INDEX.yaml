@@ -1,0 +1,6 @@
+programme: trend_quality_v1
+hypotheses:
+  - hyp_tq_stack_quiet.yaml
+  - hyp_tq_stack_volok.yaml
+  - hyp_tq_mom_stack.yaml
+  - hyp_tq_trail_stack.yaml

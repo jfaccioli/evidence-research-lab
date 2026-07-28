@@ -4,7 +4,7 @@
 export PYTHONPATH := src
 PY ?= .venv/bin/python
 
-.PHONY: doctor status programmes inventory fetch-1d fetch-4h test paper-smoke
+.PHONY: doctor status programmes inventory fetch-1d fetch-4h test paper-smoke check
 
 doctor:
 	$(PY) -m crl doctor
@@ -27,9 +27,15 @@ fetch-4h:
 test:
 	$(PY) -m pytest tests/ -q --tb=line
 
+check: doctor test status
+
 paper-smoke:
 	$(PY) -m crl paper -H examples/batch/hyp_sma200_long.yaml --cash 50
 
 # Example: make run-prog PROG=fade
 run-prog:
 	$(PY) -m crl run-programme examples/batch/$(PROG)
+
+# Example: make autopsy PROG=fade
+autopsy:
+	$(PY) -m crl autopsy examples/batch/$(PROG)

@@ -59,20 +59,28 @@ def run_batch(
     if write_hyps:
         write_catalog(hyp_dir)
 
-    if dataset_id is None:
-        m = latest_manifest(
-            root / cfg["data"]["manifest_dir"],
-            symbol=cfg.get("symbol_binance", "BTCUSDT"),
-            interval="1d",
-            source="binance_public",
-        )
-        if m is None:
-            raise FileNotFoundError("No BTCUSDT 1d dataset. Run: crl fetch --interval 1d")
-        dataset_id = m.dataset_id
-
     paths = sorted(hyp_dir.glob("hyp_*.yaml"))
     if limit is not None:
         paths = paths[:limit]
+    if not paths:
+        raise FileNotFoundError(f"No hyp_*.yaml in {hyp_dir}")
+
+    # Infer interval from first hyp when dataset not specified (1d vs 4h programmes).
+    if dataset_id is None:
+        probe = load_hypothesis_yaml(paths[0])
+        interval = probe.timeframe if probe.timeframe in ("1d", "4h") else "1d"
+        m = latest_manifest(
+            root / cfg["data"]["manifest_dir"],
+            symbol=cfg.get("symbol_binance", "BTCUSDT"),
+            interval=interval,
+            source="binance_public",
+        )
+        if m is None:
+            raise FileNotFoundError(
+                f"No BTCUSDT {interval} dataset. Run: crl fetch --interval {interval}"
+            )
+        dataset_id = m.dataset_id
+        print(f"dataset_id={dataset_id} (inferred interval={interval})", flush=True)
 
     results: list[dict[str, Any]] = []
     for i, path in enumerate(paths, 1):

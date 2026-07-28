@@ -1,6 +1,6 @@
 # Live-readiness status (honest)
 
-**Updated:** 2026-07-27 (breakout/volume/paper-replay)  
+**Updated:** 2026-07-28  
 **Branch tip:** see `git log -1`
 
 See also: `docs/MANDATE_CURRENT_SCOPE.md`, `crl doctor`.
@@ -25,7 +25,7 @@ Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only aft
 |-----------|----------------|
 | Paper broker | `src/crl/production/execution/broker.py` |
 | Paper historical session | `src/crl/production/paper/session.py` |
-| CLI | `python -m crl paper -H <hyp.yaml> --cash 50` |
+| CLI | `python -m crl paper`, `shadow`, `doctor`, `status`, `programmes`, `run-programme` |
 | Shadow logger | `src/crl/production/shadow/logger.py` |
 | LIVE | Dual flags + **no exchange adapter** |
 

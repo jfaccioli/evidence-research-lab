@@ -251,6 +251,20 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_status.set_defaults(func=cmd_status)
 
+    p_runp = sub.add_parser(
+        "run-programme",
+        help="Doctor + temp-registry exploratory batch for a programme dir",
+    )
+    p_runp.add_argument("hyp_dir", help="Path e.g. examples/batch/fade")
+    p_runp.add_argument("--dataset-id", default=None)
+    p_runp.add_argument("--limit", type=int, default=None)
+    p_runp.add_argument(
+        "--skip-doctor",
+        action="store_true",
+        help="Do not require doctor ok (not recommended)",
+    )
+    p_runp.set_defaults(func=cmd_run_programme)
+
     p_shadow = sub.add_parser(
         "shadow",
         help="Historical shadow walk (signals only; no orders)",
@@ -429,6 +443,44 @@ def cmd_status(args: argparse.Namespace) -> int:
     st = lab_status(args.config)
     print(json.dumps(st, indent=2))
     return 0 if st.get("doctor_ok") and not st.get("live_enabled") else 1
+
+
+def cmd_run_programme(args: argparse.Namespace) -> int:
+    from crl.ops.run_programme import run_programme
+
+    try:
+        out = run_programme(
+            Path(args.hyp_dir),
+            dataset_id=args.dataset_id,
+            config_path=args.config,
+            limit=args.limit,
+            require_doctor=not args.skip_doctor,
+        )
+    except Exception as e:
+        print(f"run-programme failed: {e}", file=sys.stderr)
+        return 1
+    print(json.dumps({
+        k: out[k]
+        for k in (
+            "programme",
+            "n_run",
+            "n_passed_val",
+            "n_failed_val",
+            "n_errors",
+            "dataset_id",
+            "registry_path",
+            "summary_json",
+            "ran_at",
+        )
+        if k in out
+    }, indent=2))
+    # Print compact per-hyp lines
+    for r in out.get("results") or []:
+        print(
+            f"  {r.get('id')}: {r.get('status')} n={r.get('val_trades')} "
+            f"sh={r.get('val_sharpe')} {r.get('reasons')}"
+        )
+    return 0 if int(out.get("n_errors") or 0) == 0 else 1
 
 
 def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):

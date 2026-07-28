@@ -7,8 +7,9 @@ from typing import Any
 
 import pandas as pd
 
+from crl.production.kill_switch import is_kill_switch_engaged
 from crl.production.paper.session import desired_long_only
-from crl.production.shadow.logger import ShadowSession, new_shadow_log_path
+from crl.production.shadow.logger import ShadowSession
 from crl.shared.types import HypothesisSpec
 
 
@@ -20,6 +21,8 @@ def shadow_walk(
     burn_in_cols: tuple[str, ...] = ("sma_200",),
     log_dir: Path | None = None,
 ) -> dict[str, Any]:
+    if is_kill_switch_engaged():
+        raise RuntimeError("Kill switch engaged — shadow walk refused")
     work = features.copy()
     need = [c for c in burn_in_cols if c in work.columns]
     if need:

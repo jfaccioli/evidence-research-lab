@@ -31,6 +31,7 @@ python -m crl doctor
 | `python -m crl programmes` | Inventory programme dirs + hyp counts |
 | `python -m crl status` | Compact doctor + programmes + kill/LIVE |
 | `python -m crl batch --hyp-dir … --temp-registry` | Programme batch with auto temp sqlite |
+| `python -m crl run-programme examples/batch/<prog>` | Doctor + temp registry + update EXPLORATORY_NOTE |
 
 ### Programme batch pattern (recommended)
 

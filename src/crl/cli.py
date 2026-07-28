@@ -541,6 +541,14 @@ def cmd_paper(args: argparse.Namespace) -> int:
     if not args.hypothesis and not args.hyp_dir:
         print("Need --hypothesis or --hyp-dir", file=sys.stderr)
         return 2
+    try:
+        return _cmd_paper_body(args, root, load_hypothesis_yaml, replay_hyp_dir, run_paper_session)
+    except RuntimeError as e:
+        print(str(e), file=sys.stderr)
+        return 1
+
+
+def _cmd_paper_body(args, root, load_hypothesis_yaml, replay_hyp_dir, run_paper_session) -> int:
     tf = "1d"
     if args.hypothesis:
         spec0 = load_hypothesis_yaml(Path(args.hypothesis))
@@ -557,15 +565,13 @@ def cmd_paper(args: argparse.Namespace) -> int:
 
         if args.hypothesis:
             assert_approved(load_hypothesis_yaml(Path(args.hypothesis)).id)
-        # hyp-dir: check each in replay
 
     if args.hyp_dir:
         if getattr(args, "require_approved", False):
             from crl.production.strategies import assert_approved
-            from crl.research.pipeline.batch import load_hypothesis_yaml as _lh
 
             for yp in sorted(Path(args.hyp_dir).glob("hyp_*.yaml")):
-                assert_approved(_lh(yp).id)
+                assert_approved(load_hypothesis_yaml(yp).id)
         rows = replay_hyp_dir(
             Path(args.hyp_dir),
             feat,

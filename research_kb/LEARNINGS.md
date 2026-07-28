@@ -2889,3 +2889,10 @@ Gates unchanged. No APPROVED. No tiny-live path opened.
 ### Implication
 - Free macro regime operationalisation does **not** clear bar.
 - EIR next tier (ETF free source or vendor export) may be reconsidered with fresh investment review.
+
+## 2026-07-28 — Search space review → Roadmap V2
+
+- V1 grammar (unconditional daily long/flat on public levels) exhausted across technicals, funding/OI, free on-chain, PM, FRED macro — 0 confirmatory survivors.
+- **Not** interpreted as lab failure; interpreted as incomplete **hypothesis class** space.
+- New directions ranked: vol forecast/risk policy, cross-asset transfer, conditional relationships, risk-as-edge; defer L2/adaptive ML soup; reject more CMD clones.
+- **RESEARCH_ROADMAP_V2** adopted; next implementable free programme class: **V2-A vol forecast → position policy** (BTC OHLCV already in lab).

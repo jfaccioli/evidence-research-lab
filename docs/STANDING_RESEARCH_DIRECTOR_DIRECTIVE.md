@@ -61,6 +61,8 @@ Reduce uncertainty; move toward justified tiny-live **or** intelligent continued
 
 **Alpha Discovery (primary):** maximise P(genuine predictive information) — `docs/ALPHA_DISCOVERY_DIRECTIVE.md`, `docs/ALPHA_DISCOVERY_ROADMAP.md`, CLI `crl alpha-discovery`. Think in **information advantages**, not dataset shopping.
 
+**Search space:** After V1 exhaustion, follow **`docs/RESEARCH_ROADMAP_V2.md`** (new hypothesis *classes*: vol/risk targets, cross-asset, conditioning) — not more V1-style level filters.
+
 **Evidence acquisition (vehicles):** `docs/EVIDENCE_ACQUISITION_ROADMAP.md`, `crl evidence-acq`. Prefer free; paid only when EV > cost and programme pre-registered.
 
 **Workstream F — Scientific Meta-Research** (`docs/WORKSTREAM_F_META_RESEARCH.md`): improve *how* the lab discovers. Does not invent signals from “what funds claim.”

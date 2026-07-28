@@ -1,7 +1,9 @@
 # Living research queue (Research Director)
 
-**Updated:** 2026-07-28 (post free-series wave)  
-**Directive:** `docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md`
+**Updated:** 2026-07-28  
+**Directive:** `docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md`  
+**Roadmap:** **V2** — `docs/RESEARCH_ROADMAP_V2.md`  
+**Search space review:** `docs/SEARCH_SPACE_REVIEW_2026-07-28.md`
 
 ## Critical path status
 
@@ -11,46 +13,28 @@
 | Confirmatory survivors | **0** |
 | APPROVED | Empty |
 | Paper / shadow / tiny live | **Blocked** |
+| V1 search grammar | **Retired as default** |
 
-## Completed this autonomy wave (free public/CMD/CLOB)
+## V1 wave (historical — do not re-mine)
 
-| ID | Programme | Expl. | Conf. | Reading |
-|----|-----------|------:|------:|---------|
-| Q1 | BTC exchange netflow | 6/8 | **0/6** | Val teases die on test |
-| Q1b | Coinbase premium | 0/5 | — | Null |
-| Q2 | Polymarket $150k YES | 0/5 | — | Short sample / design |
-| Q4 | Stablecoin exchange netflow | 0/5 | — | Null |
-| Q5 | Long liquidations | 1/5 | **0/1** | Val tease → conf kill |
-| Q6 | MVRV | 0/5 | — | Low trade counts |
+Technicals, funding/OI, free on-chain CMD family, PM single + panel, FRED macro level filters → **no confirmatory survivors**.
 
-**Meta-conclusion (honest):** Under **frozen gates**, **spot long-only**, **daily**, and **free daily third-party series** (fixed publish lag), this wave did **not** produce confirmatory survivors. Further near-clone free CMD metrics are **low expected value** (multiplicity / same failure mode).
+## V2 ranked queue (active)
 
-## Ranked queue (next)
-
-| Rank | ID | Action | EV | Blocker |
-|------|-----|--------|-----|---------|
-| Rank | ID | Action | Status |
-|------|-----|--------|--------|
-| — | **A2** | Macro regime FRED (DTWEXBGS+DGS2) | **Done null** explor 0/5 |
-| — | **A1** | PM path panel | Done null 0/5 |
-| **1** | **EIR-revisit** | Fresh evidence investment after free macro null | Next (autonomous doc) |
-| 2 | **A4** | Spot ETF flows (free source if any) | Candidate free tier |
-| 3 | **A3** | Vendor netflow **export** | Paid — only if EIR still ranks it first |
-| 4 | **F** | Meta-research | Maintain |
-
-**Free macro (A2) is now tested.** Re-run EIR before any cash spend.  
-**Reject:** free on-chain clones; L2; open-ended data subs without EIR.
-
-See `docs/PROGRAMME_MACRO_REGIME_V1.md`, `docs/EVIDENCE_INVESTMENT_REVIEW_2026-07-28.md`.
-
-See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
+| Rank | ID | Hypothesis **class** | Status |
+|------|-----|----------------------|--------|
+| **1** | **V2-A** | Vol forecast → risk policy (BTC OHLCV) | **Next** |
+| **2** | **V2-B** | Cross-asset transfer (BTC→ETH) | Queued |
+| **3** | **V2-C** | Conditional trend (pre-reg state × trend) | Queued |
+| **4** | **V2-D** | Risk-as-edge (DD/vol policy) | Queued |
+| 5 | V2-E | ETF flow (if free series) | Later |
+| — | Paid vendor netflow | EIR only after free V2 tiers | Not now |
 
 ## Selection rule
 
-Do **not** auto-spawn another 5 hyps on the next free CMD ticker without a **materially different** claim (horizon, vehicle, or data quality class).
-
-If rank-1 META is done and Q8 blocked: **intelligent idle** is correct — interrupt human only for paid data / direction change, not for “what next?” theatre.
+Prefer **new prediction objects / coupling / conditioning** over new free daily *level* series of the same shape.  
+Family trial ledger on; ≤5 hyps per class. Gates frozen.
 
 ## Success stance
 
-*Insufficient evidence to trade* remains the scientific conclusion. Lab continues as a trustworthy rejection engine until a new information class clears confirmatory.
+*Insufficient evidence to trade* until a V2 class earns confirmatory survival. Nulls that retire a **class** are success.

@@ -1,7 +1,6 @@
 # Programme inventory
 
-**Auto-generated for operators.** Science outcomes are in each EXPLORATORY_NOTE.
-
+**Auto-generated** (`crl programmes --write-md`). Outcomes live in each EXPLORATORY_NOTE.
 
 | programme | hyps | note | autopsy | design | outcome |
 |-----------|-----:|:----:|:-------:|--------|---------|

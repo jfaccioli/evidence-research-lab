@@ -185,6 +185,11 @@ def main(argv: list[str] | None = None) -> int:
         "programmes",
         help="List pre-registered programme dirs under examples/batch",
     )
+    p_progs.add_argument(
+        "--write-md",
+        action="store_true",
+        help="Write docs/PROGRAMME_INVENTORY.md from live inventory",
+    )
     p_progs.set_defaults(func=cmd_programmes)
 
     p_batch.add_argument(
@@ -242,6 +247,11 @@ def main(argv: list[str] | None = None) -> int:
         "--mandate-limits",
         action="store_true",
         help="Apply tiny-live envelope (1 trade/day, notional cap)",
+    )
+    p_paper.add_argument(
+        "--require-approved",
+        action="store_true",
+        help="Refuse unless hyp id is in production.strategies.APPROVED (empty until survivors)",
     )
     p_paper.set_defaults(func=cmd_paper)
 
@@ -430,10 +440,13 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 
 
 def cmd_programmes(args: argparse.Namespace) -> int:
-    from crl.ops.programmes import list_programmes, programmes_to_dict
+    from crl.ops.programmes import list_programmes, programmes_to_dict, write_inventory_md
 
     rows = list_programmes()
     print(json.dumps(programmes_to_dict(rows), indent=2))
+    if getattr(args, "write_md", False):
+        path = write_inventory_md()
+        print(f"wrote {path}", flush=True)
     return 0
 
 
@@ -539,7 +552,20 @@ def cmd_paper(args: argparse.Namespace) -> int:
     assert cfg is not None and feat is not None
     jdir = Path(args.journal_dir) if args.journal_dir else (root / "data" / "paper_journal")
     fee_rt = _fee_rt(cfg)
+    if getattr(args, "require_approved", False):
+        from crl.production.strategies import assert_approved
+
+        if args.hypothesis:
+            assert_approved(load_hypothesis_yaml(Path(args.hypothesis)).id)
+        # hyp-dir: check each in replay
+
     if args.hyp_dir:
+        if getattr(args, "require_approved", False):
+            from crl.production.strategies import assert_approved
+            from crl.research.pipeline.batch import load_hypothesis_yaml as _lh
+
+            for yp in sorted(Path(args.hyp_dir).glob("hyp_*.yaml")):
+                assert_approved(_lh(yp).id)
         rows = replay_hyp_dir(
             Path(args.hyp_dir),
             feat,
@@ -562,6 +588,10 @@ def cmd_paper(args: argparse.Namespace) -> int:
         }, indent=2, default=str))
         return 0
     spec = load_hypothesis_yaml(Path(args.hypothesis))
+    if getattr(args, "require_approved", False):
+        from crl.production.strategies import assert_approved
+
+        assert_approved(spec.id)
     res = run_paper_session(
         spec,
         feat,

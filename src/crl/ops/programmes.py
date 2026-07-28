@@ -112,3 +112,27 @@ def programmes_to_dict(rows: list[ProgrammeInfo]) -> dict[str, Any]:
         "n_hyps_total": sum(r.n_hyps for r in rows),
         "programmes": [asdict(r) for r in rows],
     }
+
+
+def write_inventory_md(path: Path | None = None) -> Path:
+    root = project_root()
+    path = path or (root / "docs" / "PROGRAMME_INVENTORY.md")
+    rows = list_programmes()
+    lines = [
+        "# Programme inventory",
+        "",
+        "**Auto-generated** (`crl programmes --write-md`). Outcomes live in each EXPLORATORY_NOTE.",
+        "",
+        "| programme | hyps | note | autopsy | design | outcome |",
+        "|-----------|-----:|:----:|:-------:|--------|---------|",
+    ]
+    for r in rows:
+        lines.append(
+            f"| `{r.name}` | {r.n_hyps} | "
+            f"{'Y' if r.has_exploratory_note else 'N'} | "
+            f"{'Y' if r.has_gate_autopsy else 'N'} | "
+            f"{r.design_doc or '—'} | {r.outcome_hint or '—'} |"
+        )
+    lines.append("")
+    path.write_text("\n".join(lines))
+    return path

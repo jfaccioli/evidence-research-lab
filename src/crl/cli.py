@@ -365,6 +365,39 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_metaf.set_defaults(func=cmd_meta_research)
 
+    p_eacq = sub.add_parser(
+        "evidence-acq",
+        help="Living evidence-acquisition roadmap (rank novel data; cost/EV advice)",
+    )
+    p_eacq.add_argument(
+        "--sync",
+        action="store_true",
+        help="Rewrite research_kb/evidence_acquisition_catalog.json",
+    )
+    p_eacq.add_argument(
+        "--recommend",
+        default=None,
+        metavar="ITEM_ID",
+        help="Cost/EV recommendation for catalog id (e.g. vendor_exchange_flow)",
+    )
+    p_eacq.add_argument(
+        "--annual-usd",
+        type=float,
+        default=None,
+        help="Optional annual cost for --recommend",
+    )
+    p_eacq.add_argument(
+        "--programme-locked",
+        action="store_true",
+        help="With --recommend: hyps pre-registered",
+    )
+    p_eacq.add_argument(
+        "--free-exhausted",
+        action="store_true",
+        help="With --recommend: free alternatives considered exhausted",
+    )
+    p_eacq.set_defaults(func=cmd_evidence_acq)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -630,6 +663,57 @@ def cmd_meta_research(args: argparse.Namespace) -> int:
             },
             indent=2,
             default=str,
+        )
+    )
+    return 0
+
+
+def cmd_evidence_acq(args: argparse.Namespace) -> int:
+    """Rank novel predictive-information sources; advise cost vs EV."""
+    from crl.research.meta.evidence_acquisition import (
+        acquisition_summary,
+        recommend_spend,
+        ranked_items,
+        sync_catalog,
+    )
+
+    if getattr(args, "sync", False) or True:
+        path = sync_catalog()
+        if getattr(args, "sync", False):
+            print(f"wrote {path}", flush=True)
+    if getattr(args, "recommend", None):
+        out = recommend_spend(
+            args.recommend,
+            annual_usd_cost=getattr(args, "annual_usd", None),
+            programme_locked=bool(getattr(args, "programme_locked", False)),
+            free_alternatives_exhausted=bool(getattr(args, "free_exhausted", False)),
+        )
+        print(json.dumps(out, indent=2))
+        return 0 if out.get("should_spend_money_now") or out.get("recommendation_base") in (
+            "acquire_free",
+            "wait",
+            "reject",
+            "buy_if_programme_ready",
+        ) else 1
+    print(
+        json.dumps(
+            {
+                "summary": acquisition_summary(),
+                "ranked": [
+                    {
+                        "rank": i.get("rank"),
+                        "id": i["id"],
+                        "name": i["name"],
+                        "ev": i["ev"],
+                        "recommendation": i["recommendation"],
+                        "cost_class": i["cost_class"],
+                        "cost_note": i.get("cost_note"),
+                        "human_required": i.get("human_required"),
+                    }
+                    for i in ranked_items()
+                ],
+            },
+            indent=2,
         )
     )
     return 0

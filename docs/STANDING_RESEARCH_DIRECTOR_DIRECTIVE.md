@@ -57,6 +57,8 @@ As listed in the human directive (implementation through roadmap maintenance; in
 
 Reduce uncertainty; move toward justified tiny-live **or** intelligent continued search—not milestone theatre or code volume.
 
-## Permanent parallel workstream
+## Permanent parallel workstreams
 
-**Workstream F — Scientific Meta-Research** (`docs/WORKSTREAM_F_META_RESEARCH.md`) runs continuously: extract public research-process principles, score against the lab, implement only justified capability upgrades. Does not invent signals from “what funds claim.”
+**Evidence acquisition (primary while data-bound):** maximise novel predictive information — living roadmap `docs/EVIDENCE_ACQUISITION_ROADMAP.md`, CLI `crl evidence-acq`. Prefer free archives; recommend paid only when EV > cost and programme is pre-registered.
+
+**Workstream F — Scientific Meta-Research** (`docs/WORKSTREAM_F_META_RESEARCH.md`): improve *how* the lab discovers. Does not invent signals from “what funds claim.”

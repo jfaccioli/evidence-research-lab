@@ -29,13 +29,15 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| 0 | **F** | Scientific meta-research (permanent) — improve *how* we discover | **High** | — active |
-| 1 | **CAP** | Series attach / programme tooling | High | largely done |
-| 2 | **F2** | Deflated-Sharpe annotation on batch summaries (info only) | Med–High | scheduled |
-| 3 | **Q8** | X/social PIT if free archive | Medium | Archive |
-| 4 | **Q7** | Polymarket panel redesign | Medium | Design |
-| 5 | **HUMAN** | Vendor-grade PIT series | Unknown | You |
-| 6 | LIVE polish | Parked | Zero without APPROVED | Survivors |
+| 0 | **ACQ** | **Evidence acquisition** — novel predictive info (primary objective) | **Highest** | living roadmap |
+| 0b | **F** | Scientific meta-research (permanent) | High | active |
+| 1 | **ACQ-1** | Free Polymarket/Kalshi **panel** (not single binary) | 4.5 | design + free data |
+| 2 | **ACQ-4** | Free macro (DXY/rates) risk-off filter programme | 3.5 | free public series |
+| 3 | **ACQ-2** | Vendor netflow export | 4.0 | **Human $** + pre-reg |
+| 4 | **F2** | Deflated-Sharpe annotation | Med | optional |
+| 5 | LIVE polish | Parked | Zero | survivors |
+
+See `docs/EVIDENCE_ACQUISITION_ROADMAP.md` and `crl evidence-acq`.
 
 See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 

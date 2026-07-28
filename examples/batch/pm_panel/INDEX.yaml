@@ -1,0 +1,19 @@
+programme: pm_panel_v1
+design: docs/PROGRAMME_PM_PANEL_V1.md
+live_data: true
+external:
+  kind: external
+  series_id: pm_panel_btc_2025_v1
+  prefix: pmp
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+  window_from_series: true
+  window_burn_in_days: 120
+hypotheses:
+  - hyp_pmp_high_flat.yaml
+  - hyp_pmp_low_long.yaml
+  - hyp_pmp_bull_trend.yaml
+  - hyp_pmp_z_hi_flat.yaml
+  - hyp_pmp_disp_flat.yaml

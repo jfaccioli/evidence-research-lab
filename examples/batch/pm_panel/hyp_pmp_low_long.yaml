@@ -1,0 +1,16 @@
+id: hyp_pmp_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_pm_panel
+direction: long_only
+entry:
+  expression: pmp_low == 1 and above_sma_200 == 1
+exit:
+  expression: pmp_low == 0 or above_sma_200 == 0
+rationale: >
+  Long when panel mean depressed + long trend. Programme: docs/PROGRAMME_PM_PANEL_V1.md. Multi-market implied state.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [pm_panel, pmp, external_pit]
+literature_refs: []

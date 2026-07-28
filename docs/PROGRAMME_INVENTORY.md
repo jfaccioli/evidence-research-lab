@@ -24,6 +24,7 @@
 | `mvrv` | 5 | Y | Y | docs/PROGRAMME_MVRV_V1.md | see EXPLORATORY_NOTE |
 | `oi` | 10 | Y | Y | docs/PROGRAMME_OI_PIT_V1.md | passed_val` | **1** (`hyp_oi_chg_pct_high_flat`) | |
 | `participation` | 4 | Y | Y | docs/PROGRAMME_PARTICIPATION_V1.md | 0/4 passed_val |
+| `pm_panel` | 5 | Y | Y | docs/PROGRAMME_PM_PANEL_V1.md | passed_val | |
 | `polymarket` | 5 | Y | Y | docs/PROGRAMME_POLYMARKET_V1.md | passed_val | |
 | `risk_off` | 4 | Y | Y | docs/PROGRAMME_RISK_OFF_V1.md | 0/4 passed_val |
 | `slow_fast` | 5 | Y | Y | docs/PROGRAMME_SLOW_FAST_V1.md | 0/5 passed_val |

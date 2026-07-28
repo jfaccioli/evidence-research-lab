@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-07-28T06:46:43.310030+00:00",
-  "total_exploratory_trials": 33,
+  "updated_at": "2026-07-28T07:19:36.971711+00:00",
+  "total_exploratory_trials": 38,
   "families": {
     "family_flow_level": {
       "n_trials": 8,
@@ -32,6 +32,11 @@
       "n_trials": 5,
       "n_programmes": 1,
       "last_programme": "mvrv_v1"
+    },
+    "family_pm_panel": {
+      "n_trials": 5,
+      "n_programmes": 1,
+      "last_programme": "pm_panel_v1"
     }
   },
   "programmes": {
@@ -94,6 +99,16 @@
       "n_candidates": 0,
       "dataset_id": null,
       "recorded_at": "2026-07-28T06:46:43.309748+00:00"
+    },
+    "pm_panel_v1": {
+      "n_trials": 5,
+      "family_counts": {
+        "family_pm_panel": 5
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": null,
+      "recorded_at": "2026-07-28T07:19:36.971028+00:00"
     }
   },
   "events": [
@@ -135,6 +150,13 @@
     {
       "at": "2026-07-28T06:46:43.309777+00:00",
       "programme": "mvrv_v1",
+      "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-28T07:19:36.971514+00:00",
+      "programme": "pm_panel_v1",
       "n_trials": 5,
       "n_passed_val": 0,
       "n_candidates": 0

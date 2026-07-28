@@ -1,0 +1,16 @@
+id: hyp_pmp_z_hi_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_pm_panel
+direction: long_only
+entry:
+  expression: pmp_z_hi == 1
+exit:
+  expression: pmp_z_hi == 0
+rationale: >
+  Flat when panel mean z elevated. Programme: docs/PROGRAMME_PM_PANEL_V1.md. Multi-market implied state.
+expected_outcome: Exploratory; confirmatory if earned.
+feature_tags: [pm_panel, pmp, external_pit]
+literature_refs: []

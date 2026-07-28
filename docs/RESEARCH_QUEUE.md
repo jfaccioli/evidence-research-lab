@@ -29,16 +29,16 @@
 
 | Rank | ID | Action | EV | Blocker |
 |------|-----|--------|-----|---------|
-| **0** | **ALPHA** | **Information advantages** (primary) — not more code | **Highest** | `docs/ALPHA_DISCOVERY_ROADMAP.md` |
-| 1 | **A1** | Cross-event **implied state** (PM/Kalshi **panel**) | 4.5 | free design+ingest |
-| 2 | **A2** | Macro risk **regime** conditioner | 3.5 | free series path |
-| 3 | **A3** | Labeled inventory flow (vendor PIT) | 4.0 | **Human $** + pre-reg |
-| 4 | **F** | Meta-research (how we discover) | High | permanent |
-| 5 | LIVE polish | Parked | Zero | survivors |
+| — | **PAUSE** | Autonomous science paused pending human info unlock | — | `HUMAN_ACTION_PACKET_2026-07-28.md` |
+| 1 | **A1** | PM multi-market panel | Done null 0/5 | — |
+| 2 | **A2** | Macro regime | Blocked | free API/key |
+| 3 | **A3** | Vendor inventory flow | **Next when human** | export/keys |
+| 4 | **A4** | Spot ETF flows | Blocked | API key |
+| 5 | **F** | Meta-research maintain | Low churn | — |
 
-**Reject:** free on-chain metric clones; L2; engineering busywork.
+**Reject:** free on-chain metric clones; L2; engineering busywork; autonomous re-runs of spent classes.
 
-See `crl alpha-discovery`, `docs/ALPHA_DISCOVERY_DIRECTIVE.md`, `docs/EVIDENCE_ACQUISITION_ROADMAP.md`.
+See `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-28.md`, `docs/HUMAN_ACTION_PACKET_2026-07-28.md`.
 
 See `docs/CAPABILITY_WHEN_WAITING.md`, `docs/WORKSTREAM_F_META_RESEARCH.md`.
 

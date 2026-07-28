@@ -2896,3 +2896,11 @@ Gates unchanged. No APPROVED. No tiny-live path opened.
 - **Not** interpreted as lab failure; interpreted as incomplete **hypothesis class** space.
 - New directions ranked: vol forecast/risk policy, cross-asset transfer, conditional relationships, risk-as-edge; defer L2/adaptive ML soup; reject more CMD clones.
 - **RESEARCH_ROADMAP_V2** adopted; next implementable free programme class: **V2-A vol forecast → position policy** (BTC OHLCV already in lab).
+
+## 2026-07-28 — Evidence aggregation architecture study
+
+- User observation: real decisions combine many weak evidences; lab still atomistic (signal→trade).
+- Study: public quant practice favours forecast combination, calibration, separation of forecast/risk/decision — not single indicators.
+- **Reject** free-text multi-agent LLM committees as promotion path.
+- **Adopt target architecture:** Evidence Channel Architecture (ECA) — numeric PIT evidence streams → frozen aggregator → decision policy under existing gates.
+- V2-A not cancelled: **re-scoped** as ECA-1 vol/risk channel; **not implemented** until ECA-0 protocol; do not ship V2-A as another standalone signal programme.

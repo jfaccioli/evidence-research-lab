@@ -1,0 +1,19 @@
+id: hyp_pm_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_polymarket_odds
+direction: long_only
+entry:
+  expression: pm_low == 1 and above_sma_200 == 1
+exit:
+  expression: pm_low == 0 or above_sma_200 == 0
+rationale: >
+  Long when implied odds low (pessimism) but long-term trend intact. Programme: docs/PROGRAMME_POLYMARKET_V1.md. Public CLOB history; publish_lag=1.
+expected_outcome: Exploratory; confirmatory only if earned.
+feature_tags:
+  - polymarket
+  - pm
+  - external_pit
+literature_refs: []

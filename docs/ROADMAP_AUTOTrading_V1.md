@@ -26,8 +26,8 @@ New PIT info → locked programme → exploratory → confirmatory (if earned)
 |----|-----------|--------|---------|
 | Q1 | Flow/whale BTC netflow PIT | **DONE null** — exploratory 6/8 passed_val; confirmatory **0/6** | — |
 | Q1b | Coinbase premium (US premium) | **DONE null** — exploratory **0/5** | — |
-| **Q2** | Prediction-market odds PIT | Next when free archive available | Reconstructible odds history |
-| Q3 | Social/X PIT | Deferred | Archive + keys if paid |
+| Q2 | Polymarket BTC $150k EOY2025 YES odds | **DONE null** — exploratory **0/5** (short sample / trade count; public CLOB, no key) | — |
+| **Q3** | Social/X PIT or next orthogonal free series | Next | Archive quality / keys if paid |
 | — | BTC technical clones | **CLOSED** | Exhausted / low EV |
 | — | Order book / HFT | Parked | Wrong capital scale |
 | — | More free CMD clones without new design | Deprioritised | Multiplicity / fishing risk |

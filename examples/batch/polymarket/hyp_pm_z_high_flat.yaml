@@ -1,0 +1,19 @@
+id: hyp_pm_z_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_polymarket_odds
+direction: long_only
+entry:
+  expression: pm_z_60 > 1.0
+exit:
+  expression: pm_z_60 < 0.0
+rationale: >
+  Flat when odds z elevated vs recent 60d (euphoria in prediction market). Programme: docs/PROGRAMME_POLYMARKET_V1.md. Public CLOB history; publish_lag=1.
+expected_outcome: Exploratory; confirmatory only if earned.
+feature_tags:
+  - polymarket
+  - pm
+  - external_pit
+literature_refs: []

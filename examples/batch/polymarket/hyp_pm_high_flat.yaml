@@ -1,0 +1,19 @@
+id: hyp_pm_high_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_polymarket_odds
+direction: long_only
+entry:
+  expression: pm_high == 1
+exit:
+  expression: pm_high == 0
+rationale: >
+  Flat when implied reach-150k probability above expanding median (crowded optimism). Programme: docs/PROGRAMME_POLYMARKET_V1.md. Public CLOB history; publish_lag=1.
+expected_outcome: Exploratory; confirmatory only if earned.
+feature_tags:
+  - polymarket
+  - pm
+  - external_pit
+literature_refs: []

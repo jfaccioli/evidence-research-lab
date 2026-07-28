@@ -1,6 +1,6 @@
 # Deferred programme: Polymarket / event odds (v1 design sketch)
 
-**Status:** Deferred — **remembered for later**; not current execution.
+**Status:** Superseded by **`docs/PROGRAMME_POLYMARKET_V1.md`** — v1 executed 2026-07-28 (exploratory null 0/5).
 
 ## Scientific question (when opened)
 

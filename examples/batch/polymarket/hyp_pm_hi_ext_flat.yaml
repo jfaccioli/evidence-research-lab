@@ -1,0 +1,19 @@
+id: hyp_pm_hi_ext_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_polymarket_odds
+direction: long_only
+entry:
+  expression: pm_hi_ext == 1
+exit:
+  expression: pm_hi_ext == 0
+rationale: >
+  Flat on extreme high expanding-quantile odds. Programme: docs/PROGRAMME_POLYMARKET_V1.md. Public CLOB history; publish_lag=1.
+expected_outcome: Exploratory; confirmatory only if earned.
+feature_tags:
+  - polymarket
+  - pm
+  - external_pit
+literature_refs: []

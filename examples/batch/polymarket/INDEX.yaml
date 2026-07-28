@@ -1,0 +1,9 @@
+programme: polymarket_btc_odds_v1
+design: docs/PROGRAMME_POLYMARKET_V1.md
+live_data: true
+hypotheses:
+  - hyp_pm_high_flat.yaml
+  - hyp_pm_low_long.yaml
+  - hyp_pm_pos_trend.yaml
+  - hyp_pm_z_high_flat.yaml
+  - hyp_pm_hi_ext_flat.yaml

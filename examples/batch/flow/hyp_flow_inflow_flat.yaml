@@ -1,0 +1,20 @@
+id: hyp_flow_inflow_flat
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_flow_level
+entry:
+  expression: above_sma_200 == 1 and flow_inflow_extreme == 0
+exit:
+  expression: above_sma_200 == 0 or flow_inflow_extreme == 1
+rationale: >
+  Flat when extreme exchange inflow (risk-off inventory narrative). flow_crowding / whale flow. Programme: docs/PROGRAMME_FLOW_WHALE_V1.md. TRUE flow via PIT join only — mock never for promotion.
+expected_outcome: Exploratory only when real flow series attached.
+feature_tags:
+  - flow_pit_v1
+  - flow
+  - true_flow
+literature_refs: []
+falsification:
+  min_trades: 30

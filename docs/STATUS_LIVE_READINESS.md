@@ -1,13 +1,24 @@
 # Live-readiness status (honest)
 
-**Updated:** 2026-07-28 (autopsy/run-programme mature)  
-**Branch tip:** see `git log -1`
+**Updated:** 2026-07-28 (flow scaffold + dual readiness + paper clock)  
+**Branch tip:** see `git log -1`  
+**Machine check:** `python -m crl status --readiness`
 
-See also: `docs/MANDATE_CURRENT_SCOPE.md`, `crl doctor`.
+See also: `docs/MANDATE_CURRENT_SCOPE.md`, `docs/LAB_BUILD_CHECKLIST.md`, `crl doctor`.
+
+## Dual readiness (authoritative)
+
+| Metric | Status |
+|--------|--------|
+| **lab_ops_ready** | **True** (doctor, git origin, LIVE off, programmes, paper/shadow, flow scaffold) |
+| **autotrading_ready** | **False** (0 confirmatory survivors; score 0.0) |
+| **close_to_tiny_live** | **False** |
+
+Agent will say “close to small real money” only when `close_to_tiny_live` flips true (still needs human Phase-5).
 
 ## Destination
 
-Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only after** promotion ladder.
+Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch, **no leverage**) **only after** promotion ladder.
 
 ## Ladder checklist
 
@@ -15,8 +26,8 @@ Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only aft
 |------|--------|
 | Phase 1 research lab | **Done** |
 | Phase 2: ≥2–3 confirmatory survivors (distinct mechanisms) | **Not met — zero candidates** |
-| Paper ≥1 month on survivors | Blocked on candidates |
-| Shadow (live signals, no orders) | Scaffold only |
+| Paper ≥1 month on survivors | Record path ready (`data/paper_clock/`); blocked on candidates |
+| Shadow (live signals, no orders) | Scaffold only; mark `data/shadow/RECONCILED.json` when earned |
 | Phase 5 LIVE flags + keys + adapter | **Hard-disabled** |
 
 ## Track B (built)
@@ -25,8 +36,10 @@ Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only aft
 |-----------|----------------|
 | Paper broker | `src/crl/production/execution/broker.py` |
 | Paper historical session | `src/crl/production/paper/session.py` |
-| CLI | `python -m crl paper`, `shadow`, `doctor`, `status`, `programmes`, `run-programme` |
+| Paper clock (mandate) | `src/crl/production/paper/clock.py`; `crl paper … --record-clock --mandate-limits` |
+| CLI | `python -m crl paper`, `shadow`, `doctor`, `status --readiness`, `programmes`, `run-programme` |
 | Shadow logger | `src/crl/production/shadow/logger.py` |
+| Readiness | `src/crl/ops/readiness.py` |
 | LIVE | Dual flags + **no exchange adapter** |
 
 ## Track A (recent programmes)
@@ -45,6 +58,7 @@ Tiny **automated** live trading (AUD ~10–50, spot BTC, kill-switch) **only aft
 | Calendar | 0/5 | — |
 | Breakout | 0/5 | — |
 | Volume | 0/5 | — |
+| **Flow / whale** | **Scaffold only** (no real-data batch) | — |
 
 **Scientific reading:** Daily long-only public technical + leverage-state filters under frozen gates are **hard**. Val teases die on test. That is progress (uncertainty reduction), not a reason to soften gates.
 
@@ -80,8 +94,11 @@ The “app” can still become **operationally complete** as: research + paper +
 4. Human Phase-5 open + venue API keys + independent safety review.  
 5. Accept that Phase 5 may stay closed indefinitely if no survivors — still a valid lab.
 
-## Human actions still needed (when ready)
+## Human actions still needed
 
-- Git remote + push (backup)  
+- Real flow history source OK (paid API keys if needed) — before any flow science batch  
+- X / Polymarket PIT archives when those programmes open  
 - Exchange API keys **only** for Phase 5  
 - Explicit Phase-5 enablement  
+
+Git remote is already set (private evidence-research-lab).

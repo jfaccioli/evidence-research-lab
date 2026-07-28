@@ -1,0 +1,20 @@
+id: hyp_flow_z_low_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_flow_meanrev
+entry:
+  expression: flow_z_60 < -1 and mom_pos_20 == 1
+exit:
+  expression: flow_z_60 >= -1 or mom_pos_20 == 0
+rationale: >
+  Depressed flow z + mom. flow. Programme: docs/PROGRAMME_FLOW_WHALE_V1.md. TRUE flow via PIT join only — mock never for promotion.
+expected_outcome: Exploratory only when real flow series attached.
+feature_tags:
+  - flow_pit_v1
+  - flow
+  - true_flow
+literature_refs: []
+falsification:
+  min_trades: 30

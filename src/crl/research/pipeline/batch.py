@@ -51,6 +51,8 @@ def run_batch(
     funding_series_id: str | None = None,
     oi_events: Any | None = None,
     oi_series_id: str | None = None,
+    flow_events: Any | None = None,
+    flow_series_id: str | None = None,
     registry_path: str | Path | None = None,
 ) -> dict[str, Any]:
     cfg = load_config(config_path)
@@ -95,6 +97,8 @@ def run_batch(
                 funding_series_id=funding_series_id,
                 oi_events=oi_events,
                 oi_series_id=oi_series_id,
+                flow_events=flow_events,
+                flow_series_id=flow_series_id,
                 registry_path=registry_path,
                 mode=ResearchMode.EXPLORATORY,
             )

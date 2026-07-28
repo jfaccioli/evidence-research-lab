@@ -11,6 +11,7 @@
 | `calendar` | 5 | Y | Y | docs/PROGRAMME_CALENDAR_V1.md | 0/5 passed_val |
 | `capacity` | 5 | Y | Y | docs/PROGRAMME_CAPACITY_TINY_FRICTION_V1.md | passed_val` | **0** | |
 | `fade` | 4 | Y | Y | docs/PROGRAMME_FADE_V1.md | 0/4 passed_val |
+| `flow` | 8 | Y | N | docs/PROGRAMME_FLOW_WHALE_V1.md | null (see note) |
 | `funding` | 10 | Y | Y | docs/PROGRAMME_FUNDING_PIT_V1.md | passed_val` | **0** | |
 | `funding_4h` | 6 | Y | Y | docs/PROGRAMME_FUNDING_4H_POWER_V1.md | passed_val` | **0** | |
 | `herding` | 4 | Y | Y | docs/PROGRAMME_HERDING_V1.md | 0/4 passed_val |

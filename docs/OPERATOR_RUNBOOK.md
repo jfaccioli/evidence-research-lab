@@ -21,9 +21,11 @@ make check
 # or:
 python -m crl doctor
 python -m crl status --write-md
+python -m crl status --readiness   # lab_ops vs autotrading dual score
 ```
 
-Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_origin` should point at GitHub.
+Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_origin` should point at GitHub.  
+`lab_ops_ready: true` with `autotrading_ready: false` is the expected healthy state until confirmatory survivors exist.
 
 ## Core research loop
 
@@ -55,11 +57,14 @@ Do **not** use live `registry/crl.sqlite` for speculative programmes until inten
 ```bash
 python -m crl paper -H examples/batch/hyp_sma200_long.yaml --cash 50
 python -m crl paper --hyp-dir examples/batch/breakout --limit 3 --cash 50
+# After APPROVED survivors only — mandate paper clock (not a science gate):
+python -m crl paper -H path/to/survivor.yaml --cash 50 \
+  --mandate-limits --require-approved --record-clock
 python -m crl shadow -H examples/batch/hyp_sma200_long.yaml
 ```
 
-Journals: `data/paper_journal/`, `data/shadow/`.  
-Paper equity is **not** a promotion gate.
+Journals: `data/paper_journal/`, `data/paper_clock/`, `data/shadow/`.  
+Paper equity is **not** a promotion gate. Paper clock records mandate walk time only.
 
 Kill switch: `data/ops/KILL_SWITCH` or `CRL_KILL_SWITCH=1`.
 

@@ -1,0 +1,12 @@
+programme: flow_whale_v1
+design: docs/PROGRAMME_FLOW_WHALE_V1.md
+live_data: false
+hypotheses:
+  - hyp_flow_inflow_flat.yaml
+  - hyp_flow_outflow_long.yaml
+  - hyp_flow_high_flat.yaml
+  - hyp_flow_z_high_flat.yaml
+  - hyp_flow_z_low_long.yaml
+  - hyp_flow_into_flat.yaml
+  - hyp_flow_trend_not_inflow.yaml
+  - hyp_flow_exit_inflow.yaml

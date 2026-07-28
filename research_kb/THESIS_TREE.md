@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-28T00:27:05Z`  
-**Summary:** [NON-AUTHORITATIVE] Zero confirmatory candidates after expanded programme wave (~20 programmes). Lab ops mature (run-programme/autopsy/paper/shadow). LIVE disabled. Success = uncertainty reduction.
+**Updated:** `2026-07-28T02:26:46.442500+00:00`  
+**Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=123. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -202,6 +202,28 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Stance:** `untested` (confidence 0.10)
 - **Recommendation:** `observe`
 - **Claim:** Edges that only work with zero friction are invalid for 10–50 AUD.
+- **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
+
+**Supporting**
+
+- _(none logged)_
+
+**Refuting**
+
+- _(none logged)_
+
+**Remaining unknowns**
+
+- OOS confirmatory not earned or not run.
+- Multiple-testing burden grows with family size.
+- No direct tests yet — high IG if economically distinct.
+- Underrepresented in catalog — remaining uncertainty high.
+
+### `flow_whale` — Exchange flow / large-player positioning (true series)
+
+- **Stance:** `untested` (confidence 0.10)
+- **Recommendation:** `observe`
+- **Claim:** PIT net exchange flow or large transfers; not unversioned whale alerts.
 - **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
 
 **Supporting**

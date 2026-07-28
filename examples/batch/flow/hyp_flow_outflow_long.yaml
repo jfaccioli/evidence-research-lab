@@ -1,0 +1,20 @@
+id: hyp_flow_outflow_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_flow_level
+entry:
+  expression: flow_outflow_extreme == 1 and above_sma_50 == 1
+exit:
+  expression: flow_outflow_extreme == 0 or above_sma_50 == 0
+rationale: >
+  Long when extreme off-exchange flow + mild trend. flow. Programme: docs/PROGRAMME_FLOW_WHALE_V1.md. TRUE flow via PIT join only — mock never for promotion.
+expected_outcome: Exploratory only when real flow series attached.
+feature_tags:
+  - flow_pit_v1
+  - flow
+  - true_flow
+literature_refs: []
+falsification:
+  min_trades: 30

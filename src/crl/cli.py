@@ -253,6 +253,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Refuse unless hyp id is in production.strategies.APPROVED (empty until survivors)",
     )
+    p_paper.add_argument(
+        "--record-clock",
+        action="store_true",
+        help="Append paper-clock session under data/paper_clock/ (mandate path; not a science gate)",
+    )
     p_paper.set_defaults(func=cmd_paper)
 
     p_status = sub.add_parser(
@@ -263,6 +268,11 @@ def main(argv: list[str] | None = None) -> int:
         "--write-md",
         action="store_true",
         help="Write docs/LAB_STATUS.md",
+    )
+    p_status.add_argument(
+        "--readiness",
+        action="store_true",
+        help="Include lab-ops vs autotrading readiness scores",
     )
     p_status.set_defaults(func=cmd_status)
 
@@ -471,6 +481,10 @@ def cmd_status(args: argparse.Namespace) -> int:
     from crl.ops.status import lab_status, write_status_md
 
     st = lab_status(args.config)
+    if getattr(args, "readiness", False):
+        from crl.ops.readiness import readiness_report
+
+        st = {**st, "readiness": readiness_report(args.config)}
     print(json.dumps(st, indent=2))
     if getattr(args, "write_md", False):
         path = write_status_md(config_path=args.config)
@@ -646,7 +660,7 @@ def _cmd_paper_body(args, root, load_hypothesis_yaml, replay_hyp_dir, run_paper_
         journal_dir=jdir,
         mandate_limits=bool(getattr(args, "mandate_limits", False)),
     )
-    print(json.dumps({
+    out: dict = {
         "hypothesis_id": res.hypothesis_id,
         "n_bars": res.n_bars,
         "n_fills": res.n_fills,
@@ -656,7 +670,27 @@ def _cmd_paper_body(args, root, load_hypothesis_yaml, replay_hyp_dir, run_paper_
         "final_position": res.final_position,
         "journal_path": res.journal_path,
         "notes": res.notes,
-    }, indent=2))
+    }
+    if getattr(args, "record_clock", False):
+        from crl.production.paper.clock import default_clock_dir, record_session
+
+        clock = record_session(
+            default_clock_dir(root),
+            res.hypothesis_id,
+            n_bars=res.n_bars,
+            n_fills=res.n_fills,
+            equity_end=res.equity_end,
+            max_drawdown=res.max_drawdown,
+            journal_path=res.journal_path,
+            mandate_limits=bool(getattr(args, "mandate_limits", False)),
+        )
+        out["paper_clock"] = {
+            "strategy_id": clock.strategy_id,
+            "status": clock.status,
+            "n_sessions": len(clock.sessions),
+            "min_calendar_days": clock.min_calendar_days,
+        }
+    print(json.dumps(out, indent=2))
     return 0
 
 

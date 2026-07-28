@@ -1,7 +1,8 @@
 # Deferred programme: Flow / whale / “smart money” tracking (v1 design sketch)
 
-**Status:** Deferred design lock — **no live scrape, no hyps run, no promotion claims.**  
-**Why consider it:** Humans who do well often react to **positioning and flow**, not only chart folklore. Machines can process **more** flow systematically — *if* the data is point-in-time and honest.
+**Status:** **Scaffolded (lab-ready)** — see **`docs/PROGRAMME_FLOW_WHALE_V1.md`** + `examples/batch/flow/` + `src/crl/shared/data/flow.py`.  
+**Still blocked for science batch:** versioned **real** flow history (human OK for paid APIs). Mock is tests-only.  
+This DEFERRED file is a pointer only; binding design is PROGRAMME_FLOW_WHALE_V1.md.
 
 ## Scientific question (when opened)
 

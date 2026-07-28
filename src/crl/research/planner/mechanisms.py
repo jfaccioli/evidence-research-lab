@@ -113,6 +113,23 @@ MECHANISMS: list[Mechanism] = [
         ),
     ),
     Mechanism(
+        "flow_whale",
+        "Exchange flow / large-player positioning (true series)",
+        "PIT net exchange flow or large transfers; not unversioned whale alerts.",
+        ("other", "composite"),
+        (
+            "flow_last",
+            "flow_high",
+            "flow_z_60",
+            "flow_inflow",
+            "flow_outflow",
+            "whale",
+            "exchange flow",
+            "net_flow",
+            "true_flow",
+        ),
+    ),
+    Mechanism(
         "crowding_proxy",
         "Crowding / leverage stress proxy",
         "High-vol or crowded risk-on states precede unwind (proxy only).",

@@ -1,13 +1,13 @@
 # Lab status
 
-**Generated:** `2026-07-28T01:46:50Z`  
+**Generated:** `2026-07-28T02:26:41Z`  
 **doctor_ok:** True  
 **live_enabled:** False  
 **kill_switch:** False  
 **git_origin:** https://github.com/jfaccioli/evidence-research-lab.git  
 **approved_strategies:** []  
 **confirmatory_candidates:** 0  
-**programmes:** 21 dirs / 107 hyps  
+**programmes:** 22 dirs / 115 hyps  
 
 ## Notes
 

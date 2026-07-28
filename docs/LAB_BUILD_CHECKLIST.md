@@ -8,6 +8,8 @@
 - [x] P1 integrity stack (schema, holdout, ledger, artefacts, anchors, evidence, adversarial)
 - [x] Funding / OI PIT paths + programme nulls
 - [x] **Flow / whale PIT scaffold** (`flow.py`, mock, 8 locked hyps, mechanism) — science batch blocked on real history
+- [x] **Multi-asset v1** — universe allow-list BTC+ETH, `crl fetch --symbol`, paper broker (`docs/MULTI_ASSET_V1.md`)
+- [x] Flow source guidance (`docs/DATA_FLOW_SOURCES.md`) — human only when ready
 - [x] Pre-registered programme dirs + inventory
 - [x] `crl doctor` / `status` / `programmes` / `run-programme` / `autopsy`
 - [x] `crl status --readiness` — lab_ops vs autotrading dual score

@@ -1,0 +1,5 @@
+programme: eth_multi_asset_smoke_v1
+design: docs/MULTI_ASSET_V1.md
+live_data: true
+hypotheses:
+  - hyp_eth_sma200_long.yaml

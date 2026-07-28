@@ -90,7 +90,7 @@ def run_hypothesis_pipeline(
     Optional ``registry_path`` overrides live registry for isolated runs.
     """
     root = project_root()
-    assert_phase1_universe(spec.model_dump())
+    assert_phase1_universe(spec.model_dump(), cfg=cfg)
     assert_hypothesis_admissible(spec)
 
     costs = cost_from_config(cfg)

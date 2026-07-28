@@ -1,0 +1,15 @@
+id: hyp_eth_sma200_long
+version: 1
+asset: ETH/USDT
+timeframe: 1d
+taxonomy: trend
+family_id: family_eth_smoke
+direction: long_only
+entry:
+  expression: close > sma_200
+exit:
+  expression: close < sma_200
+rationale: Multi-asset plumbing smoke — ETH trend filter (not a locked science programme).
+expected_outcome: Verifies universe + dataset path; not promotion candidate without a full programme.
+feature_tags: []
+literature_refs: []

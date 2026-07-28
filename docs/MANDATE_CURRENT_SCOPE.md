@@ -17,10 +17,12 @@
 
 ## Mandate under test (this wave)
 
-- Asset: BTC/USDT spot long-only  
+- Assets: **BTC/USDT** (primary evidence base) + **ETH/USDT** plumbing (`universe.spot_assets`)  
 - Horizons: primarily **1d**, selective **4h** power/hold  
 - Costs: lab default (or elevated for capacity programme)  
 - Success: confirmatory survivors **or** clean exhaustion under these rules  
+- Flow/whale: scaffold only until real PIT series (`docs/DATA_FLOW_SOURCES.md`)  
+
 
 ## Scientific stance (current)
 

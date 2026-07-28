@@ -31,7 +31,8 @@ Exit 0 from doctor/status = hard checks pass; LIVE should report disabled; `git_
 
 | Command | Purpose |
 |---------|---------|
-| `python -m crl fetch --interval 1d` | Pin BTC daily OHLCV |
+| `python -m crl fetch --interval 1d` | Pin BTC daily OHLCV (default symbol) |
+| `python -m crl fetch --interval 1d --symbol ETHUSDT` | Pin ETH daily (universe allow-list) |
 | `python -m crl fetch --interval 4h` | Pin 4h OHLCV |
 | `python -m crl plan` | Evidence-driven research plan |
 | `python -m crl run-programme examples/batch/<prog>` | Doctor + temp registry + note + autopsy |

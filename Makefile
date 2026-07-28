@@ -24,6 +24,10 @@ fetch-1d:
 fetch-4h:
 	$(PY) -m crl fetch --interval 4h
 
+# Example: make fetch-eth
+fetch-eth:
+	$(PY) -m crl fetch --interval 1d --symbol ETHUSDT
+
 test:
 	$(PY) -m pytest tests/ -q --tb=line
 

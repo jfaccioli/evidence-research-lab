@@ -36,7 +36,10 @@ def shadow_walk(
         desired = desired_long_only(
             spec.entry.expression, spec.exit.expression, row, prev
         )
-        session.on_bar(ts=str(ts), signal=desired, mark_price=px, symbol="BTCUSDT")
+        from crl.shared.universe import asset_to_binance_symbol
+
+        sym = asset_to_binance_symbol(getattr(spec, "asset", "BTC/USDT") or "BTC/USDT")
+        session.on_bar(ts=str(ts), signal=desired, mark_price=px, symbol=sym)
         prev = desired
     path = None
     if log_dir is not None:

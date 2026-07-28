@@ -81,6 +81,7 @@ def run_paper_session(
         limits=RiskLimits(max_position=1.0, min_position=0.0, max_leverage=1.0),
         fee_bps_rt=fee_bps_rt,
         starting_cash=starting_cash,
+        # Default universe BTC+ETH; config override via PaperBroker(config=…)
     )
     env = envelope or RiskEnvelope(
         max_notional_aud=max(starting_cash, 50.0),

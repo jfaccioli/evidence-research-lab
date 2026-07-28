@@ -16,14 +16,14 @@
 | Paper → shadow → tiny live | Risk ladder after *evidence*, not after a pretty backtest |
 | Kill switch / risk envelope | Ops fail-closed before capital |
 
-## What is domain-specific today (BTC application)
+## What is domain-specific today (crypto spot application)
 
 | Piece | Crypto-specific |
 |-------|-----------------|
-| OHLCV fetch | Binance public BTCUSDT |
-| Funding / OI | Perp exchange series |
+| OHLCV fetch | Binance public (BTCUSDT default; ETHUSDT via `--symbol`) |
+| Funding / OI | Perp exchange series (per symbol when used) |
 | Cost model | Fee/spread/slippage bps for crypto spot |
-| Asset constraint | Phase-1 long-only BTC/USDT |
+| Asset constraint | Config allow-list — default **BTC/USDT + ETH/USDT** (`docs/MULTI_ASSET_V1.md`) |
 | Calendar features | UTC crypto continuous market |
 
 ## How to reuse for another science domain

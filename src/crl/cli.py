@@ -15,9 +15,15 @@ from crl.shared.types import HypothesisSpec, ResearchMode, RuleSpec, Taxonomy
 
 
 def cmd_fetch(args: argparse.Namespace) -> int:
+    from crl.shared.universe import assert_symbol_allowed, default_binance_symbol
+
     cfg = load_config(args.config)
     root = project_root()
-    symbol = cfg.get("symbol_binance", "BTCUSDT")
+    symbol = assert_symbol_allowed(
+        getattr(args, "symbol", None) or default_binance_symbol(cfg),
+        cfg,
+        context="fetch",
+    )
     interval = args.interval
     processed = root / cfg["data"]["cache_dir"]
     manifests = root / cfg["data"]["manifest_dir"]
@@ -78,16 +84,22 @@ def cmd_run(args: argparse.Namespace) -> int:
     )
     mode = ResearchMode.CONFIRMATORY if args.confirmatory else ResearchMode.EXPLORATORY
 
+    from crl.shared.universe import asset_to_binance_symbol, assert_symbol_allowed
+
+    run_symbol = assert_symbol_allowed(
+        asset_to_binance_symbol(spec.asset), cfg, context="run"
+    )
+
     dataset_id = args.dataset_id
     df = None
     manifest = None
     if args.mock:
         src = MockOHLCVSource(n=args.mock_bars, seed=1)
-        df = src.fetch_ohlcv("BTCUSDT", spec.timeframe)
+        df = src.fetch_ohlcv(run_symbol, spec.timeframe)
         manifest = save_dataset(
             df,
             source="mock",
-            symbol="BTCUSDT",
+            symbol=run_symbol,
             interval=spec.timeframe,
             processed_dir=root / cfg["data"]["cache_dir"],
             manifest_dir=root / cfg["data"]["manifest_dir"],
@@ -98,12 +110,15 @@ def cmd_run(args: argparse.Namespace) -> int:
     elif not dataset_id:
         m = latest_manifest(
             root / cfg["data"]["manifest_dir"],
-            symbol=cfg.get("symbol_binance", "BTCUSDT"),
+            symbol=run_symbol,
             interval=spec.timeframe,
             source="binance_public",
         )
         if m is None:
-            print("No dataset found. Run: crl fetch --interval 1d", file=sys.stderr)
+            print(
+                f"No dataset for {run_symbol}. Run: crl fetch --interval 1d --symbol {run_symbol}",
+                file=sys.stderr,
+            )
             return 1
         dataset_id = m.dataset_id
 
@@ -140,6 +155,11 @@ def main(argv: list[str] | None = None) -> int:
 
     p_fetch = sub.add_parser("fetch", help="Fetch and pin OHLCV dataset")
     p_fetch.add_argument("--interval", default="1d", choices=["1d", "4h"])
+    p_fetch.add_argument(
+        "--symbol",
+        default=None,
+        help="Binance symbol in universe (default: config symbol_binance; e.g. ETHUSDT)",
+    )
     p_fetch.add_argument("--mock", action="store_true")
     p_fetch.add_argument("--mock-bars", type=int, default=1500)
     p_fetch.set_defaults(func=cmd_fetch)
@@ -552,23 +572,36 @@ def cmd_autopsy(args: argparse.Namespace) -> int:
     return 0
 
 
-def _load_feat_for_cli(args: argparse.Namespace, timeframe: str = "1d"):
+def _load_feat_for_cli(
+    args: argparse.Namespace,
+    timeframe: str = "1d",
+    *,
+    symbol: str | None = None,
+):
     from crl.shared.data.feature_store import load_or_build_features
     from crl.shared.data.store import load_dataset, latest_manifest
+    from crl.shared.universe import assert_symbol_allowed, default_binance_symbol
 
     cfg = load_config(args.config)
     root = project_root()
     mdir = root / cfg.get("data", {}).get("manifest_dir", "data/manifests")
     dataset_id = args.dataset_id
     if dataset_id is None:
+        sym = assert_symbol_allowed(
+            symbol or default_binance_symbol(cfg), cfg, context="paper/shadow"
+        )
         m = latest_manifest(
             mdir,
-            symbol=cfg.get("symbol_binance", "BTCUSDT"),
+            symbol=sym,
             interval=timeframe if timeframe in ("1d", "4h") else "1d",
             source="binance_public",
         )
         if m is None:
-            return None, None, "No dataset. Run: crl fetch --interval 1d"
+            return (
+                None,
+                None,
+                f"No dataset for {sym}. Run: crl fetch --interval 1d --symbol {sym}",
+            )
         dataset_id = m.dataset_id
     df, _ = load_dataset(dataset_id, manifest_dir=mdir, verify_hash=True)
     cache = root / cfg.get("data", {}).get("cache_dir", "data/processed") / "features"
@@ -603,11 +636,15 @@ def cmd_paper(args: argparse.Namespace) -> int:
 
 
 def _cmd_paper_body(args, root, load_hypothesis_yaml, replay_hyp_dir, run_paper_session) -> int:
+    from crl.shared.universe import asset_to_binance_symbol
+
     tf = "1d"
+    sym = None
     if args.hypothesis:
         spec0 = load_hypothesis_yaml(Path(args.hypothesis))
         tf = spec0.timeframe if spec0.timeframe in ("1d", "4h") else "1d"
-    cfg, feat, err = _load_feat_for_cli(args, tf)
+        sym = asset_to_binance_symbol(spec0.asset)
+    cfg, feat, err = _load_feat_for_cli(args, tf, symbol=sym)
     if err:
         print(err, file=sys.stderr)
         return 1
@@ -698,11 +735,14 @@ def cmd_shadow(args: argparse.Namespace) -> int:
     """Historical shadow walk — intents only."""
     from crl.production.shadow.walk import shadow_walk
     from crl.research.pipeline.batch import load_hypothesis_yaml
+    from crl.shared.universe import asset_to_binance_symbol
 
     root = project_root()
     spec = load_hypothesis_yaml(Path(args.hypothesis))
     tf = spec.timeframe if spec.timeframe in ("1d", "4h") else "1d"
-    cfg, feat, err = _load_feat_for_cli(args, tf)
+    cfg, feat, err = _load_feat_for_cli(
+        args, tf, symbol=asset_to_binance_symbol(spec.asset)
+    )
     if err:
         print(err, file=sys.stderr)
         return 1

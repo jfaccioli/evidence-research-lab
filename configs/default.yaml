@@ -1,8 +1,13 @@
-# Crypto Research Lab — default Phase 1 config
+# Crypto Research Lab — default config
 # Primary objective: after-cost Sharpe (no metric shopping)
 
 asset: BTC/USDT
 symbol_binance: BTCUSDT
+# Spot allow-list (long-only, no leverage). Expand deliberately — not alt spam.
+universe:
+  spot_assets:
+    - BTC/USDT
+    - ETH/USDT
 timeframes:
   - 1d
   - 4h

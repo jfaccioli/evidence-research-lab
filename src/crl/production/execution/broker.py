@@ -62,20 +62,36 @@ class PaperBroker(Broker):
         limits: RiskLimits | None = None,
         fee_bps_rt: float = 33.0,
         starting_cash: float = 50.0,
+        allowed_symbols: frozenset[str] | set[str] | None = None,
+        config: dict[str, Any] | None = None,
     ) -> None:
+        from crl.shared.universe import allowed_binance_symbols
+
         self.limits = limits or RiskLimits()
         self.fee_bps_rt = float(fee_bps_rt)
         self.cash = float(starting_cash)
         self._position = 0.0
         self.fills: list[FillRecord] = []
+        self._config = config
+        self._allowed_symbols = (
+            frozenset(allowed_symbols)
+            if allowed_symbols is not None
+            else allowed_binance_symbols(config)
+        )
 
     def position(self) -> float:
         return self._position
 
     def place_order(self, order: OrderIntent, *, mark_price: float) -> FillRecord:
         assert_mode_allowed(ExecutionMode.PAPER)
-        if order.symbol.upper().replace("/", "") not in ("BTCUSDT", "BTC/USDT"):
-            raise ValueError("Paper broker Phase path: BTC only")
+        from crl.shared.universe import asset_to_binance_symbol
+
+        sym = asset_to_binance_symbol(order.symbol)
+        if sym not in self._allowed_symbols:
+            raise ValueError(
+                f"Paper broker: symbol {order.symbol!r} not in universe "
+                f"{sorted(self._allowed_symbols)}"
+            )
         side = order.side.lower()
         if side not in ("buy", "sell"):
             raise ValueError(side)

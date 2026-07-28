@@ -31,14 +31,27 @@ def clamp_position(pos: float, limits: RiskLimits) -> float:
     return float(pos)
 
 
-def assert_phase1_universe(spec_dict: dict[str, Any]) -> None:
-    """Hard reject non-Phase-1 universes."""
-    asset = spec_dict.get("asset", "")
-    direction = spec_dict.get("direction", "")
-    if asset not in ("BTC/USDT", "BTCUSDT"):
-        raise ValueError(f"Phase 1 only allows BTC/USDT, got {asset}")
+def assert_phase1_universe(
+    spec_dict: dict[str, Any],
+    cfg: dict[str, Any] | None = None,
+) -> None:
+    """Hard reject assets/directions outside the spot mandate.
+
+    Spot assets come from ``cfg['universe']['spot_assets']`` (default BTC+ETH).
+    Long-only, no leverage, no derivatives remain hard policy.
+    """
+    from crl.shared.universe import allowed_spot_assets, normalize_asset
+
+    asset = normalize_asset(str(spec_dict.get("asset", "")))
+    direction = spec_dict.get("direction", "") or "long_only"
+    allowed = allowed_spot_assets(cfg)
+    if asset not in allowed:
+        raise ValueError(
+            f"Asset {spec_dict.get('asset')!r} not in spot universe "
+            f"{sorted(allowed)} (docs/MULTI_ASSET_V1.md)"
+        )
     if direction not in ("long_only", "long"):
-        raise ValueError(f"Phase 1 long_only only, got {direction}")
+        raise ValueError(f"long_only only, got {direction}")
     lev = spec_dict.get("leverage", 1)
     if lev not in (1, 1.0, None):
         raise ValueError("Leverage not allowed (project mandate: spot only, max_leverage=1)")

@@ -1,7 +1,7 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-27T18:00:00+00:00`  
-**Summary:** [NON-AUTHORITATIVE] Zero candidates after broad daily programme wave. Paper/shadow path ready; LIVE disabled.
+**Updated:** `2026-07-28T00:27:05Z`  
+**Summary:** [NON-AUTHORITATIVE] Zero confirmatory candidates after expanded programme wave (~20 programmes). Lab ops mature (run-programme/autopsy/paper/shadow). LIVE disabled. Success = uncertainty reduction.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
 
@@ -18,7 +18,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `tsmom_underreaction` — Time-series momentum / underreaction
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.40)
 - **Recommendation:** `pivot`
 - **Claim:** Gradual diffusion of information; intermediate returns continue.
 - **Evidence mass:** n_tests=31, passed_val=0, failed_test=1, candidate=0
@@ -45,7 +45,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `crowding_proxy` — Crowding / leverage stress proxy
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.40)
 - **Recommendation:** `pivot`
 - **Claim:** High-vol or crowded risk-on states precede unwind (proxy only).
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -66,7 +66,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `slow_fast_disagreement` — Slow vs fast signal disagreement
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.40)
 - **Recommendation:** `pivot`
 - **Claim:** When short-horizon mom disagrees with long trend, edge may be in resolution.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -89,7 +89,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `vol_regime_shift` — Volatility regime-shift risk
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.40)
 - **Recommendation:** `pivot`
 - **Claim:** Rising vol marks stress transitions; reduce exposure.
 - **Evidence mass:** n_tests=4, passed_val=0, failed_test=0, candidate=0
@@ -112,7 +112,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `liquidity_panic_rebound` — Forced selling / panic rebound
 
-- **Stance:** `active` (confidence 0.4)
+- **Stance:** `active` (confidence 0.40)
 - **Recommendation:** `pivot`
 - **Claim:** Sharp selloffs reverse when temporary liquidity demand fades.
 - **Evidence mass:** n_tests=3, passed_val=0, failed_test=0, candidate=0
@@ -199,7 +199,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `capacity_tiny_friction` — Tiny-capital friction realism
 
-- **Stance:** `untested` (confidence 0.1)
+- **Stance:** `untested` (confidence 0.10)
 - **Recommendation:** `observe`
 - **Claim:** Edges that only work with zero friction are invalid for 10–50 AUD.
 - **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
@@ -221,7 +221,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `oi_leverage_stock` — Open interest / leverage stock (true series)
 
-- **Stance:** `untested` (confidence 0.1)
+- **Stance:** `untested` (confidence 0.10)
 - **Recommendation:** `observe`
 - **Claim:** Exchange-native OI as stock of open leverage; PIT snapshots only — not funding.
 - **Evidence mass:** n_tests=0, passed_val=0, failed_test=0, candidate=0
@@ -264,7 +264,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `vol_risk_premium` — Volatility risk preference / quiet markets
 
-- **Stance:** `exhausted_null` (confidence 0.7)
+- **Stance:** `exhausted_null` (confidence 0.70)
 - **Recommendation:** `retire`
 - **Claim:** Agents prefer risk when realized vol is low.
 - **Evidence mass:** n_tests=38, passed_val=0, failed_test=0, candidate=0
@@ -284,8 +284,8 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `volume_confirmation` — Volume confirmation of price moves
 
-- **Stance:** `exhausted_null` (confidence 0.7)
-- **Recommendation:** `pivot`
+- **Stance:** `exhausted_null` (confidence 0.70)
+- **Recommendation:** `retire`
 - **Claim:** Moves without volume are less reliable; thrust needs participation.
 - **Evidence mass:** n_tests=18, passed_val=0, failed_test=0, candidate=0
 
@@ -296,7 +296,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - Large null body (n≈18) with no exploratory survival.
-- Volume confirmation v1: 0/5 passed_val (bootstrap/WF).
 
 **Remaining unknowns**
 
@@ -305,7 +304,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `mean_reversion_cross_section_proxy` — Relative value / stretch vs own history only
 
-- **Stance:** `exhausted_null` (confidence 0.7)
+- **Stance:** `exhausted_null` (confidence 0.70)
 - **Recommendation:** `retire`
 - **Claim:** Extreme z-score stretches mean-revert when not in structural bear.
 - **Evidence mass:** n_tests=14, passed_val=0, failed_test=0, candidate=0
@@ -325,7 +324,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `breakout_attention` — Breakout + attention / participation
 
-- **Stance:** `refuted` (confidence 0.5)
+- **Stance:** `refuted` (confidence 0.50)
 - **Recommendation:** `pivot`
 - **Claim:** New highs with volume reflect information incorporation.
 - **Evidence mass:** n_tests=11, passed_val=0, failed_test=0, candidate=0
@@ -337,7 +336,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 **Refuting**
 
 - All 11 tests failed exploratory/gates under current design class.
-- Breakout v1: 0/5 passed_val (min_trades/bootstrap).
 
 **Remaining unknowns**
 
@@ -347,7 +345,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ### `calendar_seasonality` — Calendar / seasonality microstructure
 
-- **Stance:** `refuted` (confidence 0.5)
+- **Stance:** `refuted` (confidence 0.50)
 - **Recommendation:** `pivot`
 - **Claim:** Day-of-week or month-end effects from institutional calendars.
 - **Evidence mass:** n_tests=10, passed_val=0, failed_test=0, candidate=0
@@ -366,3 +364,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Multiple-testing burden grows with family size.
 - A structurally different operationalisation might still be open.
 
+---
+
+*Chief Research Scientist mode: maximise knowledge per budget unit.*

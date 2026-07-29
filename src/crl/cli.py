@@ -465,8 +465,10 @@ def main(argv: list[str] | None = None) -> int:
             "characterize-premium-residual",
             "fetch-stable-supply",
             "characterize-stable-supply",
+            "fetch-defi-tvl",
+            "characterize-defi-tvl",
         ],
-        help="Market property fetch/characterize actions (see observe --help)",
+        help="Market property fetch/characterize actions",
     )
     p_obs.add_argument(
         "--mock",
@@ -1035,39 +1037,32 @@ def cmd_observe(args: argparse.Namespace) -> int:
         print(json.dumps(meta, indent=2))
         return 0
 
-    if args.action == "characterize-stable-supply":
-        from crl.research.market_properties.stablecoin_supply import (
-            characterize_stablecoin_supply,
-        )
-        from crl.shared.data.stablecoin_supply import load_latest_supply
+    if args.action == "fetch-defi-tvl":
+        from crl.shared.data.defi_tvl import save_tvl_series
+        from crl.shared.data.sources.defillama_tvl import DefiLlamaTvlSource
 
+        print("Fetching aggregate DeFi TVL from DefiLlama...", flush=True)
+        df = DefiLlamaTvlSource(publish_lag_days=1).fetch_tvl_events()
+        meta = save_tvl_series(
+            df,
+            processed_dir=project_root() / "data" / "processed" / "defi_tvl",
+            publish_lag_days=1,
+        )
+        print(json.dumps(meta, indent=2))
+        return 0
+
+    if args.action in ("characterize-stable-supply", "characterize-defi-tvl"):
         ohlcv, source, dataset_id = _leda_load_ohlcv(args)
         if ohlcv is None:
             print("No BTC 1d; fetch or --mock", file=sys.stderr)
             return 1
-        if getattr(args, "mock", False):
-            import numpy as np
+
+        def _load_funding_premium():
             import pandas as pd
 
-            rng = np.random.default_rng(1)
-            n = len(ohlcv)
-            level = 1e10 * np.exp(np.cumsum(rng.normal(0.0002, 0.002, size=n)))
-            supply = pd.DataFrame(
-                {"event_time": ohlcv.index, "supply_usd": level}
-            )
-            meta = {"series_id": "mock_stable_supply"}
-            funding = None
-            prem = None
-        else:
-            supply, meta = load_latest_supply(
-                project_root() / "data" / "processed" / "stablecoin"
-            )
-            funding = None
-            prem = None
+            funding = prem = None
             fund_dir = project_root() / "data" / "processed" / "funding"
             if fund_dir.exists():
-                import pandas as pd
-
                 parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
                 if parts:
                     funding = pd.read_parquet(parts[-1])
@@ -1079,15 +1074,72 @@ def cmd_observe(args: argparse.Namespace) -> int:
                 )
             except Exception:
                 prem = None
-        report = characterize_stablecoin_supply(
-            ohlcv,
-            supply,
-            funding_events=funding,
-            premium_events=prem,
-        )
+            return funding, prem
+
+        if args.action == "characterize-stable-supply":
+            from crl.research.market_properties.stablecoin_supply import (
+                characterize_stablecoin_supply,
+            )
+            from crl.shared.data.stablecoin_supply import load_latest_supply
+
+            if getattr(args, "mock", False):
+                import numpy as np
+                import pandas as pd
+
+                rng = np.random.default_rng(1)
+                n = len(ohlcv)
+                level = 1e10 * np.exp(np.cumsum(rng.normal(0.0002, 0.002, size=n)))
+                supply = pd.DataFrame({"event_time": ohlcv.index, "supply_usd": level})
+                meta = {"series_id": "mock_stable_supply"}
+                funding = prem = None
+            else:
+                supply, meta = load_latest_supply(
+                    project_root() / "data" / "processed" / "stablecoin"
+                )
+                funding, prem = _load_funding_premium()
+            report = characterize_stablecoin_supply(
+                ohlcv, supply, funding_events=funding, premium_events=prem
+            )
+            report["supply_series_id"] = meta.get("series_id")
+        else:
+            from crl.research.market_properties.defi_tvl import characterize_defi_tvl
+            from crl.shared.data.defi_tvl import load_latest_tvl
+
+            if getattr(args, "mock", False):
+                import numpy as np
+                import pandas as pd
+
+                rng = np.random.default_rng(2)
+                n = len(ohlcv)
+                level = 1e9 * np.exp(np.cumsum(rng.normal(0.0005, 0.01, size=n)))
+                tvl = pd.DataFrame({"event_time": ohlcv.index, "tvl_usd": level})
+                meta = {"series_id": "mock_tvl"}
+                supply = funding = prem = None
+            else:
+                tvl, meta = load_latest_tvl(
+                    project_root() / "data" / "processed" / "defi_tvl"
+                )
+                funding, prem = _load_funding_premium()
+                supply = None
+                try:
+                    from crl.shared.data.stablecoin_supply import load_latest_supply
+
+                    supply, _ = load_latest_supply(
+                        project_root() / "data" / "processed" / "stablecoin"
+                    )
+                except Exception:
+                    supply = None
+            report = characterize_defi_tvl(
+                ohlcv,
+                tvl,
+                supply_events=supply,
+                funding_events=funding,
+                premium_events=prem,
+            )
+            report["tvl_series_id"] = meta.get("series_id")
+
         report["dataset_id"] = dataset_id
         report["ohlcv_source"] = source
-        report["supply_series_id"] = meta.get("series_id")
         print(json.dumps(report, indent=2))
         return 0 if report.get("ok") else 1
 

@@ -31,7 +31,8 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68; vs fwd_ret ~0; vs next RV ~0.16. **LEDA refused**.
 - **`premium_residual`:** expanding residual vs funding → **linear next-RV IC ~0**; premium’s linear uncertainty association is largely funding-collinear. Understanding win; not an edge.
 - **`stablecoin_agg_supply`:** DefiLlama aggregate circulating USD; dlog30_lag ↔ next RV ~**0.29**, vs fwd_ret ~0; partially independent of funding/premium. Liquidity stock property; **LEDA refused**.
-- Next: new mechanism orthogonal to OHLCV + funding + premium + stable stock.
+- **`defi_agg_tvl`:** DeFi capital lock; distinct from stable growth (~0.20); **null** linear association with BTC next return/RV. Understanding null; **LEDA refused**.
+- CoinGecko total mcap/dominance history blocked (401) without paid/key — free path closed for now.
 - Shadow still unjustified.
 
 ## Mechanisms

@@ -470,8 +470,10 @@ def main(argv: list[str] | None = None) -> int:
             "fetch-cross-basis",
             "characterize-cross-basis",
             "synthesis-review",
+            "mechanisms",
+            "study-vol-clustering",
         ],
-        help="Market property fetch/characterize/synthesis actions",
+        help="Properties + mechanism studies (mechanism-first mission)",
     )
     p_obs.add_argument(
         "--mock",
@@ -1137,13 +1139,7 @@ def cmd_observe(args: argparse.Namespace) -> int:
         print(json.dumps(report, indent=2))
         return 0 if report.get("ok") else 1
 
-    if args.action == "synthesis-review":
-        from crl.research.market_properties.synthesis import run_property_synthesis_review
-
-        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
-        if ohlcv is None:
-            print("No BTC OHLCV", file=sys.stderr)
-            return 1
+    def _load_mechanism_series():
         root = project_root()
         premium = funding = supply = tvl = basis = None
         try:
@@ -1177,23 +1173,74 @@ def cmd_observe(args: argparse.Namespace) -> int:
             basis, _ = load_latest_basis(root / "data" / "processed" / "cross_venue")
         except Exception:
             pass
-        # Prefer OHLCV with micro columns
-        if "taker_buy_base" not in ohlcv.columns and not getattr(args, "mock", False):
-            from crl.shared.config import load_config
-            from crl.shared.data.store import load_dataset
+        return premium, funding, supply, tvl, basis
 
-            cfg = load_config(args.config)
-            mdir = root / cfg["data"]["manifest_dir"]
-            for mp in sorted(mdir.glob("binance_public_BTCUSDT_1d_*.json"), reverse=True):
-                try:
-                    mid = json.loads(mp.read_text())["dataset_id"]
-                    df, _ = load_dataset(mid, manifest_dir=mdir, verify_hash=True)
-                    if "taker_buy_base" in df.columns:
-                        ohlcv = df
-                        dataset_id = mid
-                        break
-                except Exception:
-                    continue
+    def _prefer_micro_ohlcv(ohlcv, dataset_id):
+        if "taker_buy_base" in ohlcv.columns or getattr(args, "mock", False):
+            return ohlcv, dataset_id
+        from crl.shared.config import load_config
+        from crl.shared.data.store import load_dataset
+
+        root = project_root()
+        cfg = load_config(args.config)
+        mdir = root / cfg["data"]["manifest_dir"]
+        for mp in sorted(mdir.glob("binance_public_BTCUSDT_1d_*.json"), reverse=True):
+            try:
+                mid = json.loads(mp.read_text())["dataset_id"]
+                df, _ = load_dataset(mid, manifest_dir=mdir, verify_hash=True)
+                if "taker_buy_base" in df.columns:
+                    return df, mid
+            except Exception:
+                continue
+        return ohlcv, dataset_id
+
+    if args.action == "mechanisms":
+        from crl.research.mechanisms.registry import load_registry, ranked_mechanisms
+
+        reg = load_registry()
+        print(
+            json.dumps(
+                {
+                    "directive": "docs/MECHANISM_DISCOVERY_DIRECTIVE.md",
+                    "registry_doc": "docs/MECHANISM_REGISTRY.md",
+                    "workflow": reg.get("workflow"),
+                    "mechanisms": ranked_mechanisms(),
+                    "retired_combination_families": reg.get("retired_combination_families"),
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.action == "study-vol-clustering":
+        from crl.research.mechanisms.vol_clustering import study_vol_clustering
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, supply, _, _ = _load_mechanism_series()
+        report = study_vol_clustering(
+            ohlcv,
+            premium_events=premium,
+            funding_events=funding,
+            supply_events=supply,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        print(json.dumps(report, indent=2, default=str))
+        return 0 if report.get("ok") else 1
+
+    if args.action == "synthesis-review":
+        from crl.research.market_properties.synthesis import run_property_synthesis_review
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, supply, tvl, basis = _load_mechanism_series()
         report = run_property_synthesis_review(
             ohlcv,
             premium_events=premium,

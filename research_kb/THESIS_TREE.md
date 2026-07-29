@@ -34,6 +34,8 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **`defi_agg_tvl`:** DeFi capital lock; distinct from stable growth (~0.20); **null** linear association with BTC next return/RV. Understanding null; **LEDA refused**.
 - **`cross_venue_basis`:** BN vs Coinbase log ratio (calendar-day aligned); persistent (~0.90); weak next-RV; not a return clone. **LEDA refused**.
 - **Property Synthesis Review (2026-07-29):** pre-reg equal-rank stress composite **fails** vs rv_lag baseline (composite IC ~0.26 vs ~0.96); family `leda_synth_stress_equal_rank_v1` **retired**. No composite LEDA programme.
+- **Mechanism mode:** primary directive is mechanism discovery (`MECHANISM_DISCOVERY_DIRECTIVE.md`).
+- **`vol_clustering` v1:** high-RV persistence lift ~3.4×; leverage/liquidity cofactors **do not** increase persistence under pre-reg design. Working description = pure RV inertia for this claim.
 - Shadow still unjustified.
 
 ## Mechanisms

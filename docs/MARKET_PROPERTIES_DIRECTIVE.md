@@ -1,12 +1,13 @@
 # Market Properties Directive
 
 **Effective:** 2026-07-29  
-**Supersedes terminology in:** Observation Discovery notes (same spirit; clearer object)  
+**Primary mission now:** `docs/MECHANISM_DISCOVERY_DIRECTIVE.md`  
+Properties are **instruments for studying mechanisms**, not an end in themselves.  
 **Complements:** Alpha Discovery, LEDA, Standing Research Director  
 
 ## Objective
 
-Build an increasingly complete **scientific description of measurable market behaviour**.
+Support mechanism science with well-characterised, independent observables of market behaviour.
 
 Not:
 

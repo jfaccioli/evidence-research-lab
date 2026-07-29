@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-29",
+  "directive": "docs/MECHANISM_DISCOVERY_DIRECTIVE.md",
+  "workflow": [
+    "mechanism",
+    "min_observables",
+    "characterisation",
+    "independence",
+    "evidence_channel",
+    "LEDA",
+    "forecast",
+    "decision"
+  ],
+  "mechanisms": [
+    {
+      "id": "vol_clustering",
+      "name": "Volatility clustering processes",
+      "question": "What processes cause volatility clustering?",
+      "hypothesis": "High-vol states persist partly because leverage stress and liquidity withdrawal co-occur with high RV and prolong uncertainty.",
+      "min_observables": ["rv_path", "funding", "premium", "stable_supply_growth", "trade_intensity", "oi"],
+      "in_lab": ["rv", "funding", "premium", "stable_supply", "intensity", "oi"],
+      "missing": [],
+      "ev": 5,
+      "status": "study_v1_done",
+      "rank": 1,
+      "result_v1": "cofactor_prolongation_not_supported; pure_rv_inertia_dominates"
+    },
+    {
+      "id": "leverage_cycle",
+      "name": "Leverage build and unwind",
+      "question": "How does leverage build and unwind?",
+      "hypothesis": "Funding, premium and OI form a leverage cycle linked to subsequent vol and risk-off.",
+      "min_observables": ["funding", "premium", "oi", "rv"],
+      "in_lab": ["funding", "premium", "oi", "rv"],
+      "missing": ["high_quality_liquidation_path"],
+      "ev": 4.5,
+      "status": "partially_mapped",
+      "rank": 2
+    },
+    {
+      "id": "liquidity_creation_destruction",
+      "name": "Liquidity creation, transfer, destruction",
+      "question": "How is liquidity created, transferred and destroyed?",
+      "hypothesis": "Mint/burn and venue flows change risk-bearing capacity; contractions amplify uncertainty.",
+      "min_observables": ["stable_supply_stock", "mint_burn", "venue_flow", "depth"],
+      "in_lab": ["stable_supply_stock"],
+      "missing": ["mint_burn", "quality_venue_inventory"],
+      "ev": 4,
+      "status": "blocked_missing_obs",
+      "rank": 3
+    },
+    {
+      "id": "uncertainty_behaviour",
+      "name": "Participant behaviour under uncertainty",
+      "question": "How do market participants change behaviour during uncertainty?",
+      "hypothesis": "High RV coincides with lower intensity, changed aggression, wider basis.",
+      "min_observables": ["rv", "intensity", "tbr", "basis"],
+      "in_lab": ["rv", "intensity", "tbr", "basis"],
+      "missing": [],
+      "ev": 3.5,
+      "status": "partially_mapped",
+      "rank": 4
+    },
+    {
+      "id": "info_propagation",
+      "name": "Cross-market information propagation",
+      "question": "How does information propagate across markets?",
+      "hypothesis": "Shocks transmit with lags across assets, venues and spot/perp.",
+      "min_observables": ["multi_asset_returns", "premium", "basis"],
+      "in_lab": ["eth", "premium", "basis"],
+      "missing": [],
+      "ev": 3,
+      "status": "partially_mapped",
+      "rank": 5
+    },
+    {
+      "id": "dislocation_persistence",
+      "name": "Persistent market dislocations",
+      "question": "What mechanisms explain persistent venue dislocations?",
+      "hypothesis": "Inventory and USD/USDT rails sustain basis; stress widens absolute basis.",
+      "min_observables": ["basis", "funding", "rv", "usd_usdt"],
+      "in_lab": ["basis", "funding", "rv"],
+      "missing": ["true_usd_usdt_fx", "inventory_labels"],
+      "ev": 3,
+      "status": "partially_mapped",
+      "rank": 6
+    }
+  ],
+  "retired_combination_families": ["leda_synth_stress_equal_rank_v1"],
+  "note": "Properties are instruments. Mechanisms are the scientific objects."
+}

@@ -1,44 +1,31 @@
-# Observation inventory — what the lab can see
+# Market property inventory
 
 **Updated:** 2026-07-29  
-**Philosophy:** `docs/OBSERVATION_DISCOVERY_DIRECTIVE.md`
+**Philosophy:** `docs/MARKET_PROPERTIES_DIRECTIVE.md`  
+**Terminology:** *market properties* (not indicators, not signals)
 
-## Currently observed (in store or tested)
+## Characterized free properties
 
-| Observation family | Source | Role tested | Status |
-|--------------------|--------|-------------|--------|
-| Spot OHLCV (price path) | Binance public | Trend/MR/breakout atomistic | Exhausted as long/flat grammar |
-| Spot volume | Binance public | Participation programmes | Mostly null as filters |
-| Funding rate | Binance futures | Crowding/leverage proxy | Conf nulls |
-| Open interest | Bybit | Leverage stock | Conf nulls |
-| Free CMD netflow / stables / MVRV / liq / premium | GitHub CMD | Inventory proxies | Conf null wave |
-| Polymarket path + panel | CLOB | Crowd path odds | Explor/conf null |
-| FRED USD + 2Y (lag+1) | FRED | Macro regime | Programme null |
-| Lagged RV (LEDA-1) | Derived OHLCV | Risk persistence | **Skill strong**; policy maps fail holdout |
-| Lagged mom rank (LEDA-2) | Derived OHLCV | Forecast | IC ~null |
-| ETH lagged mom (LEDA-5a) | ETH OHLCV | Cross-asset | IC ~null |
+| Property | Measures | Independence | Primary role | LEDA? |
+|----------|----------|--------------|--------------|-------|
+| **kline_aggression** | Taker buy share; trade count | tbr↔ret ~0.36; intensity↔RV | participation / activity | No (char only) |
+| **perp_premium** | Mark–index premium (perps) | ~0.68 vs funding; ~0 vs ret | uncertainty / leverage stress | No (char only) |
 
-## Blind spots (high priority free)
+Details: `PROPERTY_PERP_PREMIUM_V1.md`, `OBSERVATION_KLINE_AGGRESSION_V1.md`.
 
-| ID | Observable property | Why independent | Acquisition |
-|----|---------------------|-----------------|-------------|
-| **`kline_aggression`** | Taker buy share + trade count on each bar | Not a function of close alone; Binance kline fields we **previously discarded** | Free; same kline API — **retain columns** |
-| `perp_premium` | Perpetual mark–index premium | Futures consensus vs spot path | Free Binance futures premiumIndex klines |
-| `cross_venue_basis` | Spot multi-venue dislocation | Venue-specific inventory/pressure | Multi-exchange free APIs; more effort |
-| `stablecoin_supply_growth` | Aggregate stable supply change | Macro crypto liquidity (not exchange netflow clone if total supply) | Free DefiLlama-type; verify PIT |
-| `etf_flow` | Spot BTC ETF create/redeem | Institutional pipe | Often delayed/paid; EIR later |
+## Already known / exhausted as atomistic trade grammar
 
-## Explicitly low EV (do not re-mine)
+OHLCV path, volume filters, funding prints, OI, free CMD on-chain family, PM panel, FRED macro, LEDA mom+vol maps.
 
-- Another free daily CMD on-chain metric of the same inventory family  
-- More SMA/mom/donchian parameter clones  
-- Vol-veto threshold fishing beyond LEDA-6 pre-reg grid  
+## Blind spots still open (free first)
 
-## Active characterization
+| Property | Mechanism | Notes |
+|----------|-----------|-------|
+| premium residual after funding | Leverage stress orthogonal to funding print | Natural next characterization |
+| stablecoin aggregate supply growth | Crypto liquidity stock | DefiLlama-class; verify PIT |
+| cross-venue spot dislocation | Venue inventory pressure | Multi-API effort |
+| options skew / IV | Tail insurance | Often paid |
 
-| Family | Claim under test | Trade mapping |
-|--------|------------------|---------------|
-| **kline_aggression** | Done — intensity ↔ next RV ~-0.26; tbr ↔ ret_lag ~0.36; weak direction | **None** until pre-reg state/risk channel |
-| **perp_premium** | Next free family | Acquire + characterize |
+## Low EV (do not re-mine)
 
-See `docs/OBSERVATION_KLINE_AGGRESSION_V1.md`.
+More SMA/mom clones; more free CMD inventory clones; vol-threshold fishing beyond LEDA-6.

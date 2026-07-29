@@ -24,12 +24,13 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **LEDA-6** pre-reg thr grid {0.7,0.8,0.9,0.95}: **0** exploratory hard-gate passes (thr=0.7 has +excess but n_trades<30).
 - Shadow/live still **not** justified. See `docs/LEDA_RESULTS_LOG.md`.
 
-## Observation discovery notes (2026-07-29)
+## Market property notes (2026-07-29)
 
-- Philosophy shifted from indicator search → **measurable market observations** (`docs/OBSERVATION_DISCOVERY_DIRECTIVE.md`).
-- **Blindness closed (partial):** Binance kline `taker_buy_*` / `n_trades` were discarded; now retained. Family **`kline_aggression`**.
-- Characterization: trade intensity associates with next RV (~-0.26) more than direction (~0); tbr co-moves with returns (~0.36). Not a trade map yet.
-- Next free observation family: **`perp_premium`**.
+- Philosophy: **market properties** (`docs/MARKET_PROPERTIES_DIRECTIVE.md`) — scientific description of behaviour, not indicator mining.
+- **`kline_aggression`:** intensity ↔ next RV ~-0.26; tbr ↔ ret ~0.36; LEDA refused.
+- **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68 (related≠identical); vs fwd_ret ~0; vs next RV ~0.16; elevated |premium| → higher next RV. **LEDA refused** pending residual-vs-funding science.
+- Next: characterize **premium residual after funding** (independence), not trade rules.
+- Shadow still unjustified.
 
 ## Mechanisms
 

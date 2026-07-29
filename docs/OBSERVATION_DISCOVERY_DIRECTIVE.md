@@ -1,6 +1,7 @@
-# Observation Discovery Directive
+# Observation Discovery Directive (legacy title)
 
 **Effective:** 2026-07-29  
+**Preferred name:** **Market Properties Directive** — see `docs/MARKET_PROPERTIES_DIRECTIVE.md`  
 **Complements:** Alpha Discovery Directive, LEDA roadmap, Standing Research Director  
 **Status:** Permanent research philosophy (not a trading rulebook)
 
@@ -14,7 +15,7 @@ Do **not** optimise for:
 
 Optimise for:
 
-> **Discovering new measurable observations about markets** that reduce uncertainty under frozen scientific standards.
+> **Discovering and characterising measurable market properties** that improve the scientific description of market behaviour under frozen standards.
 
 ## Core questions (always on)
 

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from crl.research.observations.kline_aggression import (
-    OBSERVATION_FAMILY_ID,
+from crl.research.market_properties.kline_aggression import (
+    PROPERTY_ID,
     build_aggression_frame,
     characterize_kline_aggression,
 )
@@ -27,10 +27,11 @@ def test_characterize_aggression_mock():
     assert "taker_buy_ratio_lag" in frame.columns
     rep = characterize_kline_aggression(ohlcv, min_points=50)
     assert rep["ok"] is True
-    assert rep["family_id"] == OBSERVATION_FAMILY_ID
-    assert "independence_vs_used_series" in rep
+    assert rep["property_id"] == PROPERTY_ID
+    assert "independence_vs_known_properties" in rep
     assert "association_next_state" in rep
     assert "not_applicable" in rep["promotion"]
+    assert rep.get("leda_candidate") is False
 
 
 def test_missing_micro_fails_closed():

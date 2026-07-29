@@ -453,17 +453,27 @@ def main(argv: list[str] | None = None) -> int:
 
     p_obs = sub.add_parser(
         "observe",
-        help="Characterize market observations (not trade signals); Observation Discovery",
+        help="Discover/characterize market properties (not trade signals)",
     )
     p_obs.add_argument(
         "action",
-        choices=["inventory", "characterize-aggression"],
-        help="inventory: print blindness map; characterize-aggression: kline micro family",
+        choices=[
+            "inventory",
+            "characterize-aggression",
+            "fetch-premium",
+            "characterize-premium",
+        ],
+        help="inventory | characterize-aggression | fetch-premium | characterize-premium",
     )
     p_obs.add_argument(
         "--mock",
         action="store_true",
-        help="Use mock OHLCV with synthetic micro columns",
+        help="Use mock data where applicable",
+    )
+    p_obs.add_argument(
+        "--symbol",
+        default="BTCUSDT",
+        help="Symbol for premium fetch (default BTCUSDT)",
     )
     p_obs.set_defaults(func=cmd_observe)
 
@@ -965,22 +975,20 @@ def cmd_leda(args: argparse.Namespace) -> int:
 
 
 def cmd_observe(args: argparse.Namespace) -> int:
-    """Observation discovery — characterize measurable market properties."""
+    """Market property discovery — characterize measurable market behaviour."""
+    from crl.shared.config import load_config, project_root
+
     if args.action == "inventory":
-        from pathlib import Path
-
-        from crl.shared.config import project_root
-
         inv = project_root() / "docs" / "OBSERVATION_INVENTORY.md"
-        directive = project_root() / "docs" / "OBSERVATION_DISCOVERY_DIRECTIVE.md"
+        directive = project_root() / "docs" / "MARKET_PROPERTIES_DIRECTIVE.md"
         print(
             json.dumps(
                 {
                     "directive": str(directive),
                     "inventory": str(inv),
-                    "active_family": "kline_aggression",
+                    "properties": ["kline_aggression", "perp_premium"],
                     "philosophy": (
-                        "Discover measurable observations; do not mine indicators"
+                        "Characterize market properties; do not mine indicators"
                     ),
                 },
                 indent=2,
@@ -990,22 +998,88 @@ def cmd_observe(args: argparse.Namespace) -> int:
             print(inv.read_text()[:4000])
         return 0
 
+    if args.action == "fetch-premium":
+        from crl.shared.data.premium import save_premium_series
+        from crl.shared.data.sources.binance_premium import BinancePremiumSource
+
+        symbol = str(getattr(args, "symbol", None) or "BTCUSDT").upper()
+        print(f"Fetching {symbol} 1d premiumIndexKlines from Binance futures...", flush=True)
+        src = BinancePremiumSource()
+        df = src.fetch_premium_klines(symbol, "1d")
+        root = project_root()
+        meta = save_premium_series(
+            df,
+            symbol=symbol,
+            interval="1d",
+            processed_dir=root / "data" / "processed" / "premium",
+        )
+        print(json.dumps(meta, indent=2))
+        return 0
+
+    if args.action == "characterize-premium":
+        from crl.research.market_properties.kline_aggression import build_aggression_frame
+        from crl.research.market_properties.perp_premium import characterize_perp_premium
+        from crl.shared.data.premium import load_latest_premium
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC 1d; fetch or --mock", file=sys.stderr)
+            return 1
+        if getattr(args, "mock", False):
+            # Synthetic premium for offline tests
+            import numpy as np
+            import pandas as pd
+
+            rng = np.random.default_rng(0)
+            n = len(ohlcv)
+            prem = pd.DataFrame(
+                {
+                    "event_time": ohlcv.index,
+                    "premium_close": rng.normal(0, 0.0003, size=n),
+                }
+            )
+            meta = {"series_id": "mock_premium", "source": "mock"}
+        else:
+            prem, meta = load_latest_premium(
+                project_root() / "data" / "processed" / "premium",
+                symbol=str(getattr(args, "symbol", None) or "BTCUSDT"),
+            )
+        funding = None
+        fund_dir = project_root() / "data" / "processed" / "funding"
+        if fund_dir.exists():
+            import pandas as pd
+
+            parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
+            if parts:
+                funding = pd.read_parquet(parts[-1])
+        aggr = None
+        if "taker_buy_base" in ohlcv.columns:
+            try:
+                aggr = build_aggression_frame(ohlcv)
+            except ValueError:
+                aggr = None
+        report = characterize_perp_premium(
+            ohlcv, prem, funding_events=funding, aggression=aggr
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        report["premium_series_id"] = meta.get("series_id")
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("ok") else 1
+
     # characterize-aggression
-    from crl.research.observations.kline_aggression import characterize_kline_aggression
+    from crl.research.market_properties.kline_aggression import characterize_kline_aggression
 
     ohlcv, source, dataset_id = _leda_load_ohlcv(args)
     if ohlcv is None:
         print("No BTC 1d dataset; use --mock or crl fetch --interval 1d", file=sys.stderr)
         return 1
-    # Prefer latest dataset with micro columns if current pin lacks them
     if "taker_buy_base" not in ohlcv.columns and not getattr(args, "mock", False):
-        from crl.shared.config import load_config, project_root
-        from crl.shared.data.store import latest_manifest, load_dataset
+        from crl.shared.data.store import load_dataset
 
-        cfg = load_config(args.config)
         root = project_root()
+        cfg = load_config(args.config)
         mdir = root / cfg["data"]["manifest_dir"]
-        # Scan manifests for BTC 1d with micro cols
         found = None
         for mp in sorted(mdir.glob("binance_public_BTCUSDT_1d_*.json"), reverse=True):
             try:

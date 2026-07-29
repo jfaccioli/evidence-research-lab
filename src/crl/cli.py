@@ -463,11 +463,10 @@ def main(argv: list[str] | None = None) -> int:
             "fetch-premium",
             "characterize-premium",
             "characterize-premium-residual",
+            "fetch-stable-supply",
+            "characterize-stable-supply",
         ],
-        help=(
-            "inventory | characterize-aggression | fetch-premium | "
-            "characterize-premium | characterize-premium-residual"
-        ),
+        help="Market property fetch/characterize actions (see observe --help)",
     )
     p_obs.add_argument(
         "--mock",
@@ -1019,6 +1018,78 @@ def cmd_observe(args: argparse.Namespace) -> int:
         )
         print(json.dumps(meta, indent=2))
         return 0
+
+    if args.action == "fetch-stable-supply":
+        from crl.shared.data.sources.defillama_stablecoins import DefiLlamaStablecoinSource
+        from crl.shared.data.stablecoin_supply import save_supply_series
+
+        print("Fetching aggregate stablecoin supply from DefiLlama...", flush=True)
+        src = DefiLlamaStablecoinSource(publish_lag_days=1)
+        df = src.fetch_supply_events()
+        root = project_root()
+        meta = save_supply_series(
+            df,
+            processed_dir=root / "data" / "processed" / "stablecoin",
+            publish_lag_days=1,
+        )
+        print(json.dumps(meta, indent=2))
+        return 0
+
+    if args.action == "characterize-stable-supply":
+        from crl.research.market_properties.stablecoin_supply import (
+            characterize_stablecoin_supply,
+        )
+        from crl.shared.data.stablecoin_supply import load_latest_supply
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC 1d; fetch or --mock", file=sys.stderr)
+            return 1
+        if getattr(args, "mock", False):
+            import numpy as np
+            import pandas as pd
+
+            rng = np.random.default_rng(1)
+            n = len(ohlcv)
+            level = 1e10 * np.exp(np.cumsum(rng.normal(0.0002, 0.002, size=n)))
+            supply = pd.DataFrame(
+                {"event_time": ohlcv.index, "supply_usd": level}
+            )
+            meta = {"series_id": "mock_stable_supply"}
+            funding = None
+            prem = None
+        else:
+            supply, meta = load_latest_supply(
+                project_root() / "data" / "processed" / "stablecoin"
+            )
+            funding = None
+            prem = None
+            fund_dir = project_root() / "data" / "processed" / "funding"
+            if fund_dir.exists():
+                import pandas as pd
+
+                parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
+                if parts:
+                    funding = pd.read_parquet(parts[-1])
+            try:
+                from crl.shared.data.premium import load_latest_premium
+
+                prem, _ = load_latest_premium(
+                    project_root() / "data" / "processed" / "premium"
+                )
+            except Exception:
+                prem = None
+        report = characterize_stablecoin_supply(
+            ohlcv,
+            supply,
+            funding_events=funding,
+            premium_events=prem,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        report["supply_series_id"] = meta.get("series_id")
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("ok") else 1
 
     if args.action in ("characterize-premium", "characterize-premium-residual"):
         from crl.research.market_properties.kline_aggression import build_aggression_frame

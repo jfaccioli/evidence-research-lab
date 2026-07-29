@@ -12,11 +12,17 @@ from crl.research.market_properties.perp_premium import (
     characterize_perp_premium,
     characterize_premium_residual,
 )
+from crl.research.market_properties.stablecoin_supply import (
+    PROPERTY_ID as STABLE_SUPPLY_ID,
+    characterize_stablecoin_supply,
+)
 
 __all__ = [
     "KLINE_AGGRESSION_ID",
     "PERP_PREMIUM_ID",
+    "STABLE_SUPPLY_ID",
     "characterize_kline_aggression",
     "characterize_perp_premium",
     "characterize_premium_residual",
+    "characterize_stablecoin_supply",
 ]

@@ -9,21 +9,27 @@
 | Stage | Value |
 |-------|--------|
 | Confirmatory candidates | **0** |
-| Bottleneck | Market **property** coverage / quality |
-| Characterized free properties | `kline_aggression`, `perp_premium`, `premium_residual` |
-| LEDA promotion | **Refused** for all three |
-| Residual finding | Linear next-RV skill **collinear with funding** (residual IC ~0) |
+| Mission | Scientific discovery of market properties |
+| Characterized free properties | aggression, premium, premium residual, **stablecoin supply** |
+| LEDA promotions | **0** (all refused pending stronger pre-reg claims) |
 | Shadow | **Not justified** |
+
+## Characterized properties (summary)
+
+| Property | Role | Key independence | LEDA |
+|----------|------|------------------|------|
+| kline_aggression | participation | intensity ↔ next RV | no |
+| perp_premium | leverage stress | ~0.68 vs funding | no |
+| premium_residual | collinearity check | linear next-RV **null** after funding | no |
+| stablecoin_agg_supply | liquidity stock | dlog30 ↔ next RV ~0.29; ~0 vs ret | no |
 
 ## Queue
 
 | Rank | ID | Object | Status |
 |------|-----|--------|--------|
-| — | `kline_aggression` | Spot kline microstructure | **Characterized** |
-| — | `perp_premium` | Futures mark–index premium | **Characterized** |
-| — | `premium_residual` | Expanding residual vs funding | **Characterized** (linear next-RV null) |
-| **1** | Next free property | Prefer **new mechanism** (e.g. aggregate stable supply) over more funding/premium transforms | **Next** |
-| **2** | Joint risk state design | Only as descriptive multi-property map after pre-reg — not promotion | Optional |
+| — | Properties above | Characterized | **Done** |
+| **1** | Next new mechanism | Prefer properties **orthogonal** to OHLCV+funding+premium+stable stock | **Next** |
+| **2** | Optional pre-reg | Joint risk-state description (not trade) if science warrants | Optional |
 | **3** | Conf / shadow | Blocked | Blocked |
 
 ## Commands
@@ -31,12 +37,13 @@
 ```bash
 python -m crl observe inventory
 python -m crl observe characterize-aggression
-python -m crl observe fetch-premium
-python -m crl observe characterize-premium
+python -m crl observe fetch-premium && python -m crl observe characterize-premium
+python -m crl observe characterize-premium-residual
+python -m crl observe fetch-stable-supply && python -m crl observe characterize-stable-supply
 ```
 
 ## Rules
 
-- Properties first; characterization before LEDA  
+- Market properties first; characterization before LEDA  
 - Understanding without edge is success  
-- Frozen gates; no paid data without EIR  
+- No architecture churn; frozen gates; no paid data without EIR  

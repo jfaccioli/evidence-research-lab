@@ -30,7 +30,8 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **`kline_aggression`:** intensity ↔ next RV ~-0.26; tbr ↔ ret ~0.36; LEDA refused.
 - **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68; vs fwd_ret ~0; vs next RV ~0.16. **LEDA refused**.
 - **`premium_residual`:** expanding residual vs funding → **linear next-RV IC ~0**; premium’s linear uncertainty association is largely funding-collinear. Understanding win; not an edge.
-- Next free property should be a **new mechanism** (not more premium/funding transforms).
+- **`stablecoin_agg_supply`:** DefiLlama aggregate circulating USD; dlog30_lag ↔ next RV ~**0.29**, vs fwd_ret ~0; partially independent of funding/premium. Liquidity stock property; **LEDA refused**.
+- Next: new mechanism orthogonal to OHLCV + funding + premium + stable stock.
 - Shadow still unjustified.
 
 ## Mechanisms

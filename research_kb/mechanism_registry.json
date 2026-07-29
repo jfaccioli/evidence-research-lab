@@ -35,8 +35,9 @@
       "in_lab": ["funding", "premium", "oi", "rv"],
       "missing": ["high_quality_liquidation_path"],
       "ev": 4.5,
-      "status": "partially_mapped",
-      "rank": 2
+      "status": "study_v1_done",
+      "rank": 2,
+      "result_v1": "build_higher_next_rv_than_unwind; descriptive_support; not_leda_candidate"
     },
     {
       "id": "liquidity_creation_destruction",
@@ -59,8 +60,9 @@
       "in_lab": ["rv", "intensity", "tbr", "basis"],
       "missing": [],
       "ev": 3.5,
-      "status": "partially_mapped",
-      "rank": 4
+      "status": "study_v1_done",
+      "rank": 4,
+      "result_v1": "intensity_higher_not_lower_in_high_rv; leverage_proxies_elevated; not_leda_candidate"
     },
     {
       "id": "info_propagation",

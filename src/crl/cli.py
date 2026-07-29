@@ -472,6 +472,8 @@ def main(argv: list[str] | None = None) -> int:
             "synthesis-review",
             "mechanisms",
             "study-vol-clustering",
+            "study-leverage-cycle",
+            "study-uncertainty-behaviour",
         ],
         help="Properties + mechanism studies (mechanism-first mission)",
     )
@@ -486,6 +488,19 @@ def main(argv: list[str] | None = None) -> int:
         help="Symbol for premium fetch (default BTCUSDT)",
     )
     p_obs.set_defaults(func=cmd_observe)
+
+    p_opsr = sub.add_parser(
+        "ops-readiness",
+        help="Operational readiness track (paper/safety/audit; NOT scientific promotion)",
+    )
+    p_opsr.add_argument(
+        "action",
+        choices=["check", "checklist"],
+        nargs="?",
+        default="check",
+        help="Run ops readiness checklist (zero capital, non-alpha policies)",
+    )
+    p_opsr.set_defaults(func=cmd_ops_readiness)
 
     p_autopsy = sub.add_parser(
         "autopsy",
@@ -1232,6 +1247,66 @@ def cmd_observe(args: argparse.Namespace) -> int:
         print(json.dumps(report, indent=2, default=str))
         return 0 if report.get("ok") else 1
 
+    if args.action == "study-leverage-cycle":
+        import pandas as pd
+
+        from crl.research.mechanisms.leverage_cycle import study_leverage_cycle
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, _, _, _ = _load_mechanism_series()
+        oi_events = None
+        oi_dir = project_root() / "data" / "processed" / "oi"
+        if oi_dir.exists():
+            parts = sorted(oi_dir.glob("bybit_oi_*.parquet"))
+            if parts:
+                oi_events = pd.read_parquet(parts[-1])
+        if oi_events is None and getattr(args, "mock", False):
+            import numpy as np
+
+            rng = np.random.default_rng(0)
+            oi_events = pd.DataFrame(
+                {
+                    "oi_time": ohlcv.index,
+                    "open_interest": 1000 * np.exp(np.cumsum(rng.normal(0, 0.02, len(ohlcv)))),
+                }
+            )
+        report = study_leverage_cycle(
+            ohlcv,
+            oi_events=oi_events,
+            premium_events=premium,
+            funding_events=funding,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        print(json.dumps(report, indent=2, default=str))
+        return 0 if report.get("ok") else 1
+
+    if args.action == "study-uncertainty-behaviour":
+        from crl.research.mechanisms.uncertainty_behaviour import (
+            study_uncertainty_behaviour,
+        )
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, _, _, basis = _load_mechanism_series()
+        report = study_uncertainty_behaviour(
+            ohlcv,
+            basis_events=basis,
+            premium_events=premium,
+            funding_events=funding,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        print(json.dumps(report, indent=2, default=str))
+        return 0 if report.get("ok") else 1
+
     if args.action == "synthesis-review":
         from crl.research.market_properties.synthesis import run_property_synthesis_review
 
@@ -1458,6 +1533,24 @@ def cmd_observe(args: argparse.Namespace) -> int:
     report["source"] = source
     print(json.dumps(report, indent=2))
     return 0 if report.get("ok") else 1
+
+
+def cmd_ops_readiness(args: argparse.Namespace) -> int:
+    """Operational readiness track — zero capital; not scientific promotion."""
+    from crl.production.ops_readiness import run_ops_readiness_checklist
+    from crl.shared.config import project_root
+
+    root = project_root()
+    jdir = root / "data" / "ops" / "readiness_journals"
+    report = run_ops_readiness_checklist(root=root, journal_dir=jdir)
+    out = report.to_dict()
+    # Persist latest summary
+    out_path = root / "data" / "ops" / "OPS_READINESS_LATEST.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=2))
+    out["summary_path"] = str(out_path)
+    print(json.dumps(out, indent=2))
+    return 0 if report.all_ok() else 1
 
 
 def cmd_alpha_discovery(args: argparse.Namespace) -> int:

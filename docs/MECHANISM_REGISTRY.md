@@ -36,7 +36,7 @@
 | **In lab** | Funding, premium, OI, RV; free liquidations series previously conf-null as *trade filters* |
 | **Missing** | True PIT liquidation path quality uncertain |
 | **EV** | High — related to vol_clustering; study after or jointly with (1) |
-| **Status** | `partially_mapped` |
+| **Status** | `study_v1_done` — build > unwind next-RV (**descriptive**); not LEDA candidate |
 
 ### 3. `liquidity_creation_destruction` — How is liquidity created/transferred/destroyed?
 
@@ -58,7 +58,7 @@
 | **In lab** | All |
 | **Missing** | None for descriptive conditioning |
 | **EV** | Medium — can run with existing data after vol_clustering |
-| **Status** | `partially_mapped` |
+| **Status** | `study_v1_done` — intensity higher in high RV; leverage proxies elevated |
 
 ### 5. `info_propagation` — How does information propagate across markets?
 

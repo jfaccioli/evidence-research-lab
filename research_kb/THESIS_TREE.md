@@ -36,7 +36,10 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **Property Synthesis Review (2026-07-29):** pre-reg equal-rank stress composite **fails** vs rv_lag baseline (composite IC ~0.26 vs ~0.96); family `leda_synth_stress_equal_rank_v1` **retired**. No composite LEDA programme.
 - **Mechanism mode:** primary directive is mechanism discovery (`MECHANISM_DISCOVERY_DIRECTIVE.md`).
 - **`vol_clustering` v1:** high-RV persistence lift ~3.4×; leverage/liquidity cofactors **do not** increase persistence under pre-reg design. Working description = pure RV inertia for this claim.
-- Shadow still unjustified.
+- **`leverage_cycle` v1:** OI-build (+ funding/premium stress) has higher mean next-RV than OI-unwind (margin ~0.006). Descriptive mechanism support; **not** LEDA candidate without new pre-reg skill claim vs rv_lag.
+- **`uncertainty_behaviour` v1:** high RV co-occurs with **higher** intensity and elevated |funding|/|premium|; intensity-drop hypothesis rejected; basis not wider.
+- **Ops readiness track:** checklist 11/11 pass (flat + flip paper, kill switch, limits, audit); **does not** authorize trading or soften gates.
+- Shadow alpha still unjustified; ops paper/shadow machinery hygiene only.
 
 ## Mechanisms
 

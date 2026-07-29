@@ -398,6 +398,50 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_eacq.set_defaults(func=cmd_evidence_acq)
 
+    p_leda = sub.add_parser(
+        "leda",
+        help="LEDA protocol, evidence channels, and thin stack decide",
+    )
+    p_leda.add_argument(
+        "action",
+        choices=[
+            "protocol",
+            "eval-vol-risk",
+            "eval-trend",
+            "eval-xasset",
+            "decide",
+            "eval-stack",
+            "eval-vol-veto",
+        ],
+        help=(
+            "protocol | channel skill evals | decide | "
+            "eval-stack (LEDA-4) | eval-vol-veto (LEDA-5b)"
+        ),
+    )
+    p_leda.add_argument(
+        "--mock",
+        action="store_true",
+        help="For eval-*: use mock OHLCV instead of pinned BTC",
+    )
+    p_leda.add_argument(
+        "--e-forecast",
+        type=float,
+        default=None,
+        help="For decide: forecast score in [0,1]",
+    )
+    p_leda.add_argument(
+        "--e-risk",
+        type=float,
+        default=None,
+        help="For decide: risk score in [0,1]",
+    )
+    p_leda.add_argument(
+        "--mode",
+        default="paper",
+        help="For decide: execution mode label (default paper)",
+    )
+    p_leda.set_defaults(func=cmd_leda)
+
     p_alpha = sub.add_parser(
         "alpha-discovery",
         help="Rank information advantages (not vendors); Alpha Discovery Directive",
@@ -724,6 +768,165 @@ def cmd_evidence_acq(args: argparse.Namespace) -> int:
         )
     )
     return 0
+
+
+def _leda_load_ohlcv(args: argparse.Namespace, *, symbol: str = "BTCUSDT"):
+    """Shared 1d (or mock) loader for LEDA channel evals."""
+    if getattr(args, "mock", False):
+        from crl.shared.data.sources.mock import MockOHLCVSource
+
+        seed = 11 if symbol.startswith("BTC") else 13
+        ohlcv = MockOHLCVSource(n=800, seed=seed).fetch_ohlcv(symbol, "1d")
+        if ohlcv.index.tz is None:
+            ohlcv.index = ohlcv.index.tz_localize("UTC")
+        return ohlcv, "mock", f"mock_{symbol}"
+
+    from crl.shared.config import load_config, project_root
+    from crl.shared.data.store import latest_manifest, load_dataset
+
+    cfg = load_config(args.config)
+    root = project_root()
+    m = latest_manifest(
+        root / cfg["data"]["manifest_dir"],
+        symbol=symbol,
+        interval="1d",
+        source="binance_public",
+    )
+    if m is None:
+        return None, None, None
+    ohlcv, _ = load_dataset(
+        m.dataset_id,
+        manifest_dir=root / cfg["data"]["manifest_dir"],
+        verify_hash=True,
+    )
+    return ohlcv, "binance_public", m.dataset_id
+
+
+def cmd_leda(args: argparse.Namespace) -> int:
+    """LEDA-0 protocol, LEDA-1/2 channel evals, LEDA-3 decide."""
+    if args.action == "protocol":
+        from crl.leda.protocol import protocol_summary
+
+        print(json.dumps(protocol_summary(), indent=2))
+        return 0
+
+    if args.action == "decide":
+        from crl.leda.stack import decide_bar
+
+        out = decide_bar(
+            asof_time="cli",
+            e_forecast=getattr(args, "e_forecast", None),
+            e_risk=getattr(args, "e_risk", None),
+            mode=getattr(args, "mode", "paper") or "paper",
+        )
+        print(json.dumps(out, indent=2))
+        return 0
+
+    ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+    if ohlcv is None:
+        print("No BTC 1d dataset; use --mock or crl fetch --interval 1d", file=sys.stderr)
+        return 1
+
+    if args.action in ("eval-stack", "eval-vol-veto"):
+        from crl.leda.economic import evaluate_stack_economic, evaluate_vol_veto_policy
+
+        if args.action == "eval-stack":
+            report = evaluate_stack_economic(ohlcv)
+        else:
+            report = evaluate_vol_veto_policy(ohlcv)
+        report["dataset_id"] = dataset_id
+        report["source"] = source
+        print(json.dumps(report, indent=2))
+        # Exit 0 always for diagnostic run; promotion is never implied
+        return 0
+
+    if args.action == "eval-xasset":
+        from crl.leda.channels.xasset import (
+            CHANNEL_ID,
+            CHANNEL_VERSION,
+            build_xasset_evidence,
+            evaluate_xasset_forecast_skill,
+        )
+
+        eth, eth_source, eth_id = _leda_load_ohlcv(args, symbol="ETHUSDT")
+        if eth is None:
+            print("No ETH 1d dataset; use --mock or crl fetch ETH", file=sys.stderr)
+            return 1
+        # Align calendars (inner join on index)
+        common = ohlcv.index.intersection(eth.index)
+        if len(common) < 200:
+            print(f"Insufficient BTC∩ETH overlap: {len(common)}", file=sys.stderr)
+            return 1
+        btc_a = ohlcv.loc[common]
+        eth_a = eth.loc[common]
+        ev = build_xasset_evidence(btc_a, eth_a)
+        skill = evaluate_xasset_forecast_skill(ev)
+        print(
+            json.dumps(
+                {
+                    "leda": "5a",
+                    "channel_id": CHANNEL_ID,
+                    "version": CHANNEL_VERSION,
+                    "dataset_id_btc": dataset_id,
+                    "dataset_id_eth": eth_id,
+                    "source": source,
+                    "eth_source": eth_source,
+                    "n_bars": len(common),
+                    "n_scored": int(ev["score"].notna().sum()),
+                    "skill": skill,
+                    "promotion": "not_applicable — forecast evidence only",
+                },
+                indent=2,
+            )
+        )
+        return 0 if skill.get("ok") else 1
+
+    if args.action == "eval-vol-risk":
+        from crl.leda.channels.vol_risk import (
+            CHANNEL_ID,
+            CHANNEL_VERSION,
+            build_vol_risk_evidence,
+            evaluate_vol_forecast_skill,
+        )
+
+        ev = build_vol_risk_evidence(ohlcv)
+        skill = evaluate_vol_forecast_skill(ev)
+        payload = {
+            "leda": "1",
+            "channel_id": CHANNEL_ID,
+            "version": CHANNEL_VERSION,
+            "dataset_id": dataset_id,
+            "source": source,
+            "n_bars": len(ohlcv),
+            "n_scored": int(ev["score"].notna().sum()),
+            "skill": skill,
+            "promotion": "not_applicable — risk evidence only",
+        }
+    else:
+        # eval-trend
+        from crl.leda.channels.trend import (
+            CHANNEL_ID,
+            CHANNEL_VERSION,
+            build_trend_evidence,
+            evaluate_trend_forecast_skill,
+        )
+
+        ev = build_trend_evidence(ohlcv)
+        skill = evaluate_trend_forecast_skill(ev)
+        payload = {
+            "leda": "2",
+            "channel_id": CHANNEL_ID,
+            "version": CHANNEL_VERSION,
+            "dataset_id": dataset_id,
+            "source": source,
+            "n_bars": len(ohlcv),
+            "n_scored": int(ev["score"].notna().sum()),
+            "skill": skill,
+            "promotion": "not_applicable — forecast evidence only",
+        }
+
+    print(json.dumps(payload, indent=2))
+    return 0 if skill.get("ok") else 1
 
 
 def cmd_alpha_discovery(args: argparse.Namespace) -> int:

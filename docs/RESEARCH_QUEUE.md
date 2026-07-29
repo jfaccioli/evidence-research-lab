@@ -1,32 +1,47 @@
 # Living research queue (Research Director)
 
 **Updated:** 2026-07-29  
-**Architecture lock (proposal):** **LEDA** — `docs/ARCHITECTURE_LAYERED_DECISION_STACK.md`  
+**Architecture:** **LEDA** — `docs/ARCHITECTURE_LAYERED_DECISION_STACK.md`  
 **Roadmap:** `docs/RESEARCH_ROADMAP_LEDA_V1.md`  
-**Prior:** ECA study retained; atomistic V1/V2 signal→trade retired as default
+**Results:** `docs/LEDA_RESULTS_LOG.md`  
+**Protocol:** `docs/LEDA0_PROTOCOL.md`
 
-## Critical path
+## Status
 
-| Stage | Status |
+| Stage | Value |
 |-------|--------|
-| Lab ops | Ready |
-| Confirmatory survivors | **0** |
-| Decision architecture | **LEDA proposed** (Forecast / Risk / Portfolio / Execution) |
-| Implementation | **Blocked until LEDA review accepted** (this cycle: review only) |
+| Confirmatory trading candidates | **0** |
+| LEDA-0…5b | **Implemented + evaluated** |
+| LEDA-4 stack economics | **Fail** exploratory hard gates |
+| LEDA-5a xasset IC | **~null** |
+| LEDA-5b vol-veto-on-B&H | **Fail** holdout (train tease only) |
+| Shadow trading milestone | **Not justified** |
 
 ## Queue
 
 | Rank | ID | Object | Status |
 |------|-----|--------|--------|
-| **0** | LEDA review | Four-layer vs single decision / ECA | **Done (docs)** |
-| **1** | **LEDA-0** | Layer contracts + evidence schema | **Next code** (after proceed) |
-| **2** | **LEDA-1** | Risk layer — vol/risk evidence channel | After LEDA-0 |
-| **3** | **LEDA-2** | Forecast layer — second channel | After LEDA-1 |
-| **4** | **LEDA-3** | Thin portfolio map + execution wire | After ≥1 F + R |
-| **5** | **LEDA-4** | Full-stack frozen-gate test | After LEDA-3 |
+| — | LEDA-0…4 | Scaffold + stack economics | **Done** |
+| — | LEDA-5a | ETH→BTC forecast skill | **Done** (null) |
+| — | LEDA-5b | B&H + vol veto economics | **Done** (holdout fail) |
+| **1** | **LEDA-6** | Pre-registered risk-threshold study **or** free macro/x-series channel (choose by IG, family ledger) | **Next** |
+| **2** | Conf | Full pipeline confirmatory | Blocked |
 
-**Do not:** implement standalone V2-A trade signal; pay for data before free LEDA channels; LLM voting committees.
+## Commands
 
-## Success
+```bash
+python -m crl leda protocol
+python -m crl leda eval-vol-risk
+python -m crl leda eval-trend
+python -m crl leda eval-xasset
+python -m crl leda eval-stack
+python -m crl leda eval-vol-veto
+python -m crl leda decide --e-forecast 0.7 --e-risk 0.2
+```
 
-Trustworthy multi-year stack = **separated scientific claims** + **calibrated evidence** + **frozen gates** — not more indicators.
+## Rules
+
+- No free-text LLM promotion path  
+- No paid data without EIR  
+- No gate softening / no threshold fishing on test  
+- Nulls are success when uncertainty falls  

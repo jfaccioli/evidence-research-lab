@@ -83,6 +83,58 @@ def _bar_gross_returns(df: pd.DataFrame) -> tuple[pd.Series, str]:
     return c.pct_change().fillna(0.0), "close_to_close_fallback"
 
 
+def run_backtest_desired(
+    df: pd.DataFrame,
+    desired: pd.Series,
+    costs: CostConfig,
+    *,
+    stress: bool = False,
+    initial_equity: float = 1.0,
+    meta: dict[str, Any] | None = None,
+) -> BacktestResult:
+    """Long-only backtest from an explicit desired-position series (lag-1 fill)."""
+    if "close" not in df.columns:
+        raise ValueError("df must include close")
+    if initial_equity <= 0:
+        raise ValueError("initial_equity must be positive")
+    if len(desired) != len(df) or not desired.index.equals(df.index):
+        desired = desired.reindex(df.index).fillna(0.0)
+    desired = desired.astype(float).clip(0.0, 1.0)
+    position = desired.shift(1).fillna(0.0)
+
+    gross, fill_model = _bar_gross_returns(df)
+    cost_frac = one_way_cost_fraction(costs, stress=stress)
+    delta = position.diff().fillna(position.iloc[0])
+    trade_cost = delta.abs() * cost_frac
+    net = position * gross - trade_cost
+
+    wealth = float(initial_equity)
+    eq_vals = []
+    for r in net.astype(float).values:
+        wealth *= 1.0 + float(r)
+        eq_vals.append(wealth)
+    equity = pd.Series(eq_vals, index=df.index, name="equity")
+
+    trades = _trades_from_bar_returns(df, position, net, cost_frac=cost_frac)
+    out_meta: dict[str, Any] = {
+        "stress": stress,
+        "fill_model": fill_model,
+        "pnl_identity": "closed_trades_include_entry_and_exit_costs",
+        "cost_frac_one_way": cost_frac,
+    }
+    if meta:
+        out_meta.update(meta)
+    return BacktestResult(
+        equity=equity,
+        position=position.rename("position"),
+        trades=trades,
+        bar_returns=net.rename("bar_return"),
+        signals=desired.rename("desired"),
+        initial_equity=float(initial_equity),
+        meta=out_meta,
+    )
+
+
 def run_backtest(
     df: pd.DataFrame,
     spec: HypothesisSpec,
@@ -99,39 +151,13 @@ def run_backtest(
     desired = desired_position_from_rules(
         df, spec.entry.expression, spec.exit.expression
     )
-    position = desired.shift(1).fillna(0.0)
-
-    gross, fill_model = _bar_gross_returns(df)
-    cost_frac = one_way_cost_fraction(costs, stress=stress)
-    delta = position.diff().fillna(position.iloc[0])
-    trade_cost = delta.abs() * cost_frac
-    net = position * gross - trade_cost
-
-    # Equity after each bar, starting from explicit initial capital
-    wealth = float(initial_equity)
-    eq_vals = []
-    for r in net.astype(float).values:
-        wealth *= 1.0 + float(r)
-        eq_vals.append(wealth)
-    equity = pd.Series(eq_vals, index=df.index, name="equity")
-
-    trades = _trades_from_bar_returns(
-        df, position, net, cost_frac=cost_frac
-    )
-    return BacktestResult(
-        equity=equity,
-        position=position.rename("position"),
-        trades=trades,
-        bar_returns=net.rename("bar_return"),
-        signals=desired,
-        initial_equity=float(initial_equity),
-        meta={
-            "stress": stress,
-            "spec_id": spec.id,
-            "fill_model": fill_model,
-            "pnl_identity": "closed_trades_include_entry_and_exit_costs",
-            "cost_frac_one_way": cost_frac,
-        },
+    return run_backtest_desired(
+        df,
+        desired,
+        costs,
+        stress=stress,
+        initial_equity=initial_equity,
+        meta={"spec_id": spec.id},
     )
 
 

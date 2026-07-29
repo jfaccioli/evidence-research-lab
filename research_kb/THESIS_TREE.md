@@ -1,6 +1,6 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-28T05:45:41.101547+00:00`  
+**Updated:** `2026-07-28T07:42:17.962490+00:00`  
 **Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=124. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
@@ -13,6 +13,15 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Daily BTC long-only space may be saturated with public technical rules.
 - True funding/OI/on-chain PIT series not yet in evidence base.
 - Whether *any* low-frequency BTC spot edge survives costs + multiple testing is open.
+
+## LEDA notes (2026-07-29)
+
+- **Architecture** LEDA (F/R/P/X + numeric channels) is the lab default; scaffold LEDA-0…4 implemented.
+- **LEDA-1** lagged RV has strong skill (~0.96 Pearson) as **risk** evidence — not trade alpha.
+- **LEDA-4** thin map (trend score long + vol veto) **fails** exploratory hard gates on test (Sharpe~0, underperforms B&H). Knowledge: architecture works; this map is not an edge.
+- **LEDA-5a** ETH→BTC lagged mom rank IC ~null on pinned daily data.
+- **LEDA-5b** B&H + fixed vol veto: train excess vs B&H positive; **test fails** (underperforms B&H). Vol skill ≠ free risk policy.
+- Shadow/live still **not** justified. See `docs/LEDA_RESULTS_LOG.md`.
 
 ## Mechanisms
 
@@ -389,8 +398,3 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 ---
 
 *Chief Research Scientist mode: maximise knowledge per budget unit.*
-
-## Meta note (2026-07-28 Research Director)
-
-Free daily alt-series wave (netflow, stablecoin flow, premium, liquidations, MVRV, short Polymarket odds) produced **no confirmatory survivors** under frozen long-only daily gates. Uncertainty reduced on these operationalisations. Autotrading remains unjustified.
-

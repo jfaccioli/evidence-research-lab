@@ -1,39 +1,32 @@
 # Living research queue (Research Director)
 
-**Updated:** 2026-07-28  
-**Directive:** `docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md`  
-**Architecture study:** `docs/ARCHITECTURE_EVIDENCE_AGGREGATION_STUDY.md`  
-**Active roadmap:** **ECA-V2** — `docs/RESEARCH_ROADMAP_ECA_V2.md`  
-**Class ideas:** `docs/RESEARCH_ROADMAP_V2.md` (as **channels**, not lonely trades)
+**Updated:** 2026-07-29  
+**Architecture lock (proposal):** **LEDA** — `docs/ARCHITECTURE_LAYERED_DECISION_STACK.md`  
+**Roadmap:** `docs/RESEARCH_ROADMAP_LEDA_V1.md`  
+**Prior:** ECA study retained; atomistic V1/V2 signal→trade retired as default
 
-## Critical path status
+## Critical path
 
 | Stage | Status |
 |-------|--------|
 | Lab ops | Ready |
 | Confirmatory survivors | **0** |
-| APPROVED | Empty |
-| V1 atomistic signal→trade | **Retired as default** |
-| Decision architecture | **ECA proposed** (evidence aggregation) |
+| Decision architecture | **LEDA proposed** (Forecast / Risk / Portfolio / Execution) |
+| Implementation | **Blocked until LEDA review accepted** (this cycle: review only) |
 
-## V1 wave (historical)
-
-Technicals, funding/OI, free on-chain, PM, FRED macro level filters → no confirmatory survivors.
-
-## ECA ranked queue
+## Queue
 
 | Rank | ID | Object | Status |
 |------|-----|--------|--------|
-| **0** | Architecture study | Indicator vs evidence aggregation | **Done** |
-| **1** | **ECA-0** | Evidence schema + channel/aggregator protocol | **Next implement** |
-| **2** | **ECA-1** | Vol/risk **evidence channel** (modified V2-A) | After ECA-0 |
-| **3** | **ECA-2** | Second channel (trend or cross-asset) | Queued |
-| **4** | **ECA-3** | Aggregator + decision policy under frozen gates | After ≥2 channels |
-| — | Paid data | EIR only | Not now |
+| **0** | LEDA review | Four-layer vs single decision / ECA | **Done (docs)** |
+| **1** | **LEDA-0** | Layer contracts + evidence schema | **Next code** (after proceed) |
+| **2** | **LEDA-1** | Risk layer — vol/risk evidence channel | After LEDA-0 |
+| **3** | **LEDA-2** | Forecast layer — second channel | After LEDA-1 |
+| **4** | **LEDA-3** | Thin portfolio map + execution wire | After ≥1 F + R |
+| **5** | **LEDA-4** | Full-stack frozen-gate test | After LEDA-3 |
 
-**Do not implement** standalone V2-A signal→trade.  
-**Reject:** free-text LLM voting committees; indicator spam; gate softening.
+**Do not:** implement standalone V2-A trade signal; pay for data before free LEDA channels; LLM voting committees.
 
-## Success stance
+## Success
 
-Build a **committee of calibrated numeric evidence**, then one testable decision policy — not a zoo of lonely indicators.
+Trustworthy multi-year stack = **separated scientific claims** + **calibrated evidence** + **frozen gates** — not more indicators.

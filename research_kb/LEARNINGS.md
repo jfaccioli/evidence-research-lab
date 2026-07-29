@@ -2904,3 +2904,12 @@ Gates unchanged. No APPROVED. No tiny-live path opened.
 - **Reject** free-text multi-agent LLM committees as promotion path.
 - **Adopt target architecture:** Evidence Channel Architecture (ECA) — numeric PIT evidence streams → frozen aggregator → decision policy under existing gates.
 - V2-A not cancelled: **re-scoped** as ECA-1 vol/risk channel; **not implemented** until ECA-0 protocol; do not ship V2-A as another standalone signal programme.
+
+## 2026-07-29 — Layered decision stack review (pre-implementation)
+
+- Assessed Forecast / Risk / Portfolio / Execution separation vs single decision and vs ECA.
+- Conclusion: **explicit four layers improve validity, modularity, calibration, explainability, and overfit control** if kept thin.
+- ECA was right on calibrated channels but under-specified layer split; redesign as **LEDA**.
+- Portfolio stays trivial (0/1 + envelope) until multi-strategy; Execution reuses paper/shadow/live.
+- Vol work belongs primarily in **Risk layer**, not as atomistic long signal.
+- **No implementation** this turn; LEDA-0 only after proceed.

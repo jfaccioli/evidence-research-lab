@@ -30,7 +30,8 @@ Not free-text AI votes.
 | **LEDA-4** | Full-stack exploratory economics | **Done** — fail exploratory hard gates |
 | **LEDA-5a** | ETH→BTC forecast | **Done** — IC ~null |
 | **LEDA-5b** | B&H + vol veto | **Done** — holdout fail (train tease) |
-| **LEDA-6** | Next IG channel or pre-reg risk study | **Next** |
+| **LEDA-6** | Pre-reg vol-veto threshold grid | **Done** — 0 hard-gate passes |
+| **LEDA-7** | Ops wire or new free evidence channel | **Next** |
 
 ## Non-goals
 

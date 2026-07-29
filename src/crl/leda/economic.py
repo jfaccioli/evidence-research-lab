@@ -252,3 +252,78 @@ def evaluate_vol_veto_policy(
             "not directional alpha; not APPROVED"
         ),
     }
+
+
+# Pre-registered thresholds for LEDA-6 (locked; report all; do not pick on test)
+LEDA6_VOL_VETO_THRESHOLDS: tuple[float, ...] = (0.70, 0.80, 0.90, 0.95)
+
+
+def evaluate_vol_veto_threshold_grid(
+    ohlcv: pd.DataFrame,
+    *,
+    thresholds: tuple[float, ...] | list[float] = LEDA6_VOL_VETO_THRESHOLDS,
+    costs: CostConfig | None = None,
+    splits: SplitConfig | None = None,
+    gates: GateConfig | None = None,
+    timeframe: str = "1d",
+    config_path: str | None = None,
+) -> dict[str, Any]:
+    """LEDA-6: pre-registered multi-threshold vol-veto study.
+
+    Evaluates **every** threshold on train/val/test. Does not select a winner
+    for promotion. Multiplicity: n_thresholds trials in the family.
+    """
+    cfg = load_config(config_path)
+    costs = costs or cost_from_config(cfg)
+    splits = splits or splits_from_config(cfg)
+    gates = gates or gates_from_config(cfg)
+
+    thr_list = [float(t) for t in thresholds]
+    for t in thr_list:
+        if not (0.0 < t <= 1.0):
+            raise ValueError(f"invalid threshold {t}")
+
+    results: list[dict[str, Any]] = []
+    for t in thr_list:
+        one = evaluate_vol_veto_policy(
+            ohlcv,
+            costs=costs,
+            splits=splits,
+            gates=gates,
+            risk_veto_threshold=t,
+            timeframe=timeframe,
+            config_path=config_path,
+        )
+        results.append(
+            {
+                "threshold": t,
+                "full_sample_long_frac": one["full_sample_long_frac"],
+                "slices": one["slices"],
+                "gate_checklist_test": one["gate_checklist_test"],
+                "exploratory_hard_gates_pass": one["exploratory_hard_gates_pass"],
+            }
+        )
+
+    # Honest summary: count how many pass diagnostic hard gates (not promotion)
+    n_pass = sum(1 for r in results if r["exploratory_hard_gates_pass"])
+    # Prefer describing test excess vs B&H without crowning a champion
+    test_excess = {
+        str(r["threshold"]): r["slices"]["test"]["excess_return_vs_bh"] for r in results
+    }
+
+    return {
+        "leda": "6",
+        "mode": "exploratory",
+        "promotion": "not_approved — multi-threshold diagnostic; no winner selection",
+        "family": "leda6_vol_veto_thresholds",
+        "n_thresholds": len(thr_list),
+        "thresholds_preregistered": thr_list,
+        "channel_ids": ["leda1_vol_risk"],
+        "results_by_threshold": results,
+        "n_pass_exploratory_hard_gates": n_pass,
+        "test_excess_return_vs_bh_by_threshold": test_excess,
+        "note": (
+            f"Family size = {len(thr_list)}. Report all cells. "
+            "Do not pick the best test threshold for promotion or shadow."
+        ),
+    }

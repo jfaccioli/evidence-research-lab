@@ -2,46 +2,35 @@
 
 **Updated:** 2026-07-29  
 **Architecture:** **LEDA** — `docs/ARCHITECTURE_LAYERED_DECISION_STACK.md`  
-**Roadmap:** `docs/RESEARCH_ROADMAP_LEDA_V1.md`  
-**Results:** `docs/LEDA_RESULTS_LOG.md`  
-**Protocol:** `docs/LEDA0_PROTOCOL.md`
+**Results:** `docs/LEDA_RESULTS_LOG.md`
 
 ## Status
 
 | Stage | Value |
 |-------|--------|
-| Confirmatory trading candidates | **0** |
-| LEDA-0…5b | **Implemented + evaluated** |
-| LEDA-4 stack economics | **Fail** exploratory hard gates |
-| LEDA-5a xasset IC | **~null** |
-| LEDA-5b vol-veto-on-B&H | **Fail** holdout (train tease only) |
-| Shadow trading milestone | **Not justified** |
+| Confirmatory candidates | **0** |
+| LEDA-0…6 | **Implemented + evaluated** |
+| Vol-veto grid (4 thr) | **0 hard-gate passes** |
+| Shadow | **Not justified** |
 
 ## Queue
 
 | Rank | ID | Object | Status |
 |------|-----|--------|--------|
-| — | LEDA-0…4 | Scaffold + stack economics | **Done** |
-| — | LEDA-5a | ETH→BTC forecast skill | **Done** (null) |
-| — | LEDA-5b | B&H + vol veto economics | **Done** (holdout fail) |
-| **1** | **LEDA-6** | Pre-registered risk-threshold study **or** free macro/x-series channel (choose by IG, family ledger) | **Next** |
-| **2** | Conf | Full pipeline confirmatory | Blocked |
+| — | LEDA-0…6 | Contracts → skill → stack → xasset → vol grid | **Done** |
+| **1** | **LEDA-7** | Paper-path audit wire (`decide_bar` → paper session log) **or** free non-OHLCV channel if IG > ops | **Next** |
+| **2** | Conf | Frozen-gate confirmatory | Blocked |
 
 ## Commands
 
 ```bash
 python -m crl leda protocol
-python -m crl leda eval-vol-risk
-python -m crl leda eval-trend
-python -m crl leda eval-xasset
-python -m crl leda eval-stack
-python -m crl leda eval-vol-veto
+python -m crl leda eval-vol-risk | eval-trend | eval-xasset
+python -m crl leda eval-stack | eval-vol-veto | eval-vol-veto-grid
 python -m crl leda decide --e-forecast 0.7 --e-risk 0.2
 ```
 
 ## Rules
 
-- No free-text LLM promotion path  
-- No paid data without EIR  
-- No gate softening / no threshold fishing on test  
-- Nulls are success when uncertainty falls  
+- No LLM promotion path; no paid data without EIR; no gate softening  
+- No threshold fishing after LEDA-6  

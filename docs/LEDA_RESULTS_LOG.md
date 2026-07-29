@@ -57,8 +57,22 @@ Cross-asset lagged ETH mom rank shows **no material linear skill** on this opera
 
 **Knowledge gain:** Vol persistence skill does **not** automatically translate to a holdout-valid risk-off policy at this fixed threshold. Train-period improvement is not confirmatory evidence. Do **not** retune threshold on test.
 
+## LEDA-6 pre-registered vol-veto threshold grid
+
+Thresholds locked: `{0.70, 0.80, 0.90, 0.95}` — **all** reported; family size 4.
+
+| thr | test Sharpe | test excess vs B&H | n_trades | hard pass |
+|-----|-------------|--------------------|----------|-----------|
+| 0.70 | ~0.41 | ~+0.13 | 18 | **no** (min_trades) |
+| 0.80 | ~0.25 | ~-0.02 | 18 | no |
+| 0.90 | ~-0.02 | ~-0.25 | 16 | no |
+| 0.95 | ~0.26 | ~-0.03 | 14 | no |
+
+**n_pass_exploratory_hard_gates = 0.**  
+Do **not** promote thr=0.70 despite positive test excess (under min_trades + multiplicity).
+
 ## Next IG priorities
 
-1. Document and stop naive threshold fishing; if revisiting risk policy, pre-register threshold grid on train only with family ledger.
-2. Prefer new **information** (different free series / mechanisms) over mom grammar clones.
+1. Prefer new **information** channels (free series / mechanisms) over more vol-threshold fishing.
+2. Optional: paper-path audit wire from `decide_bar` (ops, not alpha).
 3. No paid data without EIR; no shadow.

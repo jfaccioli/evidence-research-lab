@@ -192,3 +192,15 @@ def test_desired_from_scores_and_economic_eval():
     )
     assert vreport["leda"] == "5b"
     assert "not_approved" in vreport["promotion"]
+
+    from crl.leda.economic import evaluate_vol_veto_threshold_grid
+
+    grid = evaluate_vol_veto_threshold_grid(
+        ohlcv,
+        thresholds=(0.80, 0.90),
+        costs=CostConfig(),
+        splits=SplitConfig(train_frac=0.5, val_frac=0.25, test_frac=0.25),
+    )
+    assert grid["leda"] == "6"
+    assert grid["n_thresholds"] == 2
+    assert len(grid["results_by_threshold"]) == 2

@@ -21,6 +21,7 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **LEDA-4** thin map (trend score long + vol veto) **fails** exploratory hard gates on test (Sharpe~0, underperforms B&H). Knowledge: architecture works; this map is not an edge.
 - **LEDA-5a** ETH→BTC lagged mom rank IC ~null on pinned daily data.
 - **LEDA-5b** B&H + fixed vol veto: train excess vs B&H positive; **test fails** (underperforms B&H). Vol skill ≠ free risk policy.
+- **LEDA-6** pre-reg thr grid {0.7,0.8,0.9,0.95}: **0** exploratory hard-gate passes (thr=0.7 has +excess but n_trades<30).
 - Shadow/live still **not** justified. See `docs/LEDA_RESULTS_LOG.md`.
 
 ## Mechanisms

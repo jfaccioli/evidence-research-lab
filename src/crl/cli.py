@@ -412,10 +412,11 @@ def main(argv: list[str] | None = None) -> int:
             "decide",
             "eval-stack",
             "eval-vol-veto",
+            "eval-vol-veto-grid",
         ],
         help=(
             "protocol | channel skill evals | decide | "
-            "eval-stack (LEDA-4) | eval-vol-veto (LEDA-5b)"
+            "eval-stack | eval-vol-veto | eval-vol-veto-grid (LEDA-6)"
         ),
     )
     p_leda.add_argument(
@@ -827,13 +828,19 @@ def cmd_leda(args: argparse.Namespace) -> int:
         print("No BTC 1d dataset; use --mock or crl fetch --interval 1d", file=sys.stderr)
         return 1
 
-    if args.action in ("eval-stack", "eval-vol-veto"):
-        from crl.leda.economic import evaluate_stack_economic, evaluate_vol_veto_policy
+    if args.action in ("eval-stack", "eval-vol-veto", "eval-vol-veto-grid"):
+        from crl.leda.economic import (
+            evaluate_stack_economic,
+            evaluate_vol_veto_policy,
+            evaluate_vol_veto_threshold_grid,
+        )
 
         if args.action == "eval-stack":
             report = evaluate_stack_economic(ohlcv)
-        else:
+        elif args.action == "eval-vol-veto":
             report = evaluate_vol_veto_policy(ohlcv)
+        else:
+            report = evaluate_vol_veto_threshold_grid(ohlcv)
         report["dataset_id"] = dataset_id
         report["source"] = source
         print(json.dumps(report, indent=2))

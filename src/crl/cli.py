@@ -545,6 +545,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_rd.set_defaults(func=cmd_rd)
 
+    p_pcs = sub.add_parser(
+        "pcs",
+        help="Production Candidate Sprint (deployability-ranked science)",
+    )
+    p_pcs.add_argument(
+        "action",
+        choices=["status", "eval-vol-scale", "eval-basis-riskoff"],
+        help="status | eval-vol-scale | eval-basis-riskoff",
+    )
+    p_pcs.add_argument("--mock", action="store_true", help="Mock OHLCV (not for promotion)")
+    p_pcs.set_defaults(func=cmd_pcs)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -1625,6 +1637,81 @@ def cmd_ops_readiness(args: argparse.Namespace) -> int:
     out["summary_path"] = str(out_path)
     print(json.dumps(out, indent=2))
     return 0 if report.all_ok() else 1
+
+
+def cmd_pcs(args: argparse.Namespace) -> int:
+    """Production Candidate Sprint."""
+    if args.action == "status":
+        from pathlib import Path
+
+        from crl.shared.config import project_root
+
+        root = project_root()
+        res = root / "research_kb" / "pcs" / "PCS_V1_RESULT.json"
+        print(
+            json.dumps(
+                {
+                    "sprint": "PRODUCTION_CANDIDATE_SPRINT_V1",
+                    "doc": "docs/PRODUCTION_CANDIDATE_SPRINT_V1.md",
+                    "primary": "PCS_VOL_SCALE_V1",
+                    "reserve": "PCS_BASIS_RISKOFF (not opened until primary decisive)",
+                    "result_path": str(res) if res.exists() else None,
+                    "result": json.loads(res.read_text()) if res.exists() else None,
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.action == "eval-vol-scale":
+        from crl.research.pcs.vol_scale import evaluate_pcs_vol_scale
+        from crl.shared.config import project_root
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC 1d; fetch or --mock", file=sys.stderr)
+            return 1
+        if getattr(args, "mock", False):
+            print("WARNING: mock data — not valid for confirmatory pass", file=sys.stderr)
+        report = evaluate_pcs_vol_scale(ohlcv)
+        report["dataset_id"] = dataset_id
+        report["source"] = source
+        out_dir = project_root() / "research_kb" / "pcs"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        path = out_dir / "PCS_V1_RESULT.json"
+        path.write_text(json.dumps(report, indent=2))
+        report["wrote"] = str(path)
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("confirmatory_pass") else 1
+
+    if args.action == "eval-basis-riskoff":
+        from crl.research.pcs.basis_riskoff import evaluate_pcs_basis_riskoff
+        from crl.shared.config import project_root
+        from crl.shared.data.cross_venue import load_latest_basis
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC 1d", file=sys.stderr)
+            return 1
+        try:
+            basis, bmeta = load_latest_basis(
+                project_root() / "data" / "processed" / "cross_venue"
+            )
+        except Exception as e:
+            print(f"basis series required: {e}", file=sys.stderr)
+            return 1
+        report = evaluate_pcs_basis_riskoff(ohlcv, basis)
+        report["dataset_id"] = dataset_id
+        report["basis_series_id"] = bmeta.get("series_id")
+        out_dir = project_root() / "research_kb" / "pcs"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        path = out_dir / "PCS_V1_BASIS_RESULT.json"
+        path.write_text(json.dumps(report, indent=2))
+        report["wrote"] = str(path)
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("confirmatory_pass") else 1
+
+    return 2
 
 
 def cmd_rd(args: argparse.Namespace) -> int:

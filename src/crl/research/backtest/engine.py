@@ -184,8 +184,10 @@ def _trades_from_bar_returns(
     rets = bar_net.astype(float).values
     n = len(df)
     i = 0
+    # Long segments: position strictly > 0.5. Position == 0.5 is treated as flat
+    # so the scanner always advances (avoids infinite loop at exactly 0.5).
     while i < n:
-        if pos[i] < 0.5:
+        if pos[i] <= 0.5:
             i += 1
             continue
         start = i
@@ -197,7 +199,7 @@ def _trades_from_bar_returns(
 
         is_open = end == n - 1 and pos[end] > 0.5
         # Closed if next bar exists and is flat (standard exit)
-        if end + 1 < n and pos[end + 1] < 0.5:
+        if end + 1 < n and pos[end + 1] <= 0.5:
             is_open = False
             # Attribute exit-bar net (includes exit cost; gross*0 - cost)
             factor *= 1.0 + float(rets[end + 1])

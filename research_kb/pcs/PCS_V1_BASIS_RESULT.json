@@ -1,0 +1,73 @@
+{
+  "programme": "PCS_BASIS_RISKOFF_V1",
+  "family_id": "pcs_basis_riskoff_v1",
+  "mechanism": "dislocation_abs_basis_risk_off",
+  "slices": {
+    "train": {
+      "n_bars": 1634,
+      "n_trades": 5,
+      "total_return": 5.252527,
+      "sharpe_after_cost": 0.966692,
+      "max_drawdown": 0.633542,
+      "long_frac": 0.726438,
+      "bh_sharpe": 1.040227,
+      "bh_max_dd": 0.832025,
+      "bh_total_return": 8.694915,
+      "excess_return_vs_bh": -3.442388,
+      "stress": false
+    },
+    "val": {
+      "n_bars": 817,
+      "n_trades": 2,
+      "total_return": 0.236508,
+      "sharpe_after_cost": 0.447947,
+      "max_drawdown": 0.667306,
+      "long_frac": 0.997552,
+      "bh_sharpe": 0.563272,
+      "bh_max_dd": 0.667306,
+      "bh_total_return": 0.424885,
+      "excess_return_vs_bh": -0.188377,
+      "stress": false
+    },
+    "test": {
+      "n_bars": 817,
+      "n_trades": 1,
+      "total_return": 0.014777,
+      "sharpe_after_cost": 0.240527,
+      "max_drawdown": 0.529718,
+      "long_frac": 1.0,
+      "bh_sharpe": 0.302867,
+      "bh_max_dd": 0.529718,
+      "bh_total_return": 0.080516,
+      "excess_return_vs_bh": -0.06574,
+      "stress": false
+    },
+    "test_stress": {
+      "n_bars": 817,
+      "n_trades": 1,
+      "total_return": 0.013126,
+      "sharpe_after_cost": 0.238915,
+      "max_drawdown": 0.529718,
+      "long_frac": 1.0,
+      "bh_sharpe": 0.301317,
+      "bh_max_dd": 0.529718,
+      "bh_total_return": 0.078839,
+      "excess_return_vs_bh": -0.065713,
+      "stress": true
+    }
+  },
+  "gate_checks": {
+    "test_sharpe_ge_min": true,
+    "test_max_dd_le_cap": true,
+    "activity_ok": false,
+    "not_worse_than_bh_on_both": false,
+    "improves_bh_sharpe_or_dd": false,
+    "stress_ok": true,
+    "overfit_gap_ok": true
+  },
+  "confirmatory_pass": false,
+  "outcome": "C_rejected",
+  "promotion": "rejected \u2014 retire pcs_basis_riskoff_v1",
+  "dataset_id": "binance_public_BTCUSDT_1d_e686b6637728",
+  "basis_series_id": "cross_venue_binance_usdt_vs_coinbase_usd_d54a084a5189"
+}

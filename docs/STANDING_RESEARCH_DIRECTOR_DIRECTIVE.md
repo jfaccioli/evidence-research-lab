@@ -61,7 +61,7 @@ Reduce uncertainty; move toward justified tiny-live **or** intelligent continued
 
 **Alpha Discovery (primary):** maximise P(genuine predictive information) — `docs/ALPHA_DISCOVERY_DIRECTIVE.md`, `docs/ALPHA_DISCOVERY_ROADMAP.md`, CLI `crl alpha-discovery`. Think in **information advantages**, not dataset shopping.
 
-**Search space / architecture:** After V1 exhaustion, follow **`docs/RESEARCH_ROADMAP_ECA_V2.md`** (Evidence Channel Architecture). Class ideas in `docs/RESEARCH_ROADMAP_V2.md` remain as **channels**. Study: `docs/ARCHITECTURE_EVIDENCE_AGGREGATION_STUDY.md`.
+**Search space / architecture:** Target **LEDA** (`docs/ARCHITECTURE_LAYERED_DECISION_STACK.md`, `docs/RESEARCH_ROADMAP_LEDA_V1.md`): Forecast / Risk / Portfolio / Execution as separate contracts, fed by calibrated evidence channels. ECA study remains historical background.
 
 **Evidence acquisition (vehicles):** `docs/EVIDENCE_ACQUISITION_ROADMAP.md`, `crl evidence-acq`. Prefer free; paid only when EV > cost and programme pre-registered.
 

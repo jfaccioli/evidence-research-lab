@@ -16,13 +16,20 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 ## LEDA notes (2026-07-29)
 
-- **Architecture** LEDA (F/R/P/X + numeric channels) is the lab default; scaffold LEDA-0…4 implemented.
+- **Architecture** LEDA (F/R/P/X + numeric channels) is the lab default; scaffold LEDA-0…7 implemented.
 - **LEDA-1** lagged RV has strong skill (~0.96 Pearson) as **risk** evidence — not trade alpha.
 - **LEDA-4** thin map (trend score long + vol veto) **fails** exploratory hard gates on test (Sharpe~0, underperforms B&H). Knowledge: architecture works; this map is not an edge.
 - **LEDA-5a** ETH→BTC lagged mom rank IC ~null on pinned daily data.
 - **LEDA-5b** B&H + fixed vol veto: train excess vs B&H positive; **test fails** (underperforms B&H). Vol skill ≠ free risk policy.
 - **LEDA-6** pre-reg thr grid {0.7,0.8,0.9,0.95}: **0** exploratory hard-gate passes (thr=0.7 has +excess but n_trades<30).
 - Shadow/live still **not** justified. See `docs/LEDA_RESULTS_LOG.md`.
+
+## Observation discovery notes (2026-07-29)
+
+- Philosophy shifted from indicator search → **measurable market observations** (`docs/OBSERVATION_DISCOVERY_DIRECTIVE.md`).
+- **Blindness closed (partial):** Binance kline `taker_buy_*` / `n_trades` were discarded; now retained. Family **`kline_aggression`**.
+- Characterization: trade intensity associates with next RV (~-0.26) more than direction (~0); tbr co-moves with returns (~0.36). Not a trade map yet.
+- Next free observation family: **`perp_premium`**.
 
 ## Mechanisms
 

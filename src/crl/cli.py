@@ -451,6 +451,22 @@ def main(argv: list[str] | None = None) -> int:
     p_alpha.add_argument("--sync", action="store_true", help="Rewrite alpha_discovery_catalog.json")
     p_alpha.set_defaults(func=cmd_alpha_discovery)
 
+    p_obs = sub.add_parser(
+        "observe",
+        help="Characterize market observations (not trade signals); Observation Discovery",
+    )
+    p_obs.add_argument(
+        "action",
+        choices=["inventory", "characterize-aggression"],
+        help="inventory: print blindness map; characterize-aggression: kline micro family",
+    )
+    p_obs.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use mock OHLCV with synthetic micro columns",
+    )
+    p_obs.set_defaults(func=cmd_observe)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -946,6 +962,83 @@ def cmd_leda(args: argparse.Namespace) -> int:
 
     print(json.dumps(payload, indent=2))
     return 0 if skill.get("ok") else 1
+
+
+def cmd_observe(args: argparse.Namespace) -> int:
+    """Observation discovery — characterize measurable market properties."""
+    if args.action == "inventory":
+        from pathlib import Path
+
+        from crl.shared.config import project_root
+
+        inv = project_root() / "docs" / "OBSERVATION_INVENTORY.md"
+        directive = project_root() / "docs" / "OBSERVATION_DISCOVERY_DIRECTIVE.md"
+        print(
+            json.dumps(
+                {
+                    "directive": str(directive),
+                    "inventory": str(inv),
+                    "active_family": "kline_aggression",
+                    "philosophy": (
+                        "Discover measurable observations; do not mine indicators"
+                    ),
+                },
+                indent=2,
+            )
+        )
+        if inv.exists():
+            print(inv.read_text()[:4000])
+        return 0
+
+    # characterize-aggression
+    from crl.research.observations.kline_aggression import characterize_kline_aggression
+
+    ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+    if ohlcv is None:
+        print("No BTC 1d dataset; use --mock or crl fetch --interval 1d", file=sys.stderr)
+        return 1
+    # Prefer latest dataset with micro columns if current pin lacks them
+    if "taker_buy_base" not in ohlcv.columns and not getattr(args, "mock", False):
+        from crl.shared.config import load_config, project_root
+        from crl.shared.data.store import latest_manifest, load_dataset
+
+        cfg = load_config(args.config)
+        root = project_root()
+        mdir = root / cfg["data"]["manifest_dir"]
+        # Scan manifests for BTC 1d with micro cols
+        found = None
+        for mp in sorted(mdir.glob("binance_public_BTCUSDT_1d_*.json"), reverse=True):
+            try:
+                mid = json.loads(mp.read_text())["dataset_id"]
+                df, _ = load_dataset(mid, manifest_dir=mdir, verify_hash=True)
+                if "taker_buy_base" in df.columns:
+                    found = (df, mid)
+                    break
+            except Exception:
+                continue
+        if found is None:
+            print(
+                json.dumps(
+                    {
+                        "ok": False,
+                        "reason": (
+                            "Pinned BTC OHLCV lacks kline micro columns. "
+                            "Run: python -m crl fetch --interval 1d"
+                        ),
+                        "dataset_id": dataset_id,
+                    },
+                    indent=2,
+                )
+            )
+            return 1
+        ohlcv, dataset_id = found
+        source = "binance_public"
+
+    report = characterize_kline_aggression(ohlcv)
+    report["dataset_id"] = dataset_id
+    report["source"] = source
+    print(json.dumps(report, indent=2))
+    return 0 if report.get("ok") else 1
 
 
 def cmd_alpha_discovery(args: argparse.Namespace) -> int:

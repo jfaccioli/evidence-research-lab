@@ -99,11 +99,35 @@ class BinancePublicSource:
             ],
         )
         df = df.drop_duplicates(subset=["open_time"]).sort_values("open_time")
-        for col in ("open", "high", "low", "close", "volume"):
+        for col in (
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "quote_volume",
+            "n_trades",
+            "taker_buy_base",
+            "taker_buy_quote",
+        ):
             df[col] = df[col].astype(float)
         df["timestamp"] = pd.to_datetime(df["open_time"], unit="ms", utc=True)
         df = df.set_index("timestamp")
-        out = df[["open", "high", "low", "close", "volume"]].copy()
+        # Core OHLCV + kline microstructure observations (previously discarded).
+        # taker_buy_* / n_trades are measurable market properties, not close transforms.
+        out = df[
+            [
+                "open",
+                "high",
+                "low",
+                "close",
+                "volume",
+                "quote_volume",
+                "n_trades",
+                "taker_buy_base",
+                "taker_buy_quote",
+            ]
+        ].copy()
         # Drop incomplete last candle if still open (close_time in future)
         now_ms = int(time.time() * 1000)
         last_close_time = int(df["close_time"].iloc[-1])
@@ -114,5 +138,15 @@ class BinancePublicSource:
 
 def _empty_ohlcv() -> pd.DataFrame:
     return pd.DataFrame(
-        columns=["open", "high", "low", "close", "volume"]
+        columns=[
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "quote_volume",
+            "n_trades",
+            "taker_buy_base",
+            "taker_buy_quote",
+        ]
     ).astype(float)

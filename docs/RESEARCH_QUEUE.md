@@ -1,44 +1,41 @@
 # Living research queue (Research Director)
 
 **Updated:** 2026-07-29  
-**Architecture:** **LEDA**  
-**Results:** `docs/LEDA_RESULTS_LOG.md`
+**Philosophy:** `docs/OBSERVATION_DISCOVERY_DIRECTIVE.md`  
+**Inventory:** `docs/OBSERVATION_INVENTORY.md`  
+**LEDA results:** `docs/LEDA_RESULTS_LOG.md`
 
 ## Status
 
 | Stage | Value |
 |-------|--------|
 | Confirmatory candidates | **0** |
-| LEDA-0…7 | **Implemented** |
-| Economic maps (L4–L6) | **No hard-gate pass** |
-| Paper wire (L7) | **Works** (ops only; not edge) |
+| Primary bottleneck | **Evidence / observation quality** (architecture mature) |
+| New observation family | **`kline_aggression`** — characterized |
 | Shadow | **Not justified** |
 
 ## Queue
 
 | Rank | ID | Object | Status |
 |------|-----|--------|--------|
-| — | LEDA-0…7 | Full thin stack + skill + economics + paper audit | **Done** |
-| **1** | **Science** | New free evidence channel with higher IG than mom/vol-threshold fishing | **Next** |
-| **2** | Conf | Frozen-gate confirmatory | Blocked |
-| **3** | Shadow | Only after confirmatory earn | Blocked |
+| — | LEDA-0…7 | Decision stack scaffold | **Done** |
+| — | Observation philosophy | Directive + inventory | **Done** |
+| — | `kline_aggression` | Characterize taker/intensity | **Done** (see OBSERVATION_KLINE_AGGRESSION_V1) |
+| **1** | **`perp_premium`** | Acquire free premiumIndex klines; characterize (not signals) | **Next** |
+| **2** | Optional | Intensity residual as LEDA risk *state* channel — only if pre-reg claim locked | Pending |
+| **3** | Conf / shadow | Blocked | Blocked |
 
 ## Commands
 
 ```bash
-python -m crl leda protocol
-python -m crl leda eval-vol-risk
-python -m crl leda eval-trend
-python -m crl leda eval-xasset
+python -m crl observe inventory
+python -m crl observe characterize-aggression
+python -m crl fetch --interval 1d   # retains micro columns
 python -m crl leda eval-stack
-python -m crl leda eval-vol-veto
-python -m crl leda eval-vol-veto-grid
-python -m crl leda paper
-python -m crl leda decide --e-forecast 0.7 --e-risk 0.2
 ```
 
 ## Rules
 
-- No LLM promotion; no paid data without EIR; no gate softening  
-- No further vol-threshold fishing without new pre-reg science case  
-- Nulls = success when uncertainty falls  
+- Observations first; no indicator fishing  
+- Frozen gates; no paid data without EIR  
+- Nulls that reduce blindness are success  

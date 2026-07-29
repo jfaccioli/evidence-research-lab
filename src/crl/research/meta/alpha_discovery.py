@@ -15,27 +15,28 @@ from crl.shared.config import project_root
 # Information advantages the lab may lack (not dataset shopping list)
 ADVANTAGES: list[dict[str, Any]] = [
     {
-        "id": "cross_event_implied_state",
-        "name": "Cross-event market-implied state (prediction market panel)",
+        "id": "kline_aggression",
+        "name": "Kline aggression / trade intensity (taker buy share, n_trades)",
         "mechanism": (
-            "Aggregated crowd probabilities across many events encode "
-            "risk-on/off, policy, and path beliefs not in OHLCV alone"
+            "Aggressive buyer share and trade count are bar-level microstructure "
+            "state not recoverable from close-only transforms; previously discarded "
+            "from Binance klines"
         ),
         "currently_observable": "partial",
-        "partial_note": "Single PM binary tested null; panel not tested",
+        "partial_note": "Columns retained on new fetch; characterize before LEDA map",
         "reconstructible": True,
-        "pit": "medium",
+        "pit": "high",
         "novelty_vs_lab": 5,
-        "ev": 4.5,
+        "ev": 4.0,
         "cost_class": "free",
         "rank": 1,
-        "action": "design_and_acquire_free_panel",
-        "reject_if": "reverts to single popular binary without panel design",
+        "action": "characterize_then_prereg_risk_or_state_channel",
+        "reject_if": "turned into another long/flat mom clone without characterization",
     },
     {
-        "id": "macro_risk_regime",
-        "name": "Macro liquidity / USD regime as conditioner",
-        "mechanism": "Global risk appetite and USD strength shift crypto risk premia",
+        "id": "perp_premium",
+        "name": "Perpetual mark–index premium (futures consensus vs spot)",
+        "mechanism": "Funding/basis related but level of premium is distinct observation of futures positioning pressure",
         "currently_observable": "no",
         "reconstructible": True,
         "pit": "high",
@@ -43,7 +44,40 @@ ADVANTAGES: list[dict[str, Any]] = [
         "ev": 3.5,
         "cost_class": "free",
         "rank": 2,
-        "action": "acquire_free_macro_series",
+        "action": "acquire_premium_index_klines",
+        "reject_if": "duplicate of funding-rate programmes without new claim",
+    },
+    {
+        "id": "cross_event_implied_state",
+        "name": "Cross-event market-implied state (prediction market panel)",
+        "mechanism": (
+            "Aggregated crowd probabilities across many events encode "
+            "risk-on/off, policy, and path beliefs not in OHLCV alone"
+        ),
+        "currently_observable": "partial",
+        "partial_note": "Panel path tested null; further path panels low EV",
+        "reconstructible": True,
+        "pit": "medium",
+        "novelty_vs_lab": 2,
+        "ev": 2.0,
+        "cost_class": "free",
+        "rank": 5,
+        "action": "wait",
+        "reject_if": "reverts to single popular binary without panel design",
+    },
+    {
+        "id": "macro_risk_regime",
+        "name": "Macro liquidity / USD regime as conditioner",
+        "mechanism": "Global risk appetite and USD strength shift crypto risk premia",
+        "currently_observable": "yes_tested",
+        "partial_note": "FRED DXY/DGS2 programme null as atomistic filters",
+        "reconstructible": True,
+        "pit": "high",
+        "novelty_vs_lab": 2,
+        "ev": 2.0,
+        "cost_class": "free",
+        "rank": 6,
+        "action": "wait",
         "reject_if": "used as another technical overlay without economic lag story",
     },
     {

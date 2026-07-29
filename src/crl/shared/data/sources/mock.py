@@ -31,6 +31,9 @@ class MockOHLCVSource:
         high = np.maximum(open_, close) * (1 + rng.uniform(0, 0.005, self.n))
         low = np.minimum(open_, close) * (1 - rng.uniform(0, 0.005, self.n))
         volume = rng.uniform(100, 1000, self.n)
+        # Synthetic microstructure (correlated weakly with returns for tests)
+        taker_frac = np.clip(0.5 + 0.15 * np.sign(rets) + rng.normal(0, 0.08, self.n), 0.05, 0.95)
+        n_trades = rng.integers(500, 5000, size=self.n).astype(float)
         freq = "1D" if interval in ("1d", "1D") else "4h"
         idx = pd.date_range(self.start, periods=self.n, freq=freq, tz="UTC")
         return pd.DataFrame(
@@ -40,6 +43,10 @@ class MockOHLCVSource:
                 "low": low,
                 "close": close,
                 "volume": volume,
+                "quote_volume": volume * close,
+                "n_trades": n_trades,
+                "taker_buy_base": volume * taker_frac,
+                "taker_buy_quote": volume * close * taker_frac,
             },
             index=idx,
         )

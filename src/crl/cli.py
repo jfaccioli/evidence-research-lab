@@ -503,6 +503,27 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_opsr.set_defaults(func=cmd_ops_readiness)
 
+    p_plat = sub.add_parser(
+        "platform",
+        help="Trading Platform (engineering; benchmarks only — not alpha discovery)",
+    )
+    p_plat.add_argument(
+        "action",
+        choices=["list", "run", "walkforward", "attribute", "deploy-gate"],
+        help="list|run|walkforward|attribute|deploy-gate",
+    )
+    p_plat.add_argument(
+        "--strategy",
+        default="bench_buy_and_hold",
+        help="Strategy id (default bench_buy_and_hold)",
+    )
+    p_plat.add_argument(
+        "--mock",
+        action="store_true",
+        help="Use mock OHLCV instead of pinned BTC",
+    )
+    p_plat.set_defaults(func=cmd_platform)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -1583,6 +1604,85 @@ def cmd_ops_readiness(args: argparse.Namespace) -> int:
     out["summary_path"] = str(out_path)
     print(json.dumps(out, indent=2))
     return 0 if report.all_ok() else 1
+
+
+def cmd_platform(args: argparse.Namespace) -> int:
+    """Trading Platform CLI — benchmark validation only (not science)."""
+    # Ensure benchmark registration
+    import crl.platform  # noqa: F401
+    from crl.platform.strategy import get_strategy, list_strategies
+    from crl.shared.config import project_root
+
+    if args.action == "list":
+        rows = [
+            {
+                "id": m.id,
+                "name": m.name,
+                "is_benchmark": m.is_benchmark,
+                "is_scientific_candidate": m.is_scientific_candidate,
+                "params": m.params,
+                "description": m.description,
+            }
+            for m in list_strategies()
+        ]
+        print(
+            json.dumps(
+                {
+                    "programme": "trading_platform",
+                    "n": len(rows),
+                    "strategies": rows,
+                    "note": "Benchmarks are engineering artefacts, not alpha claims",
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    if args.action == "deploy-gate":
+        from crl.platform.deployment import deployment_gate
+
+        meta = get_strategy(args.strategy).meta
+        print(json.dumps(deployment_gate(meta), indent=2))
+        return 0
+
+    # Need OHLCV for run / walkforward / attribute
+    ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+    if ohlcv is None:
+        print("No BTC 1d data; use --mock or crl fetch", file=sys.stderr)
+        return 1
+
+    if args.action == "attribute":
+        from crl.platform.attribution import attribute_all_benchmarks
+
+        report = attribute_all_benchmarks(ohlcv)
+        report["dataset_id"] = dataset_id
+        report["source"] = source
+        print(json.dumps(report, indent=2))
+        return 0
+
+    strat = get_strategy(args.strategy)
+    if args.action == "run":
+        from crl.platform.engine import run_platform_backtest
+
+        audit_dir = project_root() / "data" / "platform" / "audit"
+        res = run_platform_backtest(strat, ohlcv, audit_dir=audit_dir)
+        out = res.to_summary()
+        out["dataset_id"] = dataset_id
+        out["source"] = source
+        print(json.dumps(out, indent=2, default=str))
+        return 0
+
+    if args.action == "walkforward":
+        from crl.platform.walkforward import walkforward_strategy
+
+        report = walkforward_strategy(strat, ohlcv)
+        report["dataset_id"] = dataset_id
+        report["source"] = source
+        print(json.dumps(report, indent=2))
+        return 0
+
+    print(f"unknown action {args.action}", file=sys.stderr)
+    return 2
 
 
 def cmd_alpha_discovery(args: argparse.Namespace) -> int:

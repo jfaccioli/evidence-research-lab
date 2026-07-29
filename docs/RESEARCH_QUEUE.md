@@ -1,37 +1,39 @@
 # Living research queue (Research Director)
 
 **Updated:** 2026-07-29  
-**Roadmap:** `docs/RESEARCH_ROADMAP_SCIENCE.md`  
-**Directive:** `docs/MECHANISM_DISCOVERY_DIRECTIVE.md`
+**Science roadmap:** `docs/RESEARCH_ROADMAP_SCIENCE.md`  
+**Platform:** `docs/TRADING_PLATFORM_V1.md`
 
-## Current scientific model (short)
+## Parallel programmes
 
-**Next-RV is dominated by RV lag.** Leverage build, multi-asset vol, and stress
-composites do **not** add residual next-RV skill under pre-reg tests.  
-**Dislocation** (|basis|) **widens** in high-RV / high-funding regimes (descriptor).  
-**0** confirmatory trading candidates.
+| Programme | Objective | Status |
+|-----------|-----------|--------|
+| **Alpha Discovery** | Mechanisms, pre-reg science, confirmatory gates | Active; **0** promotions |
+| **Trading Platform** | Safe deploy when science earns it | **v1** scaffold + benchmarks |
+| **Ops readiness** | Paper/safety checklist | 11/11 pass |
 
-## Retired this cycle (do not revisit)
+Science gates are **never** weakened by platform readiness.  
+Benchmarks validate engineering only — not alpha claims.
 
-- `leverage_incremental_rv_skill_v1`  
-- `info_prop_eth_rv_to_btc_residual_v1`  
+## Scientific model (short)
 
-## Active / blocked
-
-| Item | Status |
-|------|--------|
-| Dislocation-under-stress | Descriptive knowledge locked |
-| Liquidity mint/burn | Blocked — free data gap |
-| Directional alpha | Needs **new mechanism + new data class** |
-| Ops readiness | 11/11 (separate; non-promotional) |
-
-## Optimisation rule
-
-Expected **information gain / trial cost** — not convenience or positive results.
+Next-RV dominated by RV lag. Leverage/ETH residual skill families **retired**.  
+Dislocation widens under stress (descriptive). Directional alpha **unfound**.
 
 ## Commands
 
 ```bash
+# Science
+python -m crl observe mechanisms
 python -m crl observe study-leverage-incremental-rv
+
+# Trading Platform (engineering)
+python -m crl platform list
+python -m crl platform run --strategy bench_tsmom
+python -m crl platform walkforward --strategy bench_sma_cross
+python -m crl platform attribute
+python -m crl platform deploy-gate --strategy bench_buy_and_hold
+
+# Ops
 python -m crl ops-readiness check
 ```

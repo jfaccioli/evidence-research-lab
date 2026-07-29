@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-29",
+  "layers": ["mechanism", "property", "channel", "forecast_target", "decision_policy"],
+  "nodes": [
+    {"id": "mech_vol_clustering", "layer": "mechanism", "label": "Volatility clustering", "status": "studied"},
+    {"id": "mech_leverage_cycle", "layer": "mechanism", "label": "Leverage build/unwind", "status": "descriptive"},
+    {"id": "mech_liquidity", "layer": "mechanism", "label": "Liquidity create/destroy", "status": "blocked_missing_obs"},
+    {"id": "mech_uncertainty_beh", "layer": "mechanism", "label": "Behaviour under uncertainty", "status": "studied"},
+    {"id": "mech_info_prop", "layer": "mechanism", "label": "Cross-market info propagation", "status": "mostly_null"},
+    {"id": "mech_dislocation", "layer": "mechanism", "label": "Venue dislocation", "status": "descriptive"},
+
+    {"id": "prop_rv", "layer": "property", "label": "Realized volatility", "status": "established"},
+    {"id": "prop_intensity", "layer": "property", "label": "Trade intensity / taker", "status": "characterised"},
+    {"id": "prop_premium", "layer": "property", "label": "Perp premium", "status": "characterised"},
+    {"id": "prop_funding", "layer": "property", "label": "Funding rate", "status": "characterised"},
+    {"id": "prop_oi", "layer": "property", "label": "Open interest", "status": "characterised"},
+    {"id": "prop_stable_supply", "layer": "property", "label": "Stablecoin aggregate supply", "status": "characterised"},
+    {"id": "prop_defi_tvl", "layer": "property", "label": "DeFi TVL", "status": "characterised"},
+    {"id": "prop_basis", "layer": "property", "label": "Cross-venue basis", "status": "characterised"},
+
+    {"id": "chan_leda1_vol", "layer": "channel", "label": "leda1_vol_risk", "status": "skill_only"},
+    {"id": "chan_leda2_trend", "layer": "channel", "label": "leda2_trend", "status": "null_ic"},
+    {"id": "chan_none_leverage", "layer": "channel", "label": "(no leverage residual channel)", "status": "retired_claim"},
+
+    {"id": "tgt_rv_next", "layer": "forecast_target", "label": "Next-bar realized vol", "status": "primary_risk_target"},
+    {"id": "tgt_fwd_ret", "layer": "forecast_target", "label": "Next-bar return", "status": "no_survivor"},
+
+    {"id": "pol_unit_long", "layer": "decision_policy", "label": "Unit long-only + risk veto", "status": "scaffold"},
+    {"id": "pol_bh", "layer": "decision_policy", "label": "Buy & hold benchmark", "status": "engineering"},
+    {"id": "pol_stress_equal_rank", "layer": "decision_policy", "label": "Equal-rank multi stress", "status": "retired"}
+  ],
+  "edges": [
+    {
+      "from": "mech_vol_clustering",
+      "to": "prop_rv",
+      "relation": "generates",
+      "why": "Clustering is the phenomenon measured by RV path",
+      "supports": ["LEDA-1 skill ~0.96"],
+      "refutes": [],
+      "status": "supported"
+    },
+    {
+      "from": "prop_rv",
+      "to": "chan_leda1_vol",
+      "relation": "feeds_channel",
+      "why": "Lagged RV percentile as risk-off evidence",
+      "supports": ["eval-vol-risk"],
+      "refutes": ["not trade promotion"],
+      "status": "supported_skill_not_trade"
+    },
+    {
+      "from": "chan_leda1_vol",
+      "to": "tgt_rv_next",
+      "relation": "forecasts",
+      "why": "Persistence skill claim",
+      "supports": ["pearson rv_lag vs rv_next"],
+      "refutes": [],
+      "status": "supported"
+    },
+    {
+      "from": "tgt_rv_next",
+      "to": "pol_unit_long",
+      "relation": "informs",
+      "why": "Risk veto / risk-off pressure in LEDA stack",
+      "supports": ["LEDA-3 decide_bar"],
+      "refutes": ["equal-rank composite does not beat rv_lag"],
+      "status": "partial"
+    },
+    {
+      "from": "mech_leverage_cycle",
+      "to": "prop_oi",
+      "relation": "generates",
+      "why": "OI change marks build/unwind",
+      "supports": ["leverage_cycle v1 state defs"],
+      "refutes": [],
+      "status": "supported_descriptive"
+    },
+    {
+      "from": "prop_oi",
+      "to": "tgt_rv_next",
+      "relation": "forecasts",
+      "why": "Claimed incremental skill of build flag",
+      "supports": ["mean next-RV higher in build"],
+      "refutes": ["leverage_incremental_rv_skill_v1 residual IC 0.027"],
+      "status": "refuted_incremental"
+    },
+    {
+      "from": "prop_funding",
+      "to": "prop_premium",
+      "relation": "collinear_with",
+      "why": "Both leverage stress measures",
+      "supports": ["corr ~0.68"],
+      "refutes": [],
+      "status": "supported"
+    },
+    {
+      "from": "prop_premium",
+      "to": "tgt_rv_next",
+      "relation": "forecasts",
+      "why": "Premium residual after funding",
+      "supports": [],
+      "refutes": ["premium residual linear next-RV IC ~0"],
+      "status": "refuted_incremental"
+    },
+    {
+      "from": "mech_info_prop",
+      "to": "prop_rv",
+      "relation": "cross_asset",
+      "why": "ETH RV as propagation of risk",
+      "supports": ["raw ETH-BTC RV corr high"],
+      "refutes": ["info_prop_eth_rv residual IC -0.03"],
+      "status": "refuted_incremental"
+    },
+    {
+      "from": "mech_dislocation",
+      "to": "prop_basis",
+      "relation": "generates",
+      "why": "Venue dislocation measured by log price ratio",
+      "supports": ["basis autocorr ~0.90"],
+      "refutes": [],
+      "status": "supported"
+    },
+    {
+      "from": "prop_rv",
+      "to": "prop_basis",
+      "relation": "conditions",
+      "why": "Stress widens dislocation",
+      "supports": ["dislocation_basis_under_stress: |basis| ~2x in high RV"],
+      "refutes": [],
+      "status": "supported_descriptive"
+    },
+    {
+      "from": "pol_stress_equal_rank",
+      "to": "tgt_rv_next",
+      "relation": "forecasts",
+      "why": "Multi-property equal-rank stress",
+      "supports": [],
+      "refutes": ["composite IC 0.26 vs rv_lag 0.96"],
+      "status": "retired"
+    },
+    {
+      "from": "chan_leda2_trend",
+      "to": "tgt_fwd_ret",
+      "relation": "forecasts",
+      "why": "Lagged mom rank as long support",
+      "supports": [],
+      "refutes": ["IC ~0.03"],
+      "status": "null"
+    },
+    {
+      "from": "tgt_fwd_ret",
+      "to": "pol_unit_long",
+      "relation": "drives",
+      "why": "Directional long intent",
+      "supports": [],
+      "refutes": ["0 confirmatory survivors overall"],
+      "status": "no_approved_edge"
+    }
+  ]
+}

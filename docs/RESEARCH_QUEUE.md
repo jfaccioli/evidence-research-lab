@@ -1,38 +1,46 @@
 # Living research queue (Research Director)
 
 **Updated:** 2026-07-29  
+**RD programme:** `docs/RESEARCH_DIRECTOR_PROGRAMME.md`  
 **Science roadmap:** `docs/RESEARCH_ROADMAP_SCIENCE.md`  
 **Platform:** `docs/TRADING_PLATFORM_V1.md`
 
-## Parallel programmes
+## Top-level programmes
 
-| Programme | Objective | Status |
-|-----------|-----------|--------|
-| **Alpha Discovery** | Mechanisms, pre-reg science, confirmatory gates | Active; **0** promotions |
-| **Trading Platform** | Safe deploy when science earns it | **v1** scaffold + benchmarks |
-| **Ops readiness** | Paper/safety checklist | 11/11 pass |
+| Programme | Role |
+|-----------|------|
+| **Research Director** | Prioritise, knowledge graph, prevent waste |
+| **Alpha Discovery** | Only path to production strategies |
+| **Mechanism Discovery** | Economic mechanisms |
+| **LEDA** | Decision architecture (stable scaffold) |
+| **Trading Platform** | Engineering deploy readiness |
+| **Ops / Governance** | Safety, frozen gates |
 
-Science gates are **never** weakened by platform readiness.  
-Benchmarks validate engineering only — not alpha claims.
+## Current model
 
-## Scientific model (short)
+RV lag dominates next-RV skill. Incremental leverage/ETH residual families **retired**.
+Dislocation widens under stress (descriptive). **0** confirmatory trading candidates.
 
-Next-RV dominated by RV lag. Leverage/ETH residual skill families **retired**.  
-Dislocation widens under stress (descriptive). Directional alpha **unfound**.
+## RD commands
 
-## Commands
+```bash
+python -m crl rd status          # full director report
+python -m crl rd rank            # scored future directions
+python -m crl rd graph           # knowledge graph
+python -m crl rd programmes      # programme map
+python -m crl rd areas           # research areas
+python -m crl rd check --query "daily momentum"   # anti-duplication
+python -m crl rd sync            # refresh research_kb/rd/director_state.json + RD_STATUS.md
+```
+
+## Parallel execution
 
 ```bash
 # Science
 python -m crl observe mechanisms
-python -m crl observe study-leverage-incremental-rv
 
-# Trading Platform (engineering)
+# Platform (engineering)
 python -m crl platform list
-python -m crl platform run --strategy bench_tsmom
-python -m crl platform walkforward --strategy bench_sma_cross
-python -m crl platform attribute
-python -m crl platform deploy-gate --strategy bench_buy_and_hold
 
 # Ops
 python -m crl ops-readiness check

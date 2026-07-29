@@ -524,6 +524,27 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_plat.set_defaults(func=cmd_platform)
 
+    p_rd = sub.add_parser(
+        "rd",
+        help="Research Director — prioritise science; knowledge graph; anti-duplication",
+    )
+    p_rd.add_argument(
+        "action",
+        choices=["status", "programmes", "areas", "rank", "graph", "check", "sync", "report"],
+        help="status|programmes|areas|rank|graph|check|sync|report",
+    )
+    p_rd.add_argument(
+        "--query",
+        default="",
+        help="For check: keyword to test against retired/duplicate work",
+    )
+    p_rd.add_argument(
+        "--include-forbidden",
+        action="store_true",
+        help="For rank: include forbidden directions",
+    )
+    p_rd.set_defaults(func=cmd_rd)
+
     p_autopsy = sub.add_parser(
         "autopsy",
         help="Write GATE_AUTOPSY_V1.md from reports for a programme dir",
@@ -1604,6 +1625,73 @@ def cmd_ops_readiness(args: argparse.Namespace) -> int:
     out["summary_path"] = str(out_path)
     print(json.dumps(out, indent=2))
     return 0 if report.all_ok() else 1
+
+
+def cmd_rd(args: argparse.Namespace) -> int:
+    """Research Director — laboratory principal investigator interface."""
+    from crl.research_director.core import (
+        director_report,
+        is_duplicate_or_retired,
+        knowledge_graph_summary,
+        list_areas,
+        list_programmes,
+        ranked_directions,
+        sync_rd_state,
+    )
+
+    action = args.action
+    if action in ("status", "report", "sync"):
+        out = sync_rd_state() if action == "sync" else {"report": director_report()}
+        if action == "sync":
+            print(json.dumps({"synced": True, "state_path": out["state_path"], "md_path": out["md_path"]}, indent=2))
+            print(json.dumps(out["report"], indent=2, default=str))
+        else:
+            print(json.dumps(out["report"] if "report" in out else out, indent=2, default=str))
+        return 0
+    if action == "programmes":
+        print(json.dumps({"programmes": list_programmes()}, indent=2))
+        return 0
+    if action == "areas":
+        print(json.dumps({"areas": list_areas()}, indent=2))
+        return 0
+    if action == "rank":
+        rows = ranked_directions(include_forbidden=bool(args.include_forbidden))
+        print(
+            json.dumps(
+                {
+                    "n": len(rows),
+                    "directions": rows,
+                    "note": "Higher composite_score = higher joint priority",
+                },
+                indent=2,
+            )
+        )
+        return 0
+    if action == "graph":
+        from crl.research_director.core import _load_json
+
+        g = _load_json("knowledge_graph.json")
+        print(
+            json.dumps(
+                {
+                    "summary": knowledge_graph_summary(),
+                    "n_nodes": len(g.get("nodes") or []),
+                    "n_edges": len(g.get("edges") or []),
+                    "nodes": g.get("nodes"),
+                    "edges": g.get("edges"),
+                },
+                indent=2,
+            )
+        )
+        return 0
+    if action == "check":
+        q = (args.query or "").strip()
+        if not q:
+            print("rd check requires --query", file=sys.stderr)
+            return 2
+        print(json.dumps(is_duplicate_or_retired(q), indent=2))
+        return 0
+    return 2
 
 
 def cmd_platform(args: argparse.Namespace) -> int:

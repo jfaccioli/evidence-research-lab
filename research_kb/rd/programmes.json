@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-29",
+  "programmes": [
+    {
+      "id": "research_director",
+      "name": "Research Director",
+      "role": "Principal investigator: prioritise, map knowledge, prevent waste",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": ["docs/RESEARCH_DIRECTOR_PROGRAMME.md", "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md"]
+    },
+    {
+      "id": "alpha_discovery",
+      "name": "Alpha Discovery",
+      "role": "Only path from evidence to production strategies under frozen gates",
+      "status": "active",
+      "owns_production_strategies": true,
+      "docs": ["docs/ALPHA_DISCOVERY_DIRECTIVE.md", "docs/RESEARCH_ROADMAP_SCIENCE.md"]
+    },
+    {
+      "id": "mechanism_discovery",
+      "name": "Mechanism Discovery",
+      "role": "Economic/behavioural mechanisms before properties",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": ["docs/MECHANISM_DISCOVERY_DIRECTIVE.md", "docs/MECHANISM_REGISTRY.md"]
+    },
+    {
+      "id": "leda",
+      "name": "LEDA",
+      "role": "Layered Evidence Decision Architecture (F/R/P/X + channels)",
+      "status": "stable_scaffold",
+      "owns_production_strategies": false,
+      "docs": ["docs/RESEARCH_ROADMAP_LEDA_V1.md", "docs/LEDA0_PROTOCOL.md"]
+    },
+    {
+      "id": "trading_platform",
+      "name": "Trading Platform",
+      "role": "Engineering deploy readiness; benchmarks only until APPROVED",
+      "status": "active_engineering",
+      "owns_production_strategies": false,
+      "docs": ["docs/TRADING_PLATFORM_V1.md"]
+    },
+    {
+      "id": "ops_governance",
+      "name": "Ops / Governance",
+      "role": "Readiness, kill switch, LIVE dual-flag, frozen validation",
+      "status": "stable",
+      "owns_production_strategies": false,
+      "docs": ["docs/TRADING_READINESS_TRACK.md"]
+    }
+  ]
+}

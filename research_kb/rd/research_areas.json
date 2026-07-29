@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-29",
+  "areas": [
+    {
+      "id": "trend_momentum",
+      "name": "Trend / momentum",
+      "status": "exhausted_public_atomistic",
+      "hypothesis_registry": "retired: atomistic long/flat mom/SMA families",
+      "retirement_registry": ["tsmom daily long/flat conf nulls", "LEDA-2 trend IC null", "bench_tsmom engineering only"],
+      "mechanism_ids": [],
+      "notes": "Do not re-mine public daily long/flat mom without new data class"
+    },
+    {
+      "id": "liquidity",
+      "name": "Liquidity creation and destruction",
+      "status": "partial",
+      "hypothesis_registry": "stable stock characterised; mint/burn open",
+      "retirement_registry": ["CMD exchange netflow conf null as trade filters"],
+      "mechanism_ids": ["liquidity_creation_destruction"],
+      "notes": "Highest remaining IG if free mint/burn reconstructible"
+    },
+    {
+      "id": "leverage",
+      "name": "Leverage cycles",
+      "status": "descriptive_only",
+      "hypothesis_registry": "build vs unwind mean next-RV; residual skill retired",
+      "retirement_registry": ["leverage_incremental_rv_skill_v1", "vol_clustering cofactor prolongation"],
+      "mechanism_ids": ["leverage_cycle", "vol_clustering"],
+      "notes": "Descriptors ok; no next-RV channel without new claim + data"
+    },
+    {
+      "id": "behavioural",
+      "name": "Behavioural effects",
+      "status": "partial",
+      "hypothesis_registry": "uncertainty_behaviour v1 done",
+      "retirement_registry": ["intensity drops in high RV"],
+      "mechanism_ids": ["uncertainty_behaviour"],
+      "notes": "Intensity rises in high RV; leverage proxies elevated"
+    },
+    {
+      "id": "microstructure",
+      "name": "Market microstructure",
+      "status": "partial",
+      "hypothesis_registry": "kline_aggression characterised",
+      "retirement_registry": [],
+      "mechanism_ids": [],
+      "notes": "Taker/intensity properties; not promoted to trade"
+    },
+    {
+      "id": "cross_market",
+      "name": "Cross-market information propagation",
+      "status": "mostly_null",
+      "hypothesis_registry": "ETH mom null; ETH RV residual null",
+      "retirement_registry": ["leda5_xasset", "info_prop_eth_rv_to_btc_residual_v1"],
+      "mechanism_ids": ["info_propagation"],
+      "notes": "Shared variance not incremental skill under current ops"
+    },
+    {
+      "id": "options",
+      "name": "Options positioning",
+      "status": "unexplored",
+      "hypothesis_registry": "none",
+      "retirement_registry": [],
+      "mechanism_ids": [],
+      "notes": "Often paid; EIR required before acquisition"
+    },
+    {
+      "id": "etf_flows",
+      "name": "ETF flows",
+      "status": "unexplored",
+      "hypothesis_registry": "none",
+      "retirement_registry": [],
+      "mechanism_ids": [],
+      "notes": "Institutional pipe; verify free delayed series before paid"
+    },
+    {
+      "id": "stablecoin_flows",
+      "name": "Stablecoin flows",
+      "status": "partial",
+      "hypothesis_registry": "agg supply stock; exchange netflow retired as trade",
+      "retirement_registry": ["CMD stable netflow trade filters"],
+      "mechanism_ids": ["liquidity_creation_destruction"],
+      "notes": "Stock vs flow distinction matters"
+    },
+    {
+      "id": "macro",
+      "name": "Macro transmission",
+      "status": "null_atomistic",
+      "hypothesis_registry": "FRED DXY/DGS2 programme null",
+      "retirement_registry": ["MACRO_REGIME_V1 atomistic filters"],
+      "mechanism_ids": [],
+      "notes": "May revisit only as calibrated risk conditioner, not clone"
+    },
+    {
+      "id": "execution_quality",
+      "name": "Execution quality",
+      "status": "platform_engineering",
+      "hypothesis_registry": "n/a — Trading Platform",
+      "retirement_registry": [],
+      "mechanism_ids": [],
+      "notes": "Owned by Trading Platform; not alpha"
+    },
+    {
+      "id": "risk_forecasting",
+      "name": "Risk forecasting",
+      "status": "partial",
+      "hypothesis_registry": "RV lag established; composites retired",
+      "retirement_registry": ["leda_synth_stress_equal_rank_v1"],
+      "mechanism_ids": ["vol_clustering"],
+      "notes": "RV persistence is the lab risk baseline"
+    },
+    {
+      "id": "alt_data",
+      "name": "Alternative data",
+      "status": "selective",
+      "hypothesis_registry": "PM panel explor null; free CMD wave null",
+      "retirement_registry": ["free on-chain clones", "pm path panels low EV"],
+      "mechanism_ids": [],
+      "notes": "Only new mechanism families; EIR for paid"
+    },
+    {
+      "id": "ml",
+      "name": "Machine learning",
+      "status": "deferred",
+      "hypothesis_registry": "none — require explicit mechanism + falsifiable claim",
+      "retirement_registry": [],
+      "mechanism_ids": [],
+      "notes": "Only if scientifically justified; never opaque hypothesis"
+    },
+    {
+      "id": "dislocation",
+      "name": "Market dislocation",
+      "status": "descriptive_support",
+      "hypothesis_registry": "cross_venue_basis; stress widens |basis|",
+      "retirement_registry": [],
+      "mechanism_ids": ["dislocation_persistence"],
+      "notes": "Descriptor; not trade rule"
+    }
+  ]
+}

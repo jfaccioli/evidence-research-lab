@@ -1,0 +1,394 @@
+{
+  "programme": "research_director",
+  "role": "principal_investigator",
+  "annual_objective": "Increase the laboratory's understanding of how markets function while maximising the probability of discovering economically meaningful, reproducible trading advantages under frozen scientific standards.",
+  "updated_at": "2026-07-29T08:35:48.732097+00:00",
+  "programmes": [
+    {
+      "id": "research_director",
+      "name": "Research Director",
+      "role": "Principal investigator: prioritise, map knowledge, prevent waste",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/RESEARCH_DIRECTOR_PROGRAMME.md",
+        "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md"
+      ]
+    },
+    {
+      "id": "alpha_discovery",
+      "name": "Alpha Discovery",
+      "role": "Only path from evidence to production strategies under frozen gates",
+      "status": "active",
+      "owns_production_strategies": true,
+      "docs": [
+        "docs/ALPHA_DISCOVERY_DIRECTIVE.md",
+        "docs/RESEARCH_ROADMAP_SCIENCE.md"
+      ]
+    },
+    {
+      "id": "mechanism_discovery",
+      "name": "Mechanism Discovery",
+      "role": "Economic/behavioural mechanisms before properties",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/MECHANISM_DISCOVERY_DIRECTIVE.md",
+        "docs/MECHANISM_REGISTRY.md"
+      ]
+    },
+    {
+      "id": "leda",
+      "name": "LEDA",
+      "role": "Layered Evidence Decision Architecture (F/R/P/X + channels)",
+      "status": "stable_scaffold",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/RESEARCH_ROADMAP_LEDA_V1.md",
+        "docs/LEDA0_PROTOCOL.md"
+      ]
+    },
+    {
+      "id": "trading_platform",
+      "name": "Trading Platform",
+      "role": "Engineering deploy readiness; benchmarks only until APPROVED",
+      "status": "active_engineering",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/TRADING_PLATFORM_V1.md"
+      ]
+    },
+    {
+      "id": "ops_governance",
+      "name": "Ops / Governance",
+      "role": "Readiness, kill switch, LIVE dual-flag, frozen validation",
+      "status": "stable",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/TRADING_READINESS_TRACK.md"
+      ]
+    }
+  ],
+  "n_research_areas": 15,
+  "areas": [
+    {
+      "id": "trend_momentum",
+      "name": "Trend / momentum",
+      "status": "exhausted_public_atomistic",
+      "notes": "Do not re-mine public daily long/flat mom without new data class"
+    },
+    {
+      "id": "liquidity",
+      "name": "Liquidity creation and destruction",
+      "status": "partial",
+      "notes": "Highest remaining IG if free mint/burn reconstructible"
+    },
+    {
+      "id": "leverage",
+      "name": "Leverage cycles",
+      "status": "descriptive_only",
+      "notes": "Descriptors ok; no next-RV channel without new claim + data"
+    },
+    {
+      "id": "behavioural",
+      "name": "Behavioural effects",
+      "status": "partial",
+      "notes": "Intensity rises in high RV; leverage proxies elevated"
+    },
+    {
+      "id": "microstructure",
+      "name": "Market microstructure",
+      "status": "partial",
+      "notes": "Taker/intensity properties; not promoted to trade"
+    },
+    {
+      "id": "cross_market",
+      "name": "Cross-market information propagation",
+      "status": "mostly_null",
+      "notes": "Shared variance not incremental skill under current ops"
+    },
+    {
+      "id": "options",
+      "name": "Options positioning",
+      "status": "unexplored",
+      "notes": "Often paid; EIR required before acquisition"
+    },
+    {
+      "id": "etf_flows",
+      "name": "ETF flows",
+      "status": "unexplored",
+      "notes": "Institutional pipe; verify free delayed series before paid"
+    },
+    {
+      "id": "stablecoin_flows",
+      "name": "Stablecoin flows",
+      "status": "partial",
+      "notes": "Stock vs flow distinction matters"
+    },
+    {
+      "id": "macro",
+      "name": "Macro transmission",
+      "status": "null_atomistic",
+      "notes": "May revisit only as calibrated risk conditioner, not clone"
+    },
+    {
+      "id": "execution_quality",
+      "name": "Execution quality",
+      "status": "platform_engineering",
+      "notes": "Owned by Trading Platform; not alpha"
+    },
+    {
+      "id": "risk_forecasting",
+      "name": "Risk forecasting",
+      "status": "partial",
+      "notes": "RV persistence is the lab risk baseline"
+    },
+    {
+      "id": "alt_data",
+      "name": "Alternative data",
+      "status": "selective",
+      "notes": "Only new mechanism families; EIR for paid"
+    },
+    {
+      "id": "ml",
+      "name": "Machine learning",
+      "status": "deferred",
+      "notes": "Only if scientifically justified; never opaque hypothesis"
+    },
+    {
+      "id": "dislocation",
+      "name": "Market dislocation",
+      "status": "descriptive_support",
+      "notes": "Descriptor; not trade rule"
+    }
+  ],
+  "knowledge_graph": {
+    "n_nodes": 22,
+    "n_edges": 14,
+    "nodes_by_layer": {
+      "mechanism": 6,
+      "property": 8,
+      "channel": 3,
+      "forecast_target": 2,
+      "decision_policy": 3
+    },
+    "edges_by_status": {
+      "supported": 4,
+      "supported_skill_not_trade": 1,
+      "partial": 1,
+      "supported_descriptive": 2,
+      "refuted_incremental": 3,
+      "retired": 1,
+      "null": 1,
+      "no_approved_edge": 1
+    },
+    "n_supported_edges": 7,
+    "n_refuted_or_retired_edges": 8,
+    "layers": [
+      "mechanism",
+      "property",
+      "channel",
+      "forecast_target",
+      "decision_policy"
+    ]
+  },
+  "ranked_directions": [
+    {
+      "id": "dir_liquidity_mint_burn",
+      "title": "Liquidity creation/destruction via reconstructible mint/burn",
+      "area_id": "liquidity",
+      "EIG": 4.5,
+      "EEV": 3.5,
+      "Pa": 2.5,
+      "SciRisk": 2.5,
+      "EngCost": 3.0,
+      "ExtDep": 2.0,
+      "Overlap": 1.0,
+      "status": "blocked_missing_free_series",
+      "external_dependency": "Free reconstructible mint/burn or human EIR for paid",
+      "blocks": [
+        "need free mint/burn series or EIR approval"
+      ],
+      "retired_overlap": [
+        "CMD netflow trade filters \u2014 different object (flow vs creation)"
+      ],
+      "composite_score": 8.4
+    },
+    {
+      "id": "dir_etf_flow_free",
+      "title": "Spot BTC ETF flow as institutional liquidity pipe (free delayed first)",
+      "area_id": "etf_flows",
+      "EIG": 4.0,
+      "EEV": 3.5,
+      "Pa": 2.5,
+      "SciRisk": 2.5,
+      "EngCost": 2.5,
+      "ExtDep": 2.0,
+      "Overlap": 1.5,
+      "status": "evaluate_free_source",
+      "external_dependency": "Identify free delayed reconstructible ETF flow",
+      "blocks": [
+        "source identification"
+      ],
+      "retired_overlap": [
+        "labeled inventory vendor \u2014 paid path deferred"
+      ],
+      "composite_score": 7.4
+    },
+    {
+      "id": "dir_risk_baseline_document",
+      "title": "Lock RV-lag as risk baseline; stop residual next-RV fishing on current shelf",
+      "area_id": "risk_forecasting",
+      "EIG": 3.0,
+      "EEV": 2.0,
+      "Pa": 1.0,
+      "SciRisk": 1.0,
+      "EngCost": 1.0,
+      "ExtDep": 0.0,
+      "Overlap": 0.0,
+      "status": "policy_done",
+      "external_dependency": null,
+      "blocks": [],
+      "retired_overlap": [],
+      "composite_score": 6.9
+    },
+    {
+      "id": "dir_options_eir",
+      "title": "Options skew / positioning (EIR before any paid data)",
+      "area_id": "options",
+      "EIG": 3.5,
+      "EEV": 3.0,
+      "Pa": 2.0,
+      "SciRisk": 3.0,
+      "EngCost": 4.0,
+      "ExtDep": 4.0,
+      "Overlap": 0.5,
+      "status": "deferred_eir",
+      "external_dependency": "Paid or restricted options history",
+      "blocks": [
+        "EIR + human approval"
+      ],
+      "retired_overlap": [],
+      "composite_score": 4.05
+    },
+    {
+      "id": "dir_dislocation_drivers",
+      "title": "Mechanism of basis persistence (rails vs inventory) \u2014 descriptive only unless new claim",
+      "area_id": "dislocation",
+      "EIG": 3.0,
+      "EEV": 1.5,
+      "Pa": 1.0,
+      "SciRisk": 2.0,
+      "EngCost": 2.0,
+      "ExtDep": 1.0,
+      "Overlap": 0.5,
+      "status": "optional_low_priority",
+      "external_dependency": "Optional true USD/USDT FX series",
+      "blocks": [],
+      "retired_overlap": [],
+      "composite_score": 3.7
+    },
+    {
+      "id": "dir_platform_benchmarks",
+      "title": "Trading Platform continuous benchmark validation (engineering)",
+      "area_id": "execution_quality",
+      "EIG": 1.0,
+      "EEV": 0.5,
+      "Pa": 0.0,
+      "SciRisk": 0.5,
+      "EngCost": 1.5,
+      "ExtDep": 0.0,
+      "Overlap": 0.0,
+      "status": "active_engineering",
+      "external_dependency": null,
+      "blocks": [],
+      "retired_overlap": [],
+      "composite_score": 0.65
+    }
+  ],
+  "top_openable_direction": {
+    "id": "dir_etf_flow_free",
+    "title": "Spot BTC ETF flow as institutional liquidity pipe (free delayed first)",
+    "area_id": "etf_flows",
+    "EIG": 4.0,
+    "EEV": 3.5,
+    "Pa": 2.5,
+    "SciRisk": 2.5,
+    "EngCost": 2.5,
+    "ExtDep": 2.0,
+    "Overlap": 1.5,
+    "status": "evaluate_free_source",
+    "external_dependency": "Identify free delayed reconstructible ETF flow",
+    "blocks": [
+      "source identification"
+    ],
+    "retired_overlap": [
+      "labeled inventory vendor \u2014 paid path deferred"
+    ],
+    "composite_score": 7.4
+  },
+  "blocked_high_value": [
+    {
+      "id": "dir_liquidity_mint_burn",
+      "title": "Liquidity creation/destruction via reconstructible mint/burn",
+      "area_id": "liquidity",
+      "EIG": 4.5,
+      "EEV": 3.5,
+      "Pa": 2.5,
+      "SciRisk": 2.5,
+      "EngCost": 3.0,
+      "ExtDep": 2.0,
+      "Overlap": 1.0,
+      "status": "blocked_missing_free_series",
+      "external_dependency": "Free reconstructible mint/burn or human EIR for paid",
+      "blocks": [
+        "need free mint/burn series or EIR approval"
+      ],
+      "retired_overlap": [
+        "CMD netflow trade filters \u2014 different object (flow vs creation)"
+      ],
+      "composite_score": 8.4
+    },
+    {
+      "id": "dir_options_eir",
+      "title": "Options skew / positioning (EIR before any paid data)",
+      "area_id": "options",
+      "EIG": 3.5,
+      "EEV": 3.0,
+      "Pa": 2.0,
+      "SciRisk": 3.0,
+      "EngCost": 4.0,
+      "ExtDep": 4.0,
+      "Overlap": 0.5,
+      "status": "deferred_eir",
+      "external_dependency": "Paid or restricted options history",
+      "blocks": [
+        "EIR + human approval"
+      ],
+      "retired_overlap": [],
+      "composite_score": 4.05
+    }
+  ],
+  "retired_family_count": 8,
+  "allocation_guidance": {
+    "alpha_discovery": "Only path to production strategies; highest P\u03b1 work only",
+    "mechanism_discovery": "Prefer unblocked mechanisms with new observables",
+    "trading_platform": "Engineering effort; no science budget from alpha",
+    "ops_governance": "Maintain; do not expand for novelty"
+  },
+  "current_scientific_model": "Next-RV dominated by RV lag; leverage/ETH residual skill retired; dislocation widens under stress (descriptive); 0 confirmatory trading candidates",
+  "standards": {
+    "gates": "frozen",
+    "trading_platform_is_alpha": false,
+    "weaken_gates_for_platform": false
+  },
+  "interrupt_policy": [
+    "new high-value programme open",
+    "external data scientifically justified",
+    "confirmatory survivor",
+    "major model contradiction",
+    "strategic human judgement required"
+  ],
+  "openable_count": 3,
+  "blocked_count": 2
+}

@@ -39,7 +39,9 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **`leverage_cycle` v1:** OI-build (+ funding/premium stress) has higher mean next-RV than OI-unwind (margin ~0.006). Descriptive mechanism support; **not** LEDA candidate without new pre-reg skill claim vs rv_lag.
 - **`uncertainty_behaviour` v1:** high RV co-occurs with **higher** intensity and elevated |funding|/|premium|; intensity-drop hypothesis rejected; basis not wider.
 - **Ops readiness track:** checklist 11/11 pass (flat + flip paper, kill switch, limits, audit); **does not** authorize trading or soften gates.
-- Shadow alpha still unjustified; ops paper/shadow machinery hygiene only.
+- **Incremental next-RV skill frontier:** OI-build residual IC ~0.027 (**retired**); ETH RV residual IC ~-0.03 (**retired**). Working model: **RV lag dominates**.
+- **Dislocation under stress:** mean |basis| ~2× in high RV vs low RV (descriptive).
+- Shadow alpha still unjustified. Roadmap: `docs/RESEARCH_ROADMAP_SCIENCE.md`.
 
 ## Mechanisms
 

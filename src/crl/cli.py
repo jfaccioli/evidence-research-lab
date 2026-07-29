@@ -474,6 +474,7 @@ def main(argv: list[str] | None = None) -> int:
             "study-vol-clustering",
             "study-leverage-cycle",
             "study-uncertainty-behaviour",
+            "study-leverage-incremental-rv",
         ],
         help="Properties + mechanism studies (mechanism-first mission)",
     )
@@ -1247,17 +1248,9 @@ def cmd_observe(args: argparse.Namespace) -> int:
         print(json.dumps(report, indent=2, default=str))
         return 0 if report.get("ok") else 1
 
-    if args.action == "study-leverage-cycle":
+    def _load_oi_events(ohlcv):
         import pandas as pd
 
-        from crl.research.mechanisms.leverage_cycle import study_leverage_cycle
-
-        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
-        if ohlcv is None:
-            print("No BTC OHLCV", file=sys.stderr)
-            return 1
-        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
-        premium, funding, _, _, _ = _load_mechanism_series()
         oi_events = None
         oi_dir = project_root() / "data" / "processed" / "oi"
         if oi_dir.exists():
@@ -1271,10 +1264,49 @@ def cmd_observe(args: argparse.Namespace) -> int:
             oi_events = pd.DataFrame(
                 {
                     "oi_time": ohlcv.index,
-                    "open_interest": 1000 * np.exp(np.cumsum(rng.normal(0, 0.02, len(ohlcv)))),
+                    "open_interest": 1000
+                    * np.exp(np.cumsum(rng.normal(0, 0.02, len(ohlcv)))),
                 }
             )
+        return oi_events
+
+    if args.action == "study-leverage-cycle":
+        from crl.research.mechanisms.leverage_cycle import study_leverage_cycle
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, _, _, _ = _load_mechanism_series()
+        oi_events = _load_oi_events(ohlcv)
         report = study_leverage_cycle(
+            ohlcv,
+            oi_events=oi_events,
+            premium_events=premium,
+            funding_events=funding,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        print(json.dumps(report, indent=2, default=str))
+        return 0 if report.get("ok") else 1
+
+    if args.action == "study-leverage-incremental-rv":
+        from crl.research.mechanisms.leverage_incremental_rv import (
+            study_leverage_incremental_rv_skill,
+        )
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        ohlcv, dataset_id = _prefer_micro_ohlcv(ohlcv, dataset_id)
+        premium, funding, _, _, _ = _load_mechanism_series()
+        oi_events = _load_oi_events(ohlcv)
+        if oi_events is None:
+            print("OI events required", file=sys.stderr)
+            return 1
+        report = study_leverage_incremental_rv_skill(
             ohlcv,
             oi_events=oi_events,
             premium_events=premium,

@@ -89,6 +89,14 @@
       "rank": 6
     }
   ],
-  "retired_combination_families": ["leda_synth_stress_equal_rank_v1"],
-  "note": "Properties are instruments. Mechanisms are the scientific objects."
+  "retired_combination_families": [
+    "leda_synth_stress_equal_rank_v1",
+    "leverage_incremental_rv_skill_v1",
+    "info_prop_eth_rv_to_btc_residual_v1"
+  ],
+  "descriptive_supported_not_leda": [
+    "leverage_cycle_build_vs_unwind_mean_rv",
+    "dislocation_basis_under_stress_v1"
+  ],
+  "note": "Properties are instruments. Mechanisms are the scientific objects. Nulls retire families."
 }

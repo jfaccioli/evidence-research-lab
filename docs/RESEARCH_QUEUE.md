@@ -1,42 +1,37 @@
 # Living research queue (Research Director)
 
 **Updated:** 2026-07-29  
-**Science:** `docs/MECHANISM_DISCOVERY_DIRECTIVE.md`  
-**Ops track:** `docs/TRADING_READINESS_TRACK.md` (separate; non-promotional)
+**Roadmap:** `docs/RESEARCH_ROADMAP_SCIENCE.md`  
+**Directive:** `docs/MECHANISM_DISCOVERY_DIRECTIVE.md`
 
-## Dual tracks
+## Current scientific model (short)
 
-| Track | Status |
-|-------|--------|
-| **Scientific** | Mechanism studies; 0 LEDA promotions |
-| **Operational** | Ops readiness checklist **11/11 pass** (zero capital) |
+**Next-RV is dominated by RV lag.** Leverage build, multi-asset vol, and stress
+composites do **not** add residual next-RV skill under pre-reg tests.  
+**Dislocation** (|basis|) **widens** in high-RV / high-funding regimes (descriptor).  
+**0** confirmatory trading candidates.
 
-Scientific gates are **not** weakened by ops readiness.
+## Retired this cycle (do not revisit)
 
-## Mechanism results
+- `leverage_incremental_rv_skill_v1`  
+- `info_prop_eth_rv_to_btc_residual_v1`  
 
-| Mechanism | Result | LEDA candidate? |
-|-----------|--------|-----------------|
-| vol_clustering | Cofactor prolongation **null**; RV inertia | no |
-| **leverage_cycle** | Build → higher next RV than unwind (**supported**) | **no** (needs dedicated pre-reg for channel) |
-| **uncertainty_behaviour** | Intensity **higher** in high RV; leverage proxies elevated | no |
+## Active / blocked
 
-## Queue
+| Item | Status |
+|------|--------|
+| Dislocation-under-stress | Descriptive knowledge locked |
+| Liquidity mint/burn | Blocked — free data gap |
+| Directional alpha | Needs **new mechanism + new data class** |
+| Ops readiness | 11/11 (separate; non-promotional) |
 
-| Rank | Object | Status |
-|------|--------|--------|
-| **1** | Optional: pre-reg **risk-state** claim “OI-build raises next-RV skill beyond rv_lag” (family cost + ablation) **only if** pursuing LEDA risk channel | Optional science |
-| **2** | Continue ops paper-clock / continuous paper shadow with **flat** policy (no alpha) | Ops hygiene |
-| **3** | Conf / live | Blocked on science |
+## Optimisation rule
+
+Expected **information gain / trial cost** — not convenience or positive results.
 
 ## Commands
 
 ```bash
-# Science
-python -m crl observe study-leverage-cycle
-python -m crl observe study-uncertainty-behaviour
-python -m crl observe mechanisms
-
-# Ops (not science)
+python -m crl observe study-leverage-incremental-rv
 python -m crl ops-readiness check
 ```

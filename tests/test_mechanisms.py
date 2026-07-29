@@ -48,3 +48,14 @@ def test_leverage_and_uncertainty_mock():
     unc = study_uncertainty_behaviour(ohlcv, min_periods=40)
     assert unc["ok"] is True
     assert unc["leda_candidate"] is False
+
+    from crl.research.mechanisms.leverage_incremental_rv import (
+        study_leverage_incremental_rv_skill,
+    )
+
+    incr = study_leverage_incremental_rv_skill(
+        ohlcv, oi_events=oi, expand_min=80
+    )
+    assert incr["ok"] is True
+    assert "decision" in incr
+    assert "retire_family" in incr["decision"]

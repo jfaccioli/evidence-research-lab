@@ -32,7 +32,8 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - **`premium_residual`:** expanding residual vs funding → **linear next-RV IC ~0**; premium’s linear uncertainty association is largely funding-collinear. Understanding win; not an edge.
 - **`stablecoin_agg_supply`:** DefiLlama aggregate circulating USD; dlog30_lag ↔ next RV ~**0.29**, vs fwd_ret ~0; partially independent of funding/premium. Liquidity stock property; **LEDA refused**.
 - **`defi_agg_tvl`:** DeFi capital lock; distinct from stable growth (~0.20); **null** linear association with BTC next return/RV. Understanding null; **LEDA refused**.
-- CoinGecko total mcap/dominance history blocked (401) without paid/key — free path closed for now.
+- **`cross_venue_basis`:** BN vs Coinbase log ratio (calendar-day aligned); persistent (~0.90); weak next-RV; not a return clone. **LEDA refused**.
+- **Property Synthesis Review (2026-07-29):** pre-reg equal-rank stress composite **fails** vs rv_lag baseline (composite IC ~0.26 vs ~0.96); family `leda_synth_stress_equal_rank_v1` **retired**. No composite LEDA programme.
 - Shadow still unjustified.
 
 ## Mechanisms

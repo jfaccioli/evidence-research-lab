@@ -467,8 +467,11 @@ def main(argv: list[str] | None = None) -> int:
             "characterize-stable-supply",
             "fetch-defi-tvl",
             "characterize-defi-tvl",
+            "fetch-cross-basis",
+            "characterize-cross-basis",
+            "synthesis-review",
         ],
-        help="Market property fetch/characterize actions",
+        help="Market property fetch/characterize/synthesis actions",
     )
     p_obs.add_argument(
         "--mock",
@@ -1049,6 +1052,159 @@ def cmd_observe(args: argparse.Namespace) -> int:
             publish_lag_days=1,
         )
         print(json.dumps(meta, indent=2))
+        return 0
+
+    if args.action == "fetch-cross-basis":
+        import numpy as np
+        import pandas as pd
+
+        from crl.shared.data.cross_venue import save_basis_series
+        from crl.shared.data.sources.coinbase_public import CoinbasePublicSource
+
+        print("Fetching Coinbase BTC-USD daily closes...", flush=True)
+        cb = CoinbasePublicSource().fetch_daily_closes("BTC-USD")
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("Need BTC Binance OHLCV for basis numerator", file=sys.stderr)
+            return 1
+        # Same UTC calendar day on both venues (not asof lag — that induced return contamination)
+        bars = (
+            ohlcv.index.tz_convert("UTC")
+            if ohlcv.index.tz is not None
+            else ohlcv.index.tz_localize("UTC")
+        )
+        bn = pd.DataFrame(
+            {
+                "event_time": pd.DatetimeIndex(pd.to_datetime(bars, utc=True)).floor("D"),
+                "bn_close": ohlcv["close"].astype(float).to_numpy(),
+            }
+        )
+        right = cb.copy()
+        right["event_time"] = pd.to_datetime(right["event_time"], utc=True).dt.floor("D")
+        merged = bn.merge(right, on="event_time", how="inner")
+        merged = merged.dropna(subset=["bn_close", "cb_close"])
+        # Drop incomplete current UTC day
+        today = pd.Timestamp.now(tz="UTC").floor("D")
+        merged = merged.loc[merged["event_time"] < today]
+        merged["basis"] = np.log(
+            merged["bn_close"].astype(float) / merged["cb_close"].astype(float)
+        )
+        basis_df = merged[["event_time", "basis", "bn_close", "cb_close"]]
+        meta = save_basis_series(
+            basis_df,
+            processed_dir=project_root() / "data" / "processed" / "cross_venue",
+        )
+        meta["binance_dataset_id"] = dataset_id
+        meta["binance_source"] = source
+        meta["n_coinbase"] = len(cb)
+        meta["alignment"] = "same_utc_calendar_day_inner_join"
+        meta["pit_note"] = (
+            "Same-day closes known after UTC day completes; use lag-1 for "
+            "predictive association (USD vs USDT not FX-adjusted)"
+        )
+        print(json.dumps(meta, indent=2, default=str))
+        return 0
+
+    if args.action == "characterize-cross-basis":
+        from crl.research.market_properties.cross_venue_basis import (
+            characterize_cross_venue_basis,
+        )
+        from crl.shared.data.cross_venue import load_latest_basis
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        if getattr(args, "mock", False):
+            import numpy as np
+            import pandas as pd
+
+            rng = np.random.default_rng(0)
+            basis = pd.DataFrame(
+                {
+                    "event_time": ohlcv.index,
+                    "basis": rng.normal(0, 0.001, size=len(ohlcv)),
+                }
+            )
+            meta = {"series_id": "mock_basis"}
+        else:
+            basis, meta = load_latest_basis(
+                project_root() / "data" / "processed" / "cross_venue"
+            )
+        report = characterize_cross_venue_basis(ohlcv, basis)
+        report["dataset_id"] = dataset_id
+        report["basis_series_id"] = meta.get("series_id")
+        print(json.dumps(report, indent=2))
+        return 0 if report.get("ok") else 1
+
+    if args.action == "synthesis-review":
+        from crl.research.market_properties.synthesis import run_property_synthesis_review
+
+        ohlcv, source, dataset_id = _leda_load_ohlcv(args)
+        if ohlcv is None:
+            print("No BTC OHLCV", file=sys.stderr)
+            return 1
+        root = project_root()
+        premium = funding = supply = tvl = basis = None
+        try:
+            from crl.shared.data.premium import load_latest_premium
+
+            premium, _ = load_latest_premium(root / "data" / "processed" / "premium")
+        except Exception:
+            pass
+        fund_dir = root / "data" / "processed" / "funding"
+        if fund_dir.exists():
+            import pandas as pd
+
+            parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
+            if parts:
+                funding = pd.read_parquet(parts[-1])
+        try:
+            from crl.shared.data.stablecoin_supply import load_latest_supply
+
+            supply, _ = load_latest_supply(root / "data" / "processed" / "stablecoin")
+        except Exception:
+            pass
+        try:
+            from crl.shared.data.defi_tvl import load_latest_tvl
+
+            tvl, _ = load_latest_tvl(root / "data" / "processed" / "defi_tvl")
+        except Exception:
+            pass
+        try:
+            from crl.shared.data.cross_venue import load_latest_basis
+
+            basis, _ = load_latest_basis(root / "data" / "processed" / "cross_venue")
+        except Exception:
+            pass
+        # Prefer OHLCV with micro columns
+        if "taker_buy_base" not in ohlcv.columns and not getattr(args, "mock", False):
+            from crl.shared.config import load_config
+            from crl.shared.data.store import load_dataset
+
+            cfg = load_config(args.config)
+            mdir = root / cfg["data"]["manifest_dir"]
+            for mp in sorted(mdir.glob("binance_public_BTCUSDT_1d_*.json"), reverse=True):
+                try:
+                    mid = json.loads(mp.read_text())["dataset_id"]
+                    df, _ = load_dataset(mid, manifest_dir=mdir, verify_hash=True)
+                    if "taker_buy_base" in df.columns:
+                        ohlcv = df
+                        dataset_id = mid
+                        break
+                except Exception:
+                    continue
+        report = run_property_synthesis_review(
+            ohlcv,
+            premium_events=premium,
+            funding_events=funding,
+            supply_events=supply,
+            tvl_events=tvl,
+            basis_events=basis,
+        )
+        report["dataset_id"] = dataset_id
+        report["ohlcv_source"] = source
+        print(json.dumps(report, indent=2, default=str))
         return 0
 
     if args.action in ("characterize-stable-supply", "characterize-defi-tvl"):

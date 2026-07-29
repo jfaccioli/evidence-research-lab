@@ -462,8 +462,12 @@ def main(argv: list[str] | None = None) -> int:
             "characterize-aggression",
             "fetch-premium",
             "characterize-premium",
+            "characterize-premium-residual",
         ],
-        help="inventory | characterize-aggression | fetch-premium | characterize-premium",
+        help=(
+            "inventory | characterize-aggression | fetch-premium | "
+            "characterize-premium | characterize-premium-residual"
+        ),
     )
     p_obs.add_argument(
         "--mock",
@@ -1016,9 +1020,12 @@ def cmd_observe(args: argparse.Namespace) -> int:
         print(json.dumps(meta, indent=2))
         return 0
 
-    if args.action == "characterize-premium":
+    if args.action in ("characterize-premium", "characterize-premium-residual"):
         from crl.research.market_properties.kline_aggression import build_aggression_frame
-        from crl.research.market_properties.perp_premium import characterize_perp_premium
+        from crl.research.market_properties.perp_premium import (
+            characterize_perp_premium,
+            characterize_premium_residual,
+        )
         from crl.shared.data.premium import load_latest_premium
 
         ohlcv, source, dataset_id = _leda_load_ohlcv(args)
@@ -1026,7 +1033,6 @@ def cmd_observe(args: argparse.Namespace) -> int:
             print("No BTC 1d; fetch or --mock", file=sys.stderr)
             return 1
         if getattr(args, "mock", False):
-            # Synthetic premium for offline tests
             import numpy as np
             import pandas as pd
 
@@ -1039,28 +1045,41 @@ def cmd_observe(args: argparse.Namespace) -> int:
                 }
             )
             meta = {"series_id": "mock_premium", "source": "mock"}
+            funding = pd.DataFrame(
+                {
+                    "funding_time": ohlcv.index,
+                    "funding_rate": rng.normal(0, 1e-4, size=n),
+                }
+            )
         else:
             prem, meta = load_latest_premium(
                 project_root() / "data" / "processed" / "premium",
                 symbol=str(getattr(args, "symbol", None) or "BTCUSDT"),
             )
-        funding = None
-        fund_dir = project_root() / "data" / "processed" / "funding"
-        if fund_dir.exists():
-            import pandas as pd
+            funding = None
+            fund_dir = project_root() / "data" / "processed" / "funding"
+            if fund_dir.exists():
+                import pandas as pd
 
-            parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
-            if parts:
-                funding = pd.read_parquet(parts[-1])
-        aggr = None
-        if "taker_buy_base" in ohlcv.columns:
-            try:
-                aggr = build_aggression_frame(ohlcv)
-            except ValueError:
-                aggr = None
-        report = characterize_perp_premium(
-            ohlcv, prem, funding_events=funding, aggression=aggr
-        )
+                parts = sorted(fund_dir.glob("binance_funding_BTCUSDT_*.parquet"))
+                if parts:
+                    funding = pd.read_parquet(parts[-1])
+
+        if args.action == "characterize-premium-residual":
+            if funding is None:
+                print("Funding series required for residual characterization", file=sys.stderr)
+                return 1
+            report = characterize_premium_residual(ohlcv, prem, funding)
+        else:
+            aggr = None
+            if "taker_buy_base" in ohlcv.columns:
+                try:
+                    aggr = build_aggression_frame(ohlcv)
+                except ValueError:
+                    aggr = None
+            report = characterize_perp_premium(
+                ohlcv, prem, funding_events=funding, aggression=aggr
+            )
         report["dataset_id"] = dataset_id
         report["ohlcv_source"] = source
         report["premium_series_id"] = meta.get("series_id")

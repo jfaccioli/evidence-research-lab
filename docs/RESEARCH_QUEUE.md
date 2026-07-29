@@ -10,8 +10,9 @@
 |-------|--------|
 | Confirmatory candidates | **0** |
 | Bottleneck | Market **property** coverage / quality |
-| Characterized free properties | `kline_aggression`, `perp_premium` |
-| LEDA promotion of either | **Refused** (characterization only) |
+| Characterized free properties | `kline_aggression`, `perp_premium`, `premium_residual` |
+| LEDA promotion | **Refused** for all three |
+| Residual finding | Linear next-RV skill **collinear with funding** (residual IC ~0) |
 | Shadow | **Not justified** |
 
 ## Queue
@@ -20,10 +21,10 @@
 |------|-----|--------|--------|
 | — | `kline_aggression` | Spot kline microstructure | **Characterized** |
 | — | `perp_premium` | Futures mark–index premium | **Characterized** |
-| **1** | **`premium_residual`** | Premium after residualizing funding (independence science) | **Next** |
-| **2** | Optional free property | Stablecoin supply growth if PIT-clean | Pending |
-| **3** | Pre-reg LEDA risk/state | Only if residual informative | Blocked on science |
-| **4** | Conf / shadow | Blocked | Blocked |
+| — | `premium_residual` | Expanding residual vs funding | **Characterized** (linear next-RV null) |
+| **1** | Next free property | Prefer **new mechanism** (e.g. aggregate stable supply) over more funding/premium transforms | **Next** |
+| **2** | Joint risk state design | Only as descriptive multi-property map after pre-reg — not promotion | Optional |
+| **3** | Conf / shadow | Blocked | Blocked |
 
 ## Commands
 

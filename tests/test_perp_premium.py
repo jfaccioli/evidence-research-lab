@@ -58,3 +58,12 @@ def test_characterize_premium_mock():
     assert rep["leda_candidate"] is False
     assert "independence_vs_known_properties" in rep
     assert "what_it_measures" in rep
+
+    from crl.research.market_properties.perp_premium import characterize_premium_residual
+
+    res = characterize_premium_residual(
+        ohlcv, prem, fund, min_points=50, expand_min=40
+    )
+    assert res["ok"] is True
+    assert res["property_id"] == "premium_residual_vs_funding"
+    assert res["leda_candidate"] is False

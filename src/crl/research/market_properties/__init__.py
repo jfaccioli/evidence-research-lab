@@ -10,6 +10,7 @@ from crl.research.market_properties.kline_aggression import (
 from crl.research.market_properties.perp_premium import (
     PROPERTY_ID as PERP_PREMIUM_ID,
     characterize_perp_premium,
+    characterize_premium_residual,
 )
 
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "PERP_PREMIUM_ID",
     "characterize_kline_aggression",
     "characterize_perp_premium",
+    "characterize_premium_residual",
 ]

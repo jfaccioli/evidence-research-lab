@@ -28,8 +28,9 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 
 - Philosophy: **market properties** (`docs/MARKET_PROPERTIES_DIRECTIVE.md`) — scientific description of behaviour, not indicator mining.
 - **`kline_aggression`:** intensity ↔ next RV ~-0.26; tbr ↔ ret ~0.36; LEDA refused.
-- **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68 (related≠identical); vs fwd_ret ~0; vs next RV ~0.16; elevated |premium| → higher next RV. **LEDA refused** pending residual-vs-funding science.
-- Next: characterize **premium residual after funding** (independence), not trade rules.
+- **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68; vs fwd_ret ~0; vs next RV ~0.16. **LEDA refused**.
+- **`premium_residual`:** expanding residual vs funding → **linear next-RV IC ~0**; premium’s linear uncertainty association is largely funding-collinear. Understanding win; not an edge.
+- Next free property should be a **new mechanism** (not more premium/funding transforms).
 - Shadow still unjustified.
 
 ## Mechanisms

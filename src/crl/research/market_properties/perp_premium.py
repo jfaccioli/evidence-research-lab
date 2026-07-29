@@ -248,3 +248,154 @@ def characterize_perp_premium(
             "if independent, pre-reg risk evidence — never atomistic long/flat fishing"
         ),
     }
+
+
+def characterize_premium_residual(
+    ohlcv: pd.DataFrame,
+    premium_events: pd.DataFrame,
+    funding_events: pd.DataFrame,
+    *,
+    min_points: int = 100,
+    expand_min: int = 60,
+) -> dict[str, Any]:
+    """Causal residual: premium_lag − β_t · funding_lag with expanding β.
+
+    β estimated only on past data (expanding OLS, min ``expand_min`` points).
+    Characterizes whether residual carries next-RV / direction association
+    beyond funding. Not a trading rule.
+    """
+    if funding_events is None or len(funding_events) == 0:
+        return {
+            "ok": False,
+            "property_id": "premium_residual_vs_funding",
+            "reason": "funding_events required",
+        }
+
+    frame = align_premium_to_ohlcv(ohlcv, premium_events)
+    frame["funding_lag"] = _align_funding_daily(ohlcv, funding_events).shift(1)
+    df = frame.dropna(subset=["premium_lag", "funding_lag", "rv_next", "fwd_ret", "rv_lag", "ret_lag"])
+    if len(df) < min_points:
+        return {
+            "ok": False,
+            "property_id": "premium_residual_vs_funding",
+            "n": len(df),
+            "reason": f"need >= {min_points} aligned bars",
+        }
+
+    p = df["premium_lag"].to_numpy(dtype=float)
+    f = df["funding_lag"].to_numpy(dtype=float)
+    resid = np.full(len(p), np.nan)
+    betas = np.full(len(p), np.nan)
+
+    # Expanding OLS of p ~ f without intercept for simplicity (both ~0-centered)
+    # Use intercept for robustness
+    for i in range(len(p)):
+        if i + 1 < expand_min:
+            continue
+        # β from past only: indices 0..i-1
+        if i < expand_min:
+            continue
+        x = f[:i]
+        y = p[:i]
+        if np.std(x) < 1e-15:
+            continue
+        # OLS with intercept: y = a + b x
+        x_mean = np.mean(x)
+        y_mean = np.mean(y)
+        b = float(np.sum((x - x_mean) * (y - y_mean)) / np.sum((x - x_mean) ** 2))
+        a = float(y_mean - b * x_mean)
+        betas[i] = b
+        resid[i] = p[i] - (a + b * f[i])
+
+    mask = np.isfinite(resid)
+    n = int(mask.sum())
+    if n < min_points:
+        return {
+            "ok": False,
+            "property_id": "premium_residual_vs_funding",
+            "n": n,
+            "reason": f"need >= {min_points} residual points after expand_min={expand_min}",
+        }
+
+    r = resid[mask]
+    rv_n = df["rv_next"].to_numpy(dtype=float)[mask]
+    fwd = df["fwd_ret"].to_numpy(dtype=float)[mask]
+    f_m = f[mask]
+    p_m = p[mask]
+    ret_l = df["ret_lag"].to_numpy(dtype=float)[mask]
+    rv_l = df["rv_lag"].to_numpy(dtype=float)[mask]
+
+    # Residual should be nearly uncorrelated with funding by construction (in-sample expanding)
+    skill = {
+        "corr_resid_vs_fwd_ret": _safe_corr(r, fwd),
+        "corr_resid_vs_rv_next": _safe_corr(r, rv_n),
+        "corr_resid_vs_funding_lag": _safe_corr(r, f_m),
+        "corr_raw_premium_vs_rv_next": _safe_corr(p_m, rv_n),
+        "corr_funding_vs_rv_next": _safe_corr(f_m, rv_n),
+    }
+    independence = {
+        "corr_resid_vs_ret_lag": _safe_corr(r, ret_l),
+        "corr_resid_vs_rv_lag": _safe_corr(r, rv_l),
+        "mean_expanding_beta": round(float(np.nanmean(betas)), 6),
+        "std_expanding_beta": round(float(np.nanstd(betas)), 6),
+    }
+
+    abs_r = np.abs(r)
+    high = abs_r >= np.nanpercentile(abs_r, 80)
+    mean_rv_hi = float(np.mean(rv_n[high])) if high.any() else float("nan")
+    mean_rv_lo = float(np.mean(rv_n[~high])) if (~high).any() else float("nan")
+
+    abs_dir = abs(skill["corr_resid_vs_fwd_ret"] or 0.0)
+    abs_unc = abs(skill["corr_resid_vs_rv_next"] or 0.0)
+    residual_informative = bool(
+        abs_unc > 0.05 or abs(mean_rv_hi - mean_rv_lo) > 1e-4
+    )
+
+    return {
+        "ok": True,
+        "property_id": "premium_residual_vs_funding",
+        "version": 1,
+        "what_it_measures": (
+            "Causal expanding residual of lagged premium after lagged funding "
+            f"(expand_min={expand_min})"
+        ),
+        "putative_mechanism": (
+            "Component of mark–index premium not linearly explained by discrete "
+            "funding prints — residual leverage / inventory stress"
+        ),
+        "primary_role_guess": (
+            "uncertainty / stress residual"
+            if abs_unc > abs_dir + 0.02
+            else "weak or unclear after residualization"
+        ),
+        "coverage": {
+            "n_residual": n,
+            "expand_min": expand_min,
+            "resid_std": round(float(np.std(r, ddof=1)), 8),
+        },
+        "independence_vs_known_properties": independence,
+        "association_next_state": skill,
+        "conditional": {
+            "mean_rv_next_when_abs_resid_ge_p80": (
+                round(mean_rv_hi, 8) if mean_rv_hi == mean_rv_hi else None
+            ),
+            "mean_rv_next_when_abs_resid_lt_p80": (
+                round(mean_rv_lo, 8) if mean_rv_lo == mean_rv_lo else None
+            ),
+        },
+        "interpretation": {
+            "residual_more_uncertainty_than_direction": bool(abs_unc > abs_dir + 0.02),
+            "residual_appears_informative_for_next_rv": residual_informative,
+            "note": (
+                "Descriptive characterization. Not LEDA promotion. "
+                "Compare residual next-RV corr to raw premium and funding alone."
+            ),
+        },
+        "improves_understanding_without_edge": True,
+        "promotion": "not_applicable — residual property characterization only",
+        "leda_candidate": False,
+        "leda_note": (
+            "Open LEDA risk/state only if residual next-RV association is material "
+            "and pre-registered; never long/flat fishing"
+        ),
+    }

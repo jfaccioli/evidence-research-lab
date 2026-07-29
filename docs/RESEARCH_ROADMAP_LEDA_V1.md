@@ -31,7 +31,8 @@ Not free-text AI votes.
 | **LEDA-5a** | ETH→BTC forecast | **Done** — IC ~null |
 | **LEDA-5b** | B&H + vol veto | **Done** — holdout fail (train tease) |
 | **LEDA-6** | Pre-reg vol-veto threshold grid | **Done** — 0 hard-gate passes |
-| **LEDA-7** | Ops wire or new free evidence channel | **Next** |
+| **LEDA-7** | Paper audit wire | **Done** — ops only |
+| **Next** | New free evidence channel (higher IG) | Science, not more mom clones |
 
 ## Non-goals
 

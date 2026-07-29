@@ -31,5 +31,7 @@ python -m crl leda protocol
 python -m crl leda eval-vol-risk
 python -m crl leda eval-trend
 python -m crl leda decide --e-forecast 0.7 --e-risk 0.2
-python -m crl leda eval-stack   # LEDA-4 exploratory economics (not promotion)
+python -m crl leda eval-stack          # LEDA-4 exploratory economics
+python -m crl leda eval-vol-veto-grid  # LEDA-6 multi-threshold (report all)
+python -m crl leda paper               # LEDA-7 paper audit wire
 ```

@@ -71,8 +71,12 @@ Thresholds locked: `{0.70, 0.80, 0.90, 0.95}` — **all** reported; family size 
 **n_pass_exploratory_hard_gates = 0.**  
 Do **not** promote thr=0.70 despite positive test excess (under min_trades + multiplicity).
 
+## LEDA-7 paper audit wire
+
+`crl leda paper` drives `PaperBroker` from LEDA-4 desired positions.  
+Ops path verified; **not** an edge claim. LIVE still dual-flag blocked.
+
 ## Next IG priorities
 
 1. Prefer new **information** channels (free series / mechanisms) over more vol-threshold fishing.
-2. Optional: paper-path audit wire from `decide_bar` (ops, not alpha).
-3. No paid data without EIR; no shadow.
+2. No paid data without EIR; no shadow.

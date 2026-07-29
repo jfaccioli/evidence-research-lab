@@ -204,3 +204,11 @@ def test_desired_from_scores_and_economic_eval():
     assert grid["leda"] == "6"
     assert grid["n_thresholds"] == 2
     assert len(grid["results_by_threshold"]) == 2
+
+    from crl.leda.paper import run_leda_paper_session
+
+    paper = run_leda_paper_session(ohlcv, starting_cash=100.0, max_bars=150)
+    assert paper["leda"] == "7"
+    assert paper["places_live_orders"] is False
+    assert paper["n_bars"] == 150
+    assert "equity_end" in paper

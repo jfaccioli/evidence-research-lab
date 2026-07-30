@@ -1,0 +1,25 @@
+id: hyp_etf_z_pos
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_etf_flow_ineff_v1
+direction: long_only
+entry:
+  expression: flow_z_60 > 0 and above_sma_50 == 1
+exit:
+  expression: flow_z_60 <= 0 or above_sma_50 == 0
+rationale: >
+  Causal scale surprise: 60-day rolling z-score of lagged net flow above zero
+  means current print is above recent mean (not absolute level). Tests whether
+  relative creation strength predicts subsequent returns under long/flat map.
+  Fixed z window — no threshold search. Programme: docs/PROGRAMME_ETF_FLOW_INEFF_V1.md.
+expected_outcome: Exploratory; confirmatory only if sole best val survivor.
+feature_tags:
+  - etf_flow
+  - flow_pit_v1
+  - true_flow
+literature_refs: []
+falsification:
+  min_trades: 30
+  reject_if: z feature NaN-dominated or pure bull beta

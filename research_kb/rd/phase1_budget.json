@@ -22,8 +22,8 @@
     "max_parallel_science_programmes": 1
   },
   "usage": {
-    "major_inefficiency_programmes_opened": 0,
-    "major_inefficiency_programmes_completed": 0,
+    "major_inefficiency_programmes_opened": 1,
+    "major_inefficiency_programmes_completed": 1,
     "external_datasets_pinned": 1,
     "paid_spend_usd": 0,
     "confirmatory_class_evals": 2,
@@ -49,11 +49,24 @@
         "date": "2026-07-30",
         "id": "etf_flow_ineff_v1",
         "notes": "Pinned us_spot_btc_etf_net_flow_usd_m_farside_v1 n=654 hash=faa7bb976e73"
+      },
+      {
+        "event": "programme_opened",
+        "date": "2026-07-30",
+        "id": "etf_flow_ineff_v1",
+        "notes": "Opened PROGRAMME_ETF_FLOW_INEFF_V1; PIT audit passed; series pinned"
+      },
+      {
+        "event": "programme_completed",
+        "date": "2026-07-30",
+        "id": "etf_flow_ineff_v1",
+        "result": "rejected_exploratory_null",
+        "notes": "4/4 failed_val; 0 confirmatory. Family family_etf_flow_ineff_v1 retired."
       }
     ]
   },
   "remaining": {
-    "major_inefficiency_programmes": 3,
+    "major_inefficiency_programmes": 2,
     "external_datasets": 1,
     "confirmatory_class_evals": 8,
     "calendar_days_left": 90,
@@ -64,8 +77,9 @@
     {
       "order": 1,
       "id": "etf_flow_ineff_v1",
-      "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md",
-      "status": "ready"
+      "status": "completed_rejected",
+      "result": "rejected_exploratory_null",
+      "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
     }
   ],
   "phase1_conclusion": null,
@@ -75,5 +89,8 @@
     "C_unlikely_robust_edge_under_constraints"
   ],
   "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints",
-  "updated_at": "2026-07-30T01:47:32.385774+00:00"
+  "updated_at": "2026-07-30T02:09:07.568383+00:00",
+  "retired_families": [
+    "family_etf_flow_ineff_v1"
+  ]
 }

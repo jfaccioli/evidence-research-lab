@@ -1,0 +1,96 @@
+{
+  "programme": "etf_flow_ineff_v1",
+  "ran_at": "2026-07-30T02:09:07.567923+00:00",
+  "series_hash": "faa7bb976e73b6c99fa60edc43d9ee56c7f1d1e9ba84aaae2580d699b15755d3",
+  "window_dataset_id": "window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486",
+  "n_bars_window": 1048,
+  "n_bars_with_flow": 928,
+  "checks": {
+    "corr_flow_contemp_return": 0.0112,
+    "corr_flow_leads_next_return": -0.0065,
+    "corr_return_leads_next_flow": 0.0619,
+    "ic_flow_to_next_ret_full": -0.0065,
+    "ic_flow_to_next_ret_ex_launch60": -0.0161,
+    "ic_flow_winsorized_p01_p99": -0.0085,
+    "positive_flow_fraction": 0.5808,
+    "top_1pct_abs_flow_share_of_sum": 0.0565,
+    "bh_sharpe_after_cost_window": 0.8844367158651183,
+    "bh_max_dd": 0.5297176591351069,
+    "price_only_sma50_control": {
+      "sharpe_after_cost": 0.918602501481559,
+      "n_trades": 32,
+      "max_dd": 0.26890656674798796
+    },
+    "price_only_sma200_control": {
+      "sharpe_after_cost": 0.01549241882535782,
+      "n_trades": 14
+    },
+    "exploratory_summary": [
+      {
+        "id": "hyp_etf_create_extreme",
+        "status": "failed_val",
+        "val_sharpe": -0.47361492184079135,
+        "val_trades": 12,
+        "val_excess_bh": 0.12548159826819016,
+        "reasons": [
+          "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+          "n_trades 12 < min_trades 30",
+          "primary sharpe_after_cost -0.474 < 0.2",
+          "overfit_gap 1.057 > 1.0",
+          "wf_positive_frac 0.50 < 0.6"
+        ]
+      },
+      {
+        "id": "hyp_etf_pos_trend",
+        "status": "failed_val",
+        "val_sharpe": -0.47140932049043827,
+        "val_trades": 12,
+        "val_excess_bh": 0.11089999265467854,
+        "reasons": [
+          "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+          "n_trades 12 < min_trades 30",
+          "primary sharpe_after_cost -0.471 < 0.2",
+          "wf_positive_frac 0.50 < 0.6",
+          "bootstrap sharpe CI lo -3.153 < 0.0"
+        ]
+      },
+      {
+        "id": "hyp_etf_redeem_flat",
+        "status": "failed_val",
+        "val_sharpe": -0.5756471694898925,
+        "val_trades": 13,
+        "val_excess_bh": 0.07668785454710891,
+        "reasons": [
+          "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+          "n_trades 13 < min_trades 30",
+          "primary sharpe_after_cost -0.576 < 0.2",
+          "wf_positive_frac 0.25 < 0.6",
+          "bootstrap sharpe CI lo -3.253 < 0.0"
+        ]
+      },
+      {
+        "id": "hyp_etf_z_pos",
+        "status": "failed_val",
+        "val_sharpe": 0.15570534706308978,
+        "val_trades": 11,
+        "val_excess_bh": 0.1761106019800276,
+        "reasons": [
+          "n_trades 11 < min_trades 30",
+          "primary sharpe_after_cost 0.156 < 0.2",
+          "bootstrap sharpe CI lo -2.328 < 0.0",
+          "skeptical P(mean trade>0) 0.547 < 0.55",
+          "2x cost stress sharpe -0.223 < 0"
+        ]
+      }
+    ]
+  },
+  "conclusions": [
+    "All 4 pre-registered exploratory hyps failed_val under frozen gates.",
+    "No confirmatory-class evaluation (n_passed_val=0; budget not spent).",
+    "Dominant failures: n_trades << 30, val Sharpe after costs < 0.2 (often negative), fee fragility.",
+    "Family family_etf_flow_ineff_v1 retired for Farside aggregate lag-1 long/flat operationalisation."
+  ],
+  "decision": "REJECT_FAMILY",
+  "promotion": false,
+  "confirmatory_run": false
+}

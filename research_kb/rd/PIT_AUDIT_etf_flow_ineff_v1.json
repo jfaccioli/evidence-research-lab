@@ -1,0 +1,55 @@
+{
+  "programme": "etf_flow_ineff_v1",
+  "audited_at": "2026-07-30T02:06:16.406093+00:00",
+  "series_id": "us_spot_btc_etf_net_flow_usd_m_farside_v1",
+  "source_url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+  "acquisition_timestamp": "2026-07-30T01:47:32.385032+00:00",
+  "content_hash": "faa7bb976e73b6c99fa60edc43d9ee56c7f1d1e9ba84aaae2580d699b15755d3",
+  "publish_lag_days": 1,
+  "units": "US$m aggregate net flow into US spot BTC ETFs",
+  "sign": "positive = net creations / inflows (not exchange deposits)",
+  "n_events": 654,
+  "first_obs_day": "2024-01-11",
+  "last_obs_day": "2026-07-29",
+  "timezone": "UTC",
+  "ohlcv_dataset_id": "binance_public_BTCUSDT_1d_e686b6637728",
+  "ohlcv_index_convention": "daily bar labeled at UTC midnight open; asof uses index as decision clock (conservative)",
+  "missing_and_non_trading_days": "No Farside row \u2192 asof carries last flow_time/value; rule false if still no flow",
+  "revisions": "No revision journal; free-research grade PIT with fixed lag only",
+  "duplicate_dates": "rejected at validate_flow_events; pin has 0 duplicates",
+  "final_pit_decision_timestamp": "last flow_time <= bar_index; signal on that bar; trade next open",
+  "example_mappings": [
+    {
+      "flow_time": "2024-01-12 23:59:59+00:00",
+      "net_flow_usd_m": 655.3,
+      "first_decision_bar_index": "2024-01-13 00:00:00+00:00",
+      "earliest_order_open": "2024-01-14 00:00:00+00:00"
+    },
+    {
+      "flow_time": "2024-01-13 23:59:59+00:00",
+      "net_flow_usd_m": 203.0,
+      "first_decision_bar_index": "2024-01-14 00:00:00+00:00",
+      "earliest_order_open": "2024-01-15 00:00:00+00:00"
+    },
+    {
+      "flow_time": "2024-01-16 23:59:59+00:00",
+      "net_flow_usd_m": 0.0,
+      "first_decision_bar_index": "2024-01-17 00:00:00+00:00",
+      "earliest_order_open": "2024-01-18 00:00:00+00:00"
+    },
+    {
+      "flow_time": "2024-01-17 23:59:59+00:00",
+      "net_flow_usd_m": -52.7,
+      "first_decision_bar_index": "2024-01-18 00:00:00+00:00",
+      "earliest_order_open": "2024-01-19 00:00:00+00:00"
+    },
+    {
+      "flow_time": "2024-01-18 23:59:59+00:00",
+      "net_flow_usd_m": 453.8,
+      "first_decision_bar_index": "2024-01-19 00:00:00+00:00",
+      "earliest_order_open": "2024-01-20 00:00:00+00:00"
+    }
+  ],
+  "pit_assert_no_lookahead": true,
+  "defensible": true
+}

@@ -1,0 +1,20 @@
+programme: etf_flow_ineff_v1
+design: docs/PROGRAMME_ETF_FLOW_INEFF_V1.md
+live_data: true
+external:
+  kind: flow
+  series_id: us_spot_btc_etf_net_flow_usd_m_farside_v1
+  path: data/processed/etf/us_spot_btc_etf_net_flow_usd_m_farside_v1.parquet
+  publish_lag_days: 1
+  source: farside_public_table
+  source_url: https://farside.co.uk/bitcoin-etf-flow-all-data/
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+  window_from_series: true
+  window_burn_in_days: 120
+hypotheses:
+  - hyp_etf_pos_trend.yaml
+  - hyp_etf_create_extreme.yaml
+  - hyp_etf_redeem_flat.yaml
+  - hyp_etf_z_pos.yaml

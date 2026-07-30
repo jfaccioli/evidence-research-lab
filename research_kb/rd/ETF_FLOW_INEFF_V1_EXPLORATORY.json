@@ -1,0 +1,119 @@
+{
+  "programme": "etf_flow_ineff_v1",
+  "hyp_dir": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/examples/batch/etf_flow",
+  "registry_path": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/data/processed/tmp_batch_etf_flow.sqlite",
+  "n_run": 4,
+  "n_passed_val": 0,
+  "n_failed_val": 4,
+  "n_errors": 0,
+  "n_candidates": 0,
+  "dataset_id": "window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486",
+  "summary_md": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/batch_summary.md",
+  "results": [
+    {
+      "id": "hyp_etf_create_extreme",
+      "taxonomy": "other",
+      "status": "failed_val",
+      "gate_passed": false,
+      "reasons": [
+        "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+        "n_trades 12 < min_trades 30",
+        "primary sharpe_after_cost -0.474 < 0.2",
+        "overfit_gap 1.057 > 1.0",
+        "wf_positive_frac 0.50 < 0.6"
+      ],
+      "val_sharpe": -0.47361492184079135,
+      "val_trades": 12,
+      "val_excess_bh": 0.12548159826819016,
+      "reality_passed": false,
+      "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_etf_create_extreme_v1_exploratory.md",
+      "error": null
+    },
+    {
+      "id": "hyp_etf_pos_trend",
+      "taxonomy": "other",
+      "status": "failed_val",
+      "gate_passed": false,
+      "reasons": [
+        "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+        "n_trades 12 < min_trades 30",
+        "primary sharpe_after_cost -0.471 < 0.2",
+        "wf_positive_frac 0.50 < 0.6",
+        "bootstrap sharpe CI lo -3.153 < 0.0"
+      ],
+      "val_sharpe": -0.47140932049043827,
+      "val_trades": 12,
+      "val_excess_bh": 0.11089999265467854,
+      "reality_passed": false,
+      "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_etf_pos_trend_v1_exploratory.md",
+      "error": null
+    },
+    {
+      "id": "hyp_etf_redeem_flat",
+      "taxonomy": "other",
+      "status": "failed_val",
+      "gate_passed": false,
+      "reasons": [
+        "reality: [fee_fragile] Average trade edge does not clear a meaningful fraction of round-trip costs.",
+        "n_trades 13 < min_trades 30",
+        "primary sharpe_after_cost -0.576 < 0.2",
+        "wf_positive_frac 0.25 < 0.6",
+        "bootstrap sharpe CI lo -3.253 < 0.0"
+      ],
+      "val_sharpe": -0.5756471694898925,
+      "val_trades": 13,
+      "val_excess_bh": 0.07668785454710891,
+      "reality_passed": false,
+      "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_etf_redeem_flat_v1_exploratory.md",
+      "error": null
+    },
+    {
+      "id": "hyp_etf_z_pos",
+      "taxonomy": "other",
+      "status": "failed_val",
+      "gate_passed": false,
+      "reasons": [
+        "n_trades 11 < min_trades 30",
+        "primary sharpe_after_cost 0.156 < 0.2",
+        "bootstrap sharpe CI lo -2.328 < 0.0",
+        "skeptical P(mean trade>0) 0.547 < 0.55",
+        "2x cost stress sharpe -0.223 < 0"
+      ],
+      "val_sharpe": 0.15570534706308978,
+      "val_trades": 11,
+      "val_excess_bh": 0.1761106019800276,
+      "reality_passed": true,
+      "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_etf_z_pos_v1_exploratory.md",
+      "error": null
+    }
+  ],
+  "confirmatory": [],
+  "series": {
+    "readiness": {
+      "ready": true,
+      "mode": "flow",
+      "series_id": "us_spot_btc_etf_net_flow_usd_m_farside_v1",
+      "checks": {
+        "series_loadable": true,
+        "n_events": 654,
+        "n_events_ge_180": true,
+        "content_hash_present": true
+      },
+      "content_hash": "faa7bb976e73b6c99fa60edc43d9ee56c7f1d1e9ba84aaae2580d699b15755d3",
+      "message": "Series us_spot_btc_etf_net_flow_usd_m_farside_v1 ready (n=654)"
+    },
+    "content_hash": "faa7bb976e73b6c99fa60edc43d9ee56c7f1d1e9ba84aaae2580d699b15755d3",
+    "kind": "flow",
+    "series_id": "us_spot_btc_etf_net_flow_usd_m_farside_v1",
+    "windowed_dataset_id": "window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486"
+  },
+  "ran_at": "2026-07-30T02:06:17.316524+00:00",
+  "summary_json": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/data/processed/tmp_batch_etf_flow_summary.json",
+  "autopsy_path": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/examples/batch/etf_flow/GATE_AUTOPSY_V1.md",
+  "family_trials": {
+    "programme": "etf_flow_ineff_v1",
+    "n_trials_added": 4,
+    "total_exploratory_trials": 47,
+    "n_families_tracked": 9
+  }
+}

@@ -1,0 +1,27 @@
+id: hyp_etf_pos_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_etf_flow_ineff_v1
+direction: long_only
+entry:
+  expression: flow_into_exch == 1 and above_sma_50 == 1
+exit:
+  expression: flow_into_exch == 0 or above_sma_50 == 0
+rationale: >
+  Primary ETF create/redeem mechanism: positive aggregate net creation
+  (flow_into_exch; series sign = US spot BTC ETF inflows in US$m) indicates
+  institutional demand that may transmit to spot with operational lag.
+  Mild SMA50 filter requires non-collapse trend so policy is long/flat deployable,
+  not pure flow noise. PIT join only; publish_lag_days=1. Programme:
+  docs/PROGRAMME_ETF_FLOW_INEFF_V1.md.
+expected_outcome: Exploratory; confirmatory only if sole best val survivor.
+feature_tags:
+  - etf_flow
+  - flow_pit_v1
+  - true_flow
+literature_refs: []
+falsification:
+  min_trades: 30
+  reject_if: null after costs, pure trend without flow, or return-leads-flow only

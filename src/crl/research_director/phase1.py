@@ -137,7 +137,10 @@ def _etf_deadline_status(budget: dict[str, Any]) -> dict[str, Any]:
     today = date.today()
     queued = budget.get("queued_science") or []
     etf_blocked = any(
-        q.get("id") == "etf_flow_ineff_v1" and q.get("blocked_on") for q in queued
+        q.get("id") == "etf_flow_ineff_v1"
+        and q.get("blocked_on")
+        and not str(q.get("status") or "").startswith("completed")
+        for q in queued
     )
     days_to_deadline: int | None = None
     overdue = False
@@ -237,8 +240,14 @@ def _next_action(
             "skip to next inefficiency within programme budget, or move toward C."
         )
     queued = budget.get("queued_science") or []
-    if queued:
-        q0 = queued[0]
+    open_q = [
+        q
+        for q in queued
+        if not str(q.get("status") or "").startswith("completed")
+        and q.get("result") not in ("rejected_exploratory_null", "rejected", "promoted")
+    ]
+    if open_q:
+        q0 = open_q[0]
         blocked = q0.get("blocked_on")
         if blocked:
             return (
@@ -250,7 +259,10 @@ def _next_action(
     if active:
         return f"Continue sole active science programme: {active}."
     if int(remaining.get("major_inefficiency_programmes") or 0) > 0:
-        return "No queued item — open next ranked inefficiency only if budget allows; else conclude."
+        return (
+            "ETF-flow programme complete or no open queue item — open next ranked "
+            "inefficiency only if budget allows; else conclude Phase 1."
+        )
     return "No remaining programme slots — issue Phase 1 conclusion A/B/C."
 
 

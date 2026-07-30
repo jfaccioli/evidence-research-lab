@@ -25,19 +25,13 @@
 ## Active work
 
 **Implementation suspended.**  
-**Strategic Research Review:** `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-30.md`  
-(Supersedes Phase 2 auto-roadmap where they conflict.)
+**Greenfield strategy (decision quality):** `docs/GREENFIELD_STRATEGY_2026-07-30.md`  
+**Prior reviews (context):** `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-30.md`
 
-**Human decision only — pick a mountain face:**
+**Chief Scientist single recommendation:**  
+Reposition as AQRO; primary capital path = **risk-budgeted market-structure multi-sleeve book** (not free daily long/flat factory); dual-track research OS; 18-month go/no-go.
 
-| Choice | Meaning |
-|--------|---------|
-| **Ω-A** | Mandate A (long/flat): one options structural bet **or** refuse → stop α |
-| **Ω-C** | Charter market-structure / delta-neutral book (higher P(edge class); policy change) |
-| **Ω-B** | Spot short allowed, no leverage |
-| **Ω-S** | Stop α under current evidence; productise research OS |
-
-Do **not** implement until one choice is explicit.
+**Human:** accept / reject / OS-only — then charter (still no implementation until accepted).
 
 ```bash
 python -m crl rd phase1

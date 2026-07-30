@@ -4,39 +4,45 @@
 **Role:** Chief Scientist / Research Director  
 **Mode:** Implementation **suspended** — decision document only  
 **Horizon:** 5 years  
+**Constitution (binding):** `docs/AQRO_CONSTITUTION.md` — **permanent principles; provisional hypotheses**  
 **Objective (fixed):**
 
-> Build the **highest-probability path** to an **autonomous system that can responsibly manage real capital with minimal human intervention**.
+> Maximise the probability of responsibly managing real capital autonomously over a five-year horizon while maintaining scientific integrity.
 
-**Method:** Start from scratch with Phase 1 knowledge. Do not defend prior roadmaps. One recommendation. Opportunity cost of months and dollars is real.
+**Method:** Start from scratch with Phase 1 knowledge. Do not defend prior roadmaps. Rank **revisable** capital-path hypotheses by EV. Opportunity cost of months and dollars is real.
+
+**Human update:** AQRO identity **accepted**. Market-structure as permanent organisational spine **rejected**. Market-structure is **H1 (leading scientific hypothesis)** only — evidence can demote it.
 
 ---
 
-## 1. Executive decision (single recommendation)
+## 1. Executive decision (single recommendation, provisional spine)
 
 ### We will not continue as a “BTC daily long/flat signal factory.”
 
 That path has been **empirically expensive and low-yield**. Phase 1 is strong evidence that free public daily directional prediction under frozen gates is a **poor mountain face** for capital-ready autonomy.
 
-### Recommended strategy (one path)
+### Recommended *provisional* capital-path hypothesis (H1 — not doctrine)
 
-**Reposition the laboratory as an Autonomous Quantitative Research Organisation (AQRO) whose first capital-facing product is a risk-budgeted crypto market-structure book — not a standalone directional BTC predictor.**
+**Current leading hypothesis:** a risk-budgeted crypto **market-structure** sleeve class (funding, basis, related structure) has **higher expected value** for the permanent objective than continuing free directional discovery — **until evidence says otherwise**.
 
-In operational terms over five years:
+**Organisation form (permanent):** Autonomous Quantitative Research Organisation (**AQRO**) = evidence/rejection engine first; capital products only when sleeves survive gates.
 
-| Layer | Commitment |
-|-------|------------|
-| **Identity** | Evidence / rejection engine first; trading system second — trading only on sleeves that survive the engine |
-| **First capital objective** | Harvest **persistent structural risk premia and relative-value inefficiencies** (funding, basis, calendar-of-derivatives structure, later options positioning) under **hard risk budgets**, not “forecast tomorrow’s BTC return” |
-| **Mandate** | Replace permanent long/flat-only as the *definition of success* with a **capital mandate**: maximise risk-adjusted capital growth subject to ruin constraints, venue risk, and scientific gates |
-| **BTC role** | Primary **liquidity and risk asset**, not the only proving ground forever |
-| **Architecture of edge** | **Multi-sleeve portfolio** with allocation / risk engine as first-class — not one holy-grail rule |
-| **Validation** | Keep frozen scientific gates; add capital-path gates (shadow, ops, kill-switch, capacity) |
-| **Business dual-track** | Productise the research OS so the organisation survives even if early sleeves null |
-| **Hard stop** | If no sleeve clears confirmatory + 90-day shadow within **18 months** of mandate charter, freeze capital autonomy ambitions and run OS-only |
+| Layer | Commitment | Reversible? |
+|-------|------------|-------------|
+| **Identity AQRO** | Evidence engine + earned capital products | Human constitutional only |
+| **H1 active test priority** | Market-structure / risk-premia **first in queue to test**, not forever spine | **Yes** — see constitution §5 |
+| **Mandate for testing H1** | Requires human charter if vehicle ≠ current long/flat policy | Human |
+| **BTC role** | Primary liquidity/risk asset initially | Yes |
+| **Multi-sleeve (H4)** | Preference **after** ≥1 validated sleeve | Yes |
+| **Validation** | Frozen scientific gates + capital ladder | Gates: scientific flaw only |
+| **Dual-track OS** | Parallel product track | Yes if dilutes science |
+| **Hard stop** | No sleeve clears confirmatory + 90d shadow within 18 months of *authorised* capital-path charter → freeze capital track | Yes |
 
-**Why this maximises 5-year P(objective):**  
-It aligns the trading objective with **where economic literature and market structure actually concentrate edge**, uses the lab’s comparative advantage (honest rejection), and treats **risk, allocation, and execution** as co-equal with signals — which is what real capital systems require.
+**Why H1 ranks first *today* (not forever):**  
+Literature and Phase 1 posteriors place more mass on structural premia than on free daily direction. That is a **Bayesian ranking**, not architecture.
+
+**Why this is not doctrine:**  
+If H1 fails its pre-registered tests under elevated costs, AQRO **must re-rank** (e.g. toward H3 options structure, revised directional, or capital-track freeze + OS). No design may embed “MS forever.”
 
 ---
 

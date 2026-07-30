@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-30",
+  "organisation": "AQRO",
+  "constitution": "docs/AQRO_CONSTITUTION.md",
+  "permanent_objective": "Maximise the probability of responsibly managing real capital autonomously over a five-year horizon while maintaining scientific integrity.",
+  "implementation_authorised": false,
+  "active_capital_path": null,
+  "active_capital_path_note": "No capital path authorised until human approves a specific test plan under the constitution. H1 is leading belief only.",
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "Market-structure / risk-premia sleeves (funding, basis, related structure) offer the highest expected value capital path under integrity constraints.",
+      "status": "leading",
+      "rank": 1,
+      "prior_strength": "medium_high",
+      "posterior_strength": "medium_high_untested_as_capital_book",
+      "doctrine": false,
+      "overturn_if": [
+        "two_distinct_ms_sleeve_families_confirmatory_null_under_elevated_costs",
+        "shadow_or_micro_capital_shows_premia_not_harvestable",
+        "higher_ev_class_produces_confirmatory_survivor_while_ms_fails",
+        "legal_or_venue_constraints_block_ms_vehicles"
+      ],
+      "strengthen_if": [
+        "confirmatory_survivor_plus_90d_shadow_under_risk_envelope"
+      ]
+    },
+    {
+      "id": "H2",
+      "statement": "Free public daily directional BTC long/flat discovery has low EV for the permanent objective.",
+      "status": "strong",
+      "rank": 99,
+      "prior_strength": "high_after_phase1",
+      "posterior_strength": "high",
+      "doctrine": false,
+      "overturn_if": [
+        "confirmatory_grade_directional_survivor_on_admissible_data_under_frozen_gates"
+      ]
+    },
+    {
+      "id": "H3",
+      "statement": "Options OI/gamma structure is a high-priority untested structural information class.",
+      "status": "contender",
+      "rank": 2,
+      "prior_strength": "medium",
+      "posterior_strength": "medium_untested",
+      "doctrine": false,
+      "overturn_if": [
+        "historical_pit_unavailable_and_no_paid_path",
+        "one_full_prereg_family_null_with_clean_falsifiers"
+      ],
+      "promote_to_leading_if": [
+        "H1_demoted_and_H3_ranks_highest_remaining_ev"
+      ]
+    },
+    {
+      "id": "H4",
+      "statement": "Multi-sleeve plus risk allocation beats a single holy-grail rule conditional on at least one validated sleeve.",
+      "status": "contender_architecture",
+      "rank": 3,
+      "doctrine": false,
+      "overturn_if": [
+        "single_sleeve_dominates_capacity_adjusted",
+        "allocator_adds_complexity_without_prereg_risk_adjusted_gain"
+      ]
+    },
+    {
+      "id": "H5",
+      "statement": "Research OS dual-track has positive organisational value even if capital path freezes.",
+      "status": "operational",
+      "rank": 4,
+      "doctrine": false,
+      "overturn_if": [
+        "dual_track_dilutes_science_or_forces_promotional_claims"
+      ]
+    }
+  ],
+  "evidence_log": [
+    {
+      "date": "2026-07-30",
+      "summary": "Phase 1 free-path directional and free structural long/flat programmes did not yield confirmatory survivors; strengthens H2; leaves H1 untested as capital book.",
+      "moves": ["H2_strengthen", "H1_untested"]
+    },
+    {
+      "date": "2026-07-30",
+      "summary": "Human accepted AQRO identity; rejected market-structure as permanent spine; H1 remains leading hypothesis only.",
+      "moves": ["constitutional_lock", "H1_not_doctrine"]
+    }
+  ],
+  "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
+  "contender_watchlist": ["H3", "H4"],
+  "forbidden_until_human": [
+    "mandate_vehicle_change_to_delta_neutral",
+    "paid_data_purchase",
+    "live_capital",
+    "gate_softening"
+  ]
+}

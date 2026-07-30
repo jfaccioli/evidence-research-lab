@@ -25,13 +25,16 @@
 ## Active work
 
 **Implementation suspended.**  
-**Greenfield strategy (decision quality):** `docs/GREENFIELD_STRATEGY_2026-07-30.md`  
-**Prior reviews (context):** `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-30.md`
 
-**Chief Scientist single recommendation:**  
-Reposition as AQRO; primary capital path = **risk-budgeted market-structure multi-sleeve book** (not free daily long/flat factory); dual-track research OS; 18-month go/no-go.
+| Doc | Role |
+|-----|------|
+| `docs/AQRO_CONSTITUTION.md` | **Binding** — permanent principles, revisable hypotheses |
+| `research_kb/rd/aqro_belief_state.json` | Machine belief ranks (H1 leading, not doctrine) |
+| `docs/GREENFIELD_STRATEGY_2026-07-30.md` | EV argument for H1 as *provisional* priority |
 
-**Human:** accept / reject / OS-only — then charter (still no implementation until accepted).
+**Accepted:** AQRO identity.  
+**Not doctrine:** market-structure permanent spine → **H1 hypothesis** with overturn conditions.  
+**Next (when human ready):** authorise a *specific* H1 test plan or re-rank — still no silent implementation.
 
 ```bash
 python -m crl rd phase1

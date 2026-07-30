@@ -1,39 +1,25 @@
 # Living research queue
 
 **Updated:** 2026-07-30  
-**Architecture:** **Frozen**  
-**Phase 1 stop rules:** `docs/PHASE1_COMPLETION_CRITERIA.md`
+**Architecture:** Frozen  
+**Phase 1:** **TERMINAL B** — richer data justified (human decision)
 
-## Phase 1 budget (summary)
+## Phase 1 conclusion
 
-| Cap | Value |
-|-----|--------|
-| Calendar | → **2026-10-28** (90 days) |
-| Major inefficiency programmes | **3** (1 completed null: ETF flow) |
-| External datasets | **2** (1 used: Farside ETF) |
-| Confirmatory-class evals | **10** (2 PCS; ETF used 0 conf) |
-| Parallel science programmes | **1** |
+**B_richer_data_justified**
 
-Must end with **A** / **B** / **C**.
+Free-path major inefficiency programmes exhausted with exploratory nulls:
 
-## Completed science
+1. ETF create/redeem flows (Farside lag-1) — reject family  
+2. Stablecoin supply-growth transmission (DefiLlama Δlog lag-1) — reject family  
+3. Miner revenue stress (Blockchain.com Δlog lag-1) — reject family  
 
-1. **PROGRAMME_ETF_FLOW_INEFF_V1** — **REJECT family** (0/4 exploratory; PIT-ok Farside lag-1 aggregate)
+0 confirmatory survivors. 0 shadow-eligible candidates.
 
-## Active work (sequential)
-
-1. Open **next ranked inefficiency** that fits remaining budget (≤2 programme slots left; 1 dataset slot left)  
-2. Or if none can run without new data: EIR path or move toward Phase 1 conclusion  
-3. Issue Phase 1 conclusion when budget forces it — no infinite “next mechanism”
-
-```bash
-python -m crl rd phase1
-python -m crl rd eir
-python -m crl rd inefficiencies
-```
+**Human decision required:** fund paid options/dealer-gamma history (specific EIR target) **or** accept **C** / pause / productise research OS.
 
 ## Do not
 
-- New organisational programmes  
-- Reopen ETF flow / retired families without new data class + human override  
-- Optimise for experiment count  
+- Auto-spend paid data  
+- Reopen retired families without new data class + override  
+- New architecture  

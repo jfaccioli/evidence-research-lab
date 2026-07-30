@@ -1,0 +1,95 @@
+{
+  "programme_id": "miner_revenue_stress_v1",
+  "decision": "REJECT_FAMILY",
+  "promoted": false,
+  "exploratory": {
+    "n_run": 4,
+    "n_passed_val": 0,
+    "n_failed_val": 4,
+    "n_errors": 0,
+    "dataset_id": "binance_public_BTCUSDT_1d_e686b6637728",
+    "series": {
+      "readiness": {
+        "ready": true,
+        "mode": "external",
+        "series_id": "blockchain_miners_revenue_dlog_lag1_v1",
+        "checks": {
+          "series_loadable": true,
+          "n_events": 1600,
+          "n_events_ge_180": true,
+          "content_hash_present": true
+        },
+        "content_hash": "7e2f3b0170d26e178aa610a4645e49c94c46d13c0a91aebfe6754c29b3a40a6c",
+        "message": "Series blockchain_miners_revenue_dlog_lag1_v1 ready (n=1600)"
+      },
+      "content_hash": "7e2f3b0170d26e178aa610a4645e49c94c46d13c0a91aebfe6754c29b3a40a6c",
+      "kind": "external",
+      "series_id": "blockchain_miners_revenue_dlog_lag1_v1"
+    },
+    "results": [
+      {
+        "id": "hyp_mrv_hi_ext_long",
+        "taxonomy": "other",
+        "status": "failed_val",
+        "gate_passed": false,
+        "reasons": [
+          "n_trades 28 < min_trades 30",
+          "bootstrap sharpe CI lo -1.139 < 0.0"
+        ],
+        "val_sharpe": 0.23360161066122573,
+        "val_trades": 28,
+        "val_excess_bh": -1.0097717358965528,
+        "reality_passed": true,
+        "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_mrv_hi_ext_long_v1_exploratory.md",
+        "error": null
+      },
+      {
+        "id": "hyp_mrv_pos_trend",
+        "taxonomy": "other",
+        "status": "failed_val",
+        "gate_passed": false,
+        "reasons": [
+          "bootstrap sharpe CI lo -0.885 < 0.0"
+        ],
+        "val_sharpe": 0.3685712479141866,
+        "val_trades": 45,
+        "val_excess_bh": -0.9199409853098219,
+        "reality_passed": true,
+        "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_mrv_pos_trend_v1_exploratory.md",
+        "error": null
+      },
+      {
+        "id": "hyp_mrv_stress_flat",
+        "taxonomy": "other",
+        "status": "failed_val",
+        "gate_passed": false,
+        "reasons": [
+          "n_trades 24 < min_trades 30"
+        ],
+        "val_sharpe": 1.445560988560896,
+        "val_trades": 24,
+        "val_excess_bh": 0.3890048064368856,
+        "reality_passed": true,
+        "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_mrv_stress_flat_v1_exploratory.md",
+        "error": null
+      },
+      {
+        "id": "hyp_mrv_z_pos",
+        "taxonomy": "other",
+        "status": "failed_val",
+        "gate_passed": false,
+        "reasons": [
+          "bootstrap sharpe CI lo -0.780 < 0.0"
+        ],
+        "val_sharpe": 0.5445750271751045,
+        "val_trades": 46,
+        "val_excess_bh": -0.7936235517872872,
+        "reality_passed": true,
+        "report": "/Users/jimmyfaccioli/Desktop/crypto-research-lab/reports/hyp_mrv_z_pos_v1_exploratory.md",
+        "error": null
+      }
+    ]
+  },
+  "confirmatory": [],
+  "ran_at": "2026-07-30T02:19:28.396257+00:00"
+}

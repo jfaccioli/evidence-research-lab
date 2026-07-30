@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-07-30T02:06:17.339329+00:00",
-  "total_exploratory_trials": 47,
+  "updated_at": "2026-07-30T02:19:28.392419+00:00",
+  "total_exploratory_trials": 55,
   "families": {
     "family_flow_level": {
       "n_trials": 8,
@@ -47,6 +47,16 @@
       "n_trials": 4,
       "n_programmes": 1,
       "last_programme": "etf_flow_ineff_v1"
+    },
+    "family_stablecoin_transmission_v1": {
+      "n_trials": 4,
+      "n_programmes": 1,
+      "last_programme": "stablecoin_transmission_v1"
+    },
+    "family_miner_revenue_stress_v1": {
+      "n_trials": 4,
+      "n_programmes": 1,
+      "last_programme": "miner_revenue_stress_v1"
     }
   },
   "programmes": {
@@ -139,6 +149,26 @@
       "n_candidates": 0,
       "dataset_id": "window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486",
       "recorded_at": "2026-07-30T02:06:17.339191+00:00"
+    },
+    "stablecoin_transmission_v1": {
+      "n_trials": 4,
+      "family_counts": {
+        "family_stablecoin_transmission_v1": 4
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": "binance_public_BTCUSDT_1d_e686b6637728",
+      "recorded_at": "2026-07-30T02:19:26.975851+00:00"
+    },
+    "miner_revenue_stress_v1": {
+      "n_trials": 4,
+      "family_counts": {
+        "family_miner_revenue_stress_v1": 4
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": "binance_public_BTCUSDT_1d_e686b6637728",
+      "recorded_at": "2026-07-30T02:19:28.392321+00:00"
     }
   },
   "events": [
@@ -201,6 +231,20 @@
     {
       "at": "2026-07-30T02:06:17.339194+00:00",
       "programme": "etf_flow_ineff_v1",
+      "n_trials": 4,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-30T02:19:26.975856+00:00",
+      "programme": "stablecoin_transmission_v1",
+      "n_trials": 4,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-30T02:19:28.392324+00:00",
+      "programme": "miner_revenue_stress_v1",
       "n_trials": 4,
       "n_passed_val": 0,
       "n_candidates": 0

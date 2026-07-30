@@ -25,9 +25,25 @@
       "n_passed_val": 0,
       "n_run": 4,
       "notes": "dataset=window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486"
+    },
+    {
+      "completed_at": "2026-07-30T02:19:26.972491+00:00",
+      "id": "stablecoin_transmission_v1",
+      "n_candidates": 0,
+      "n_passed_val": 0,
+      "n_run": 4,
+      "notes": "dataset=binance_public_BTCUSDT_1d_e686b6637728"
+    },
+    {
+      "completed_at": "2026-07-30T02:19:28.388019+00:00",
+      "id": "miner_revenue_stress_v1",
+      "n_candidates": 0,
+      "n_passed_val": 0,
+      "n_run": 4,
+      "notes": "dataset=binance_public_BTCUSDT_1d_e686b6637728"
     }
   ],
   "policy": "no_low_ev_free_btc_technical_clones; wait_time_build_capability",
-  "updated_at": "2026-07-30T02:06:17.330341+00:00",
+  "updated_at": "2026-07-30T02:19:28.388114+00:00",
   "version": 1
 }

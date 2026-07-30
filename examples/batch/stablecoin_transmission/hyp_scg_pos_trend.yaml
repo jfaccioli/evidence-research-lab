@@ -1,0 +1,20 @@
+id: hyp_scg_pos_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_stablecoin_transmission_v1
+direction: long_only
+entry:
+  expression: scg_pos == 1 and above_sma_50 == 1
+exit:
+  expression: scg_pos == 0 or above_sma_50 == 0
+rationale: >
+  System-wide stablecoin supply expansion (Δlog > 0 at lag-1) proxies net minting /
+  crypto liquidity creation; gradual transmission into BTC risk-on with mild trend filter.
+  Not exchange netflow. Programme: docs/PROGRAMME_STABLECOIN_TRANSMISSION_V1.md.
+expected_outcome: Exploratory; confirmatory only if sole best val survivor.
+feature_tags: [stablecoin_transmission, scg, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

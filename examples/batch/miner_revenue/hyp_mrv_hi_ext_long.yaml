@@ -1,0 +1,19 @@
+id: hyp_mrv_hi_ext_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_miner_revenue_stress_v1
+direction: long_only
+entry:
+  expression: mrv_hi_ext == 1 and above_sma_50 == 1
+exit:
+  expression: mrv_hi_ext == 0 or above_sma_50 == 0
+rationale: >
+  Extreme revenue expansion days may mark stress relief / network prosperity impulse.
+  Programme: docs/PROGRAMME_MINER_REVENUE_STRESS_V1.md.
+expected_outcome: Exploratory; confirmatory only if sole best val survivor.
+feature_tags: [miner_revenue, mrv, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

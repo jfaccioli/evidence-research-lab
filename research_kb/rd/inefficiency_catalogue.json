@@ -59,8 +59,8 @@
         "Pa": 3.0,
         "Overlap": 0.5
       },
-      "status": "deferred_eir_after_etf",
-      "notes": "High EV but data costly and PIT hard; second to ETF for personal mandate."
+      "status": "deferred_paid_data_no_free_path",
+      "notes": "High EV but data costly and PIT hard; second to ETF for personal mandate. | Free path cancelled in internal review 2026-07-30 cycle2"
     },
     {
       "id": "ineff_forced_liquidation",
@@ -99,7 +99,7 @@
         "mint/burn flows (missing)",
         "exchange stable reserves"
       ],
-      "lab_has_observables": "partial",
+      "lab_has_observables": true,
       "min_additional_data": "Daily USDT+USDC mint/burn or net issuance with publish lag",
       "scores": {
         "Dur": 3.5,
@@ -109,8 +109,9 @@
         "Pa": 2.5,
         "Overlap": 2.0
       },
-      "status": "data_gap",
-      "notes": "Stock growth characterised; creation process still missing. Distinct from CMD exchange netflow nulls."
+      "status": "tested_null_exploratory",
+      "notes": "Stock growth characterised; creation process still missing. Distinct from CMD exchange netflow nulls.",
+      "lab_result": "stablecoin_transmission_v1 REJECT_FAMILY"
     },
     {
       "id": "ineff_institutional_execution",
@@ -161,8 +162,9 @@
         "Pa": 2.0,
         "Overlap": 2.0
       },
-      "status": "deferred",
-      "notes": "Medium EV; free hashrate alone is weak without inventory."
+      "status": "tested_null_exploratory",
+      "notes": "Medium EV; free hashrate alone is weak without inventory.",
+      "lab_result": "miner_revenue_stress_v1 REJECT_FAMILY"
     },
     {
       "id": "ineff_treasury_accumulation",

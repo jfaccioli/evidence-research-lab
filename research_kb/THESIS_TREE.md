@@ -1,6 +1,6 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-30T02:06:17.315455+00:00`  
+**Updated:** `2026-07-30T02:19:28.376416+00:00`  
 **Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=124. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.

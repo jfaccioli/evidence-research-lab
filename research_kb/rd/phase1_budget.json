@@ -22,9 +22,9 @@
     "max_parallel_science_programmes": 1
   },
   "usage": {
-    "major_inefficiency_programmes_opened": 1,
-    "major_inefficiency_programmes_completed": 1,
-    "external_datasets_pinned": 1,
+    "major_inefficiency_programmes_opened": 3,
+    "major_inefficiency_programmes_completed": 3,
+    "external_datasets_pinned": 2,
     "paid_spend_usd": 0,
     "confirmatory_class_evals": 2,
     "notes_on_confirmatory_count": "PCS_VOL_SCALE + PCS_BASIS_RISKOFF counted as confirmatory-class one-shot evals before Phase1 doc; remaining budget = 8",
@@ -62,12 +62,38 @@
         "id": "etf_flow_ineff_v1",
         "result": "rejected_exploratory_null",
         "notes": "4/4 failed_val; 0 confirmatory. Family family_etf_flow_ineff_v1 retired."
+      },
+      {
+        "event": "programme_opened",
+        "date": "2026-07-30",
+        "id": "stablecoin_transmission_v1",
+        "notes": "Autonomous RD open stablecoin_transmission_v1"
+      },
+      {
+        "event": "programme_completed",
+        "date": "2026-07-30",
+        "id": "stablecoin_transmission_v1",
+        "result": "rejected_exploratory_null",
+        "notes": "REJECT_FAMILY"
+      },
+      {
+        "event": "programme_opened",
+        "date": "2026-07-30",
+        "id": "miner_revenue_stress_v1",
+        "notes": "Autonomous RD open miner_revenue_stress_v1"
+      },
+      {
+        "event": "programme_completed",
+        "date": "2026-07-30",
+        "id": "miner_revenue_stress_v1",
+        "result": "rejected_exploratory_null",
+        "notes": "REJECT_FAMILY"
       }
     ]
   },
   "remaining": {
-    "major_inefficiency_programmes": 2,
-    "external_datasets": 1,
+    "major_inefficiency_programmes": 0,
+    "external_datasets": 0,
     "confirmatory_class_evals": 8,
     "calendar_days_left": 90,
     "ends_on": "2026-10-28",
@@ -80,17 +106,32 @@
       "status": "completed_rejected",
       "result": "rejected_exploratory_null",
       "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+    },
+    {
+      "id": "stablecoin_transmission_v1",
+      "status": "completed_rejected",
+      "result": "rejected_exploratory_null"
+    },
+    {
+      "id": "miner_revenue_stress_v1",
+      "status": "completed_rejected",
+      "result": "rejected_exploratory_null"
     }
   ],
-  "phase1_conclusion": null,
+  "phase1_conclusion": "B_richer_data_justified",
   "allowed_conclusions": [
     "A_deployable_candidate_path",
     "B_richer_data_justified",
     "C_unlikely_robust_edge_under_constraints"
   ],
   "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints",
-  "updated_at": "2026-07-30T02:09:07.568383+00:00",
+  "updated_at": "2026-07-30T02:19:28.393404+00:00",
   "retired_families": [
-    "family_etf_flow_ineff_v1"
-  ]
+    "family_etf_flow_ineff_v1",
+    "family_stablecoin_transmission_v1",
+    "family_miner_revenue_stress_v1"
+  ],
+  "phase1_conclusion_at": "2026-07-30T02:19:28.399204+00:00",
+  "phase1_conclusion_rationale": "Phase 1 free-path major programmes exhausted (ETF flow, stablecoin supply-growth transmission, miner revenue stress): all exploratory nulls under frozen gates; 0 confirmatory survivors. Remaining highest-ranked untested inefficiency is options dealer gamma/hedging, which has no free admissible PIT series; paid Deribit/vendor OI-greeks history is the specific dataset that could materially change the answer. Human must approve spend (default paid budget $0) or choose C/stop. Alternatively accept C without funding.",
+  "phase1_conclusion_label": "Budgeted programmes null'd on obtainable data, and EIR ranks a specific paid dataset with EV above remaining free options. Human decides whether to fund Phase 1b or stop."
 }

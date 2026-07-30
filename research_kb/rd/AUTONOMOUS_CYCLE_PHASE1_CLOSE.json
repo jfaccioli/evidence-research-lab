@@ -1,0 +1,33 @@
+{
+  "cycle": "autonomous_phase1_completion",
+  "ran_at": "2026-07-30T02:19:28.400836+00:00",
+  "programmes": [
+    {
+      "id": "etf_flow_ineff_v1",
+      "decision": "REJECT_FAMILY",
+      "prior": true
+    },
+    {
+      "id": "stablecoin_transmission_v1",
+      "decision": "REJECT_FAMILY",
+      "promoted": false
+    },
+    {
+      "id": "miner_revenue_stress_v1",
+      "decision": "REJECT_FAMILY",
+      "promoted": false
+    }
+  ],
+  "cancelled_without_run": [
+    "ineff_options_dealer_hedge_free",
+    "ineff_forced_liquidation",
+    "ineff_institutional_execution"
+  ],
+  "phase1_conclusion": "B_richer_data_justified",
+  "interrupt": {
+    "type": "phase1_terminal_B_and_human_data_approval",
+    "message": "Phase 1 terminal outcome B: free programmes null; paid options/gamma dataset requires human approval to continue scientifically. Or accept conclusion C without funding.",
+    "paid_dataset_candidate": "Historical BTC options OI/greeks or dealer-gamma proxy with PIT timestamps (Deribit-class)",
+    "do_not_auto_spend": true
+  }
+}

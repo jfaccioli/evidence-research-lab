@@ -1,0 +1,83 @@
+{
+  "as_of": "2026-07-30T02:18:11.305909+00:00",
+  "reviews": [
+    {
+      "candidate": "ineff_options_dealer_hedge",
+      "decision": "CANCEL_FREE_PATH",
+      "criticisms": [
+        "No free admissible historical dealer-gamma / options OI series with defendable PIT found (CoinGlass free endpoint failed).",
+        "Paid Deribit/vendor history would require human approval \u2192 interrupt path, not silent spend.",
+        "Without gamma surface, any OHLCV proxy is look-alike to retired vol/calendar families."
+      ],
+      "responses": [
+        "Do not open options programme on free shelf proxies.",
+        "Defer paid acquisition to Phase1 terminal B only if free programmes exhaust and EIR still ranks options above remaining free options."
+      ],
+      "open_programme": false
+    },
+    {
+      "candidate": "ineff_stablecoin_transmission",
+      "decision": "OPEN_WITH_CONDITIONS",
+      "criticisms": [
+        "Overlap with CMD stablecoin *exchange netflow* conf-null family.",
+        "Property characterization already showed near-null dlog\u2192fwd_ret association.",
+        "LEDA note discouraged fishing long/flat on supply growth.",
+        "Supply *level* is always positive \u2014 using level as external value would make pos flags vacuous (look-ahead-free but useless).",
+        "Limited independent mechanism if growth is just risk-on collinear with BTC."
+      ],
+      "responses": [
+        "Object is system-wide mint/burn proxy (\u0394log supply), not exchange inventory netflow \u2014 different operationalisation; family_id distinct.",
+        "Characterization was descriptive, not gated confirmatory; catalogue still lists data_gap for transmission \u2014 formal pre-reg \u22644 hyps closes it.",
+        "Programme is a *retirement attempt* of the transmission long/flat claim under frozen gates, not LEDA promotion fishing.",
+        "Derived series value = \u0394log(supply) at already lag-1 event_time \u2014 no new lag, no same-day look-ahead.",
+        "\u22644 hyps, one family budget, no threshold grid; falsify vs price-only and return-leads-growth."
+      ],
+      "open_programme": true,
+      "programme_id": "stablecoin_transmission_v1",
+      "max_exploratory": 4,
+      "max_confirmatory": 1
+    },
+    {
+      "candidate": "ineff_forced_liquidation",
+      "decision": "CANCEL",
+      "criticisms": [
+        "High Overlap score; free CMD long-liquidations already conf-null as trade filters.",
+        "Re-mining same series is retired-family risk."
+      ],
+      "responses": [
+        "Cancel. No reopen without vendor PIT new operationalisation + human override."
+      ],
+      "open_programme": false
+    },
+    {
+      "candidate": "ineff_miner_selling",
+      "decision": "OPEN_AFTER_STABLE_IF_SLOTS",
+      "criticisms": [
+        "Without miner inventory, hashrate/revenue are weak proxies for forced selling.",
+        "May collapse to vol/stress filters already tested.",
+        "Sample long but mechanism indirect."
+      ],
+      "responses": [
+        "Free Blockchain.com miners-revenue + hashrate with lag-1 is admissible and not previously gate-tested as long/flat family.",
+        "Pre-register \u22644 stress/recovery hyps; reject if pure vol clone or fee-fragile.",
+        "If stablecoin programme uses a slot, miner is programme slot 3 only if remaining \u22651."
+      ],
+      "open_programme": true,
+      "programme_id": "miner_revenue_stress_v1",
+      "max_exploratory": 4,
+      "max_confirmatory": 1,
+      "depends_on_remaining_slots": true
+    },
+    {
+      "candidate": "ineff_institutional_execution",
+      "decision": "CANCEL",
+      "criticisms": [
+        "Requires intraday multi-venue flow; no free daily admissible series."
+      ],
+      "responses": [
+        "Cancel for Phase1 free path."
+      ],
+      "open_programme": false
+    }
+  ]
+}

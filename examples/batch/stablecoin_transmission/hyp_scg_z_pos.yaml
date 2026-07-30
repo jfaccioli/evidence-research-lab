@@ -1,0 +1,19 @@
+id: hyp_scg_z_pos
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_stablecoin_transmission_v1
+direction: long_only
+entry:
+  expression: scg_z_60 > 0 and above_sma_50 == 1
+exit:
+  expression: scg_z_60 <= 0 or above_sma_50 == 0
+rationale: >
+  Causal 60d z-score of lagged supply growth above zero = expansion above recent mean.
+  Fixed window; no threshold search. Programme: docs/PROGRAMME_STABLECOIN_TRANSMISSION_V1.md.
+expected_outcome: Exploratory; confirmatory only if sole best val survivor.
+feature_tags: [stablecoin_transmission, scg, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

@@ -1,0 +1,17 @@
+programme: stablecoin_transmission_v1
+design: docs/PROGRAMME_STABLECOIN_TRANSMISSION_V1.md
+live_data: true
+external:
+  kind: external
+  series_id: defillama_stablecoin_supply_dlog_lag1_v1
+  path: data/processed/external/defillama_stablecoin_supply_dlog_lag1_v1.parquet
+  prefix: scg
+  publish_lag_days: 1
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+hypotheses:
+  - hyp_scg_pos_trend.yaml
+  - hyp_scg_hi_ext_long.yaml
+  - hyp_scg_neg_flat.yaml
+  - hyp_scg_z_pos.yaml

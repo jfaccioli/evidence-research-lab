@@ -19,8 +19,8 @@ Must end with **A** (candidate path), **B** (richer data), or **C** (unlikely ro
 
 ## Active work (sequential)
 
-1. Pin free delayed US spot BTC ETF net flows (EIR already written)  
-2. Run `PROGRAMME_ETF_FLOW_INEFF_V1` only after pin  
+1. ~~Pin free delayed US spot BTC ETF net flows~~ **DONE** (2026-07-30): `us_spot_btc_etf_net_flow_usd_m_farside_v1` under `data/processed/etf/` (Farside public table, `publish_lag_days=1`)  
+2. **Next:** open and run `PROGRAMME_ETF_FLOW_INEFF_V1` only (≤4 exploratory hyps; at most 1 confirmatory)  
 3. At most two further programmes if null  
 4. Issue Phase 1 conclusion — no infinite “next mechanism”
 

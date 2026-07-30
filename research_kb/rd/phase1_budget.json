@@ -24,7 +24,7 @@
   "usage": {
     "major_inefficiency_programmes_opened": 0,
     "major_inefficiency_programmes_completed": 0,
-    "external_datasets_pinned": 0,
+    "external_datasets_pinned": 1,
     "paid_spend_usd": 0,
     "confirmatory_class_evals": 2,
     "notes_on_confirmatory_count": "PCS_VOL_SCALE + PCS_BASIS_RISKOFF counted as confirmatory-class one-shot evals before Phase1 doc; remaining budget = 8",
@@ -43,21 +43,29 @@
         "date": "2026-07-29",
         "counts_as_confirmatory_class": true,
         "before_phase1_budget_doc": true
+      },
+      {
+        "event": "dataset_pinned",
+        "date": "2026-07-30",
+        "id": "etf_flow_ineff_v1",
+        "notes": "Pinned us_spot_btc_etf_net_flow_usd_m_farside_v1 n=654 hash=faa7bb976e73"
       }
     ]
   },
   "remaining": {
     "major_inefficiency_programmes": 3,
-    "external_datasets": 2,
+    "external_datasets": 1,
     "confirmatory_class_evals": 8,
-    "calendar_days_note": "compute as ends_on - today"
+    "calendar_days_left": 90,
+    "ends_on": "2026-10-28",
+    "etf_data_deadline": "2026-08-13"
   },
   "queued_science": [
     {
       "order": 1,
       "id": "etf_flow_ineff_v1",
-      "blocked_on": "pin_free_delayed_us_spot_btc_etf_net_flow",
-      "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+      "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md",
+      "status": "ready"
     }
   ],
   "phase1_conclusion": null,
@@ -66,5 +74,6 @@
     "B_richer_data_justified",
     "C_unlikely_robust_edge_under_constraints"
   ],
-  "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints"
+  "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints",
+  "updated_at": "2026-07-30T01:47:32.385774+00:00"
 }

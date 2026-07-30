@@ -1,0 +1,35 @@
+{
+  "type": "process_restoration",
+  "as_of": "2026-07-30",
+  "charter": "docs/INTERNAL_ORGANISATION.md",
+  "diagnosis": {
+    "sr_challenging_rd": "degraded_during_cycle2",
+    "evidence": [
+      "stablecoin_transmission and miner_revenue opened despite SR criticisms that later RD belief state called low-EV slot burns",
+      "responses re-labelled concerns (catalogue hygiene, free proxy available) instead of meeting EV bar",
+      "default was open-if-runnable rather than cancel-if-weak"
+    ],
+    "what_still_worked": [
+      "DR-style cancel of free options path (no historical PIT)",
+      "cancel of forced liquidation reopen (overlap)",
+      "EA gates killing sparse miner high-Sharpe",
+      "post-hoc B vs C disagreement recorded"
+    ]
+  },
+  "restoration": {
+    "soft_veto_sr": true,
+    "hard_veto_dr": true,
+    "default_unresolved": "cancel",
+    "slot_filling_forbidden": true,
+    "human_resolves_B_vs_C": true
+  },
+  "active_roles": [
+    "research_director",
+    "scientific_reviewer",
+    "literature_reviewer",
+    "data_reviewer",
+    "implementation_engineer",
+    "experiment_auditor"
+  ],
+  "next_science": "none_until_human_phase1b_or_C"
+}

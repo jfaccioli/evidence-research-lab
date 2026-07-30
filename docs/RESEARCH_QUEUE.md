@@ -3,6 +3,7 @@
 **Updated:** 2026-07-30  
 **Architecture:** Frozen  
 **Operating mode:** Maximise P(truth) per resource — not programme throughput  
+**Internal org:** `docs/INTERNAL_ORGANISATION.md` (restored 2026-07-30 — SR soft veto, default cancel)  
 **Belief state:** `research_kb/rd/RD_BELIEF_STATE.md`
 
 ## Phase 1 status

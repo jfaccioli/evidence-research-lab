@@ -125,7 +125,7 @@
     "C_unlikely_robust_edge_under_constraints"
   ],
   "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints",
-  "updated_at": "2026-07-30T02:19:28.393404+00:00",
+  "updated_at": "2026-07-30T02:41:07.130688+00:00",
   "retired_families": [
     "family_etf_flow_ineff_v1",
     "family_stablecoin_transmission_v1",
@@ -133,5 +133,13 @@
   ],
   "phase1_conclusion_at": "2026-07-30T02:19:28.399204+00:00",
   "phase1_conclusion_rationale": "Phase 1 free-path major programmes exhausted (ETF flow, stablecoin supply-growth transmission, miner revenue stress): all exploratory nulls under frozen gates; 0 confirmatory survivors. Remaining highest-ranked untested inefficiency is options dealer gamma/hedging, which has no free admissible PIT series; paid Deribit/vendor OI-greeks history is the specific dataset that could materially change the answer. Human must approve spend (default paid budget $0) or choose C/stop. Alternatively accept C without funding.",
-  "phase1_conclusion_label": "Budgeted programmes null'd on obtainable data, and EIR ranks a specific paid dataset with EV above remaining free options. Human decides whether to fund Phase 1b or stop."
+  "phase1_conclusion_label": "Budgeted programmes null'd on obtainable data, and EIR ranks a specific paid dataset with EV above remaining free options. Human decides whether to fund Phase 1b or stop.",
+  "belief_state": "research_kb/rd/RD_BELIEF_STATE.md",
+  "phase1b_eir": "docs/EVIDENCE_INVESTMENT_REVIEW_PHASE1B_OPTIONS_GAMMA_2026-07-30.md",
+  "operating_mode": "maximise_p_truth_per_budget",
+  "process_lessons": [
+    "Do not open major programmes when characterization already near-null on the same channel",
+    "Weak free proxies that burn scarce slots reduce option value for paid high-EV data",
+    "Cancel after multi-role criticism is preferred to low-EV execution"
+  ]
 }

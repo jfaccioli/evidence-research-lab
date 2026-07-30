@@ -2,24 +2,41 @@
 
 **Updated:** 2026-07-30  
 **Architecture:** Frozen  
-**Phase 1:** **TERMINAL B** — richer data justified (human decision)
+**Operating mode:** Maximise P(truth) per resource — not programme throughput  
+**Belief state:** `research_kb/rd/RD_BELIEF_STATE.md`
 
-## Phase 1 conclusion
+## Phase 1 status
 
-**B_richer_data_justified**
+| Item | State |
+|------|--------|
+| Conclusion | **B_richer_data_justified** |
+| Free major programmes | **3/3 spent** (all exploratory null) |
+| Dataset pins | **2/2** |
+| Confirmatory remaining | **8** (reserved for true survivors only) |
+| Paid spend | **$0** (human gate) |
 
-Free-path major inefficiency programmes exhausted with exploratory nulls:
+### Free-path results (knowledge, not failure)
 
-1. ETF create/redeem flows (Farside lag-1) — reject family  
-2. Stablecoin supply-growth transmission (DefiLlama Δlog lag-1) — reject family  
-3. Miner revenue stress (Blockchain.com Δlog lag-1) — reject family  
+1. ETF create/redeem lag-1 aggregate — reject family  
+2. Stablecoin Δlog transmission — reject family *(in retrospect: low EV vs characterization — process lesson)*  
+3. Miner revenue Δlog stress — reject family *(sparse high-Sharpe correctly killed)*  
 
-0 confirmatory survivors. 0 shadow-eligible candidates.
+## Active work
 
-**Human decision required:** fund paid options/dealer-gamma history (specific EIR target) **or** accept **C** / pause / productise research OS.
+**Not** opening new free programmes.
+
+**Human decision only:**
+
+- Fund Phase 1b per `docs/EVIDENCE_INVESTMENT_REVIEW_PHASE1B_OPTIONS_GAMMA_2026-07-30.md`  
+- **or** accept **C** / pause / productise  
+
+```bash
+python -m crl rd phase1
+```
 
 ## Do not
 
+- Burn confirmatory budget on weak free ideas  
+- Reopen retired families  
+- Optimise for experiment count or “look busy”  
 - Auto-spend paid data  
-- Reopen retired families without new data class + override  
-- New architecture  

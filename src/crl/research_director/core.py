@@ -224,6 +224,9 @@ def director_report() -> dict[str, Any]:
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
         "suspended": "immediate_deployable_strategy_search_from_free_shelf",
+        "phase1": __import__(
+            "crl.research_director.phase1", fromlist=["phase1_status"]
+        ).phase1_status(),
         "programmes": list_programmes(),
         "n_research_areas": len(list_areas()),
         "areas": [

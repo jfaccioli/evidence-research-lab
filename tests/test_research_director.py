@@ -81,3 +81,19 @@ def test_inefficiency_catalogue_ranks_etf_first():
     rep = inefficiency_report()
     assert rep["eir_required"] is True
     assert "etf" in rep["recommendation"].lower()
+
+
+def test_phase1_budget_loaded():
+    from crl.research_director.phase1 import phase1_status, refuse_new_programme
+
+    st = phase1_status()
+    assert st.get("architecture_frozen") is True
+    assert "remaining" in st
+    assert st["remaining"]["confirmatory_class_evals"] >= 0
+    assert st.get("ends_on") == "2026-10-28"
+    assert st.get("phase1_conclusion") is None
+    assert "next_action" in st
+    assert st["remaining"]["confirmatory_class_evals"] == 8  # 10 - 2 PCS
+    # organisational programmes blocked while architecture frozen
+    refuse = refuse_new_programme("organisational")
+    assert refuse["allowed"] is False

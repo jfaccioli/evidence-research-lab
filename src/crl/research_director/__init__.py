@@ -18,6 +18,12 @@ from crl.research_director.inefficiency import (
     ranked_inefficiencies,
     top_inefficiency,
 )
+from crl.research_director.phase1 import (
+    phase1_status,
+    record_phase1_event,
+    refuse_new_programme,
+    set_phase1_conclusion,
+)
 
 __all__ = [
     "composite_score",
@@ -30,4 +36,8 @@ __all__ = [
     "ranked_inefficiencies",
     "top_inefficiency",
     "eir_required",
+    "phase1_status",
+    "set_phase1_conclusion",
+    "record_phase1_event",
+    "refuse_new_programme",
 ]

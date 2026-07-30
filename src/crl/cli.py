@@ -541,8 +541,9 @@ def main(argv: list[str] | None = None) -> int:
             "report",
             "inefficiencies",
             "eir",
+            "phase1",
         ],
-        help="status|programmes|areas|rank|graph|check|sync|report|inefficiencies|eir",
+        help="status|programmes|areas|rank|graph|check|sync|report|inefficiencies|eir|phase1",
     )
     p_rd.add_argument(
         "--query",
@@ -1824,6 +1825,11 @@ def cmd_rd(args: argparse.Namespace) -> int:
             # print first ~80 lines of EIR for operator visibility
             lines = eir_path.read_text().splitlines()
             print("\n".join(lines[:80]))
+        return 0
+    if action == "phase1":
+        from crl.research_director.phase1 import phase1_status
+
+        print(json.dumps(phase1_status(), indent=2))
         return 0
     return 2
 

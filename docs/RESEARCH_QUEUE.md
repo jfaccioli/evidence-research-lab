@@ -1,40 +1,37 @@
-# Living research queue (Research Director)
+# Living research queue
 
 **Updated:** 2026-07-30  
-**Active initiative:** **Economic Inefficiency Programme V1**  
-**Suspended:** Immediate deployable-strategy search from free shelf  
+**Architecture:** **Frozen**  
+**Phase 1 stop rules:** `docs/PHASE1_COMPLETION_CRITERIA.md`
 
-## Objective
+## Phase 1 budget (summary)
 
-Identify **economically plausible reasons** BTC might be temporarily predictable,  
-and the **smallest additional information** needed to test them.
+| Cap | Value |
+|-----|--------|
+| Calendar | → **2026-10-28** (90 days) |
+| Major inefficiency programmes | **3** |
+| External datasets | **2** |
+| Confirmatory-class evals | **10** (2 already used by PCS) |
+| Parallel science programmes | **1** |
+| ETF data pin deadline | **2026-08-13** |
 
-## Top inefficiency
+Must end with **A** (candidate path), **B** (richer data), or **C** (unlikely robust edge).
 
-| Rank | ID | Status |
-|------|-----|--------|
-| **1** | Spot BTC **ETF create/redeem** | **EIR issued** — free delayed flow data required |
-| 2 | Options dealer hedging | Deferred (data cost) after ETF |
-| 3 | Forced liquidations | Low priority (overlap with conf-null free series) |
-| 4 | Stablecoin mint/burn transmission | Data gap (stock have; creation missing) |
+## Active work (sequential)
 
-## Human / next action
-
-See **`docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md`**:
-
-- Prefer **free delayed** aggregate US spot BTC ETF net flows + PIT lag  
-- **Do not pay** for vendor API until free path fails  
-- Open Alpha Discovery programme only after series is pinned  
-
-## Commands
+1. Pin free delayed US spot BTC ETF net flows (EIR already written)  
+2. Run `PROGRAMME_ETF_FLOW_INEFF_V1` only after pin  
+3. At most two further programmes if null  
+4. Issue Phase 1 conclusion — no infinite “next mechanism”
 
 ```bash
-python -m crl rd inefficiencies
+python -m crl rd phase1
 python -m crl rd eir
 python -m crl rd status
-python -m crl rd sync
 ```
 
-## Gates
+## Do not
 
-Unchanged. Platform ≠ alpha. No LIVE without confirmatory + dual flags.
+- New organisational programmes  
+- Reopen retired families without new data class + human override  
+- Optimise for experiment count  

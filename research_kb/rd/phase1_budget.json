@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "phase": "1",
+  "doc": "docs/PHASE1_COMPLETION_CRITERIA.md",
+  "started_on": "2026-07-30",
+  "ends_on": "2026-10-28",
+  "etf_data_deadline": "2026-08-13",
+  "architecture_frozen": true,
+  "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+  "suspended": [
+    "immediate_deployable_strategy_search_from_free_shelf_without_new_data_class",
+    "new_organisational_programmes",
+    "parallel_exploratory_science_programmes"
+  ],
+  "caps": {
+    "max_major_inefficiency_programmes": 3,
+    "max_external_datasets": 2,
+    "max_paid_spend_usd_default": 0,
+    "max_calendar_days": 90,
+    "max_confirmatory_class_evals": 10,
+    "max_exploratory_hyps_per_programme": 4,
+    "max_parallel_science_programmes": 1
+  },
+  "usage": {
+    "major_inefficiency_programmes_opened": 0,
+    "major_inefficiency_programmes_completed": 0,
+    "external_datasets_pinned": 0,
+    "paid_spend_usd": 0,
+    "confirmatory_class_evals": 2,
+    "notes_on_confirmatory_count": "PCS_VOL_SCALE + PCS_BASIS_RISKOFF counted as confirmatory-class one-shot evals before Phase1 doc; remaining budget = 8",
+    "active_science_programme_id": null,
+    "programmes_log": [
+      {
+        "id": "pcs_vol_scale_v1",
+        "result": "C_rejected",
+        "date": "2026-07-29",
+        "counts_as_confirmatory_class": true,
+        "before_phase1_budget_doc": true
+      },
+      {
+        "id": "pcs_basis_riskoff_v1",
+        "result": "C_rejected",
+        "date": "2026-07-29",
+        "counts_as_confirmatory_class": true,
+        "before_phase1_budget_doc": true
+      }
+    ]
+  },
+  "remaining": {
+    "major_inefficiency_programmes": 3,
+    "external_datasets": 2,
+    "confirmatory_class_evals": 8,
+    "calendar_days_note": "compute as ends_on - today"
+  },
+  "queued_science": [
+    {
+      "order": 1,
+      "id": "etf_flow_ineff_v1",
+      "blocked_on": "pin_free_delayed_us_spot_btc_etf_net_flow",
+      "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+    }
+  ],
+  "phase1_conclusion": null,
+  "allowed_conclusions": [
+    "A_deployable_candidate_path",
+    "B_richer_data_justified",
+    "C_unlikely_robust_edge_under_constraints"
+  ],
+  "forced_conclusion_if_budget_exhausted": "C_unlikely_robust_edge_under_constraints"
+}

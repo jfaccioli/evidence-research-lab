@@ -24,12 +24,18 @@
 
 ## Active work
 
-**Not** opening new free programmes.
+**Phase 2 design complete — implementation not started.**  
+See `docs/PHASE2_RESEARCH_PROGRAMME_DESIGN.md`.
 
 **Human decision only:**
 
-- Fund Phase 1b per `docs/EVIDENCE_INVESTMENT_REVIEW_PHASE1B_OPTIONS_GAMMA_2026-07-30.md`  
-- **or** accept **C** / pause / productise  
+| Choice | Meaning |
+|--------|---------|
+| **B / B+** | Fund one options OI/gamma history → single science programme → null forces C |
+| **S** | Accept C now; freeze alpha; optional productise research OS |
+| **Phase 3 charter** | Mandate expansion (short/carry) — separate from Phase 2 |
+
+Do **not** implement Phase 2 until one choice is explicit.
 
 ```bash
 python -m crl rd phase1

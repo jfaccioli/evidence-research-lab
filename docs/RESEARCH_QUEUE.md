@@ -24,18 +24,20 @@
 
 ## Active work
 
-**Phase 2 design complete — implementation not started.**  
-See `docs/PHASE2_RESEARCH_PROGRAMME_DESIGN.md`.
+**Implementation suspended.**  
+**Strategic Research Review:** `docs/STRATEGIC_RESEARCH_REVIEW_2026-07-30.md`  
+(Supersedes Phase 2 auto-roadmap where they conflict.)
 
-**Human decision only:**
+**Human decision only — pick a mountain face:**
 
 | Choice | Meaning |
 |--------|---------|
-| **B / B+** | Fund one options OI/gamma history → single science programme → null forces C |
-| **S** | Accept C now; freeze alpha; optional productise research OS |
-| **Phase 3 charter** | Mandate expansion (short/carry) — separate from Phase 2 |
+| **Ω-A** | Mandate A (long/flat): one options structural bet **or** refuse → stop α |
+| **Ω-C** | Charter market-structure / delta-neutral book (higher P(edge class); policy change) |
+| **Ω-B** | Spot short allowed, no leverage |
+| **Ω-S** | Stop α under current evidence; productise research OS |
 
-Do **not** implement Phase 2 until one choice is explicit.
+Do **not** implement until one choice is explicit.
 
 ```bash
 python -m crl rd phase1

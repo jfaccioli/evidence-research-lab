@@ -1,6 +1,6 @@
 # Research Thesis Tree
 
-**Updated:** `2026-07-28T07:42:17.962490+00:00`  
+**Updated:** `2026-07-30T02:06:17.315455+00:00`  
 **Summary:** [NON-AUTHORITATIVE] 17 mechanisms tracked; 6 closed/retired/null; 11 still open; registry n=124. Success = uncertainty reduction, not alpha discovery.
 
 Epistemic map of *economic mechanisms*. Confidence = certainty about the **scientific status** of the claim, not expected returns.
@@ -13,35 +13,6 @@ Nomination ≠ promotion: confirmatory still requires **existing validation gate
 - Daily BTC long-only space may be saturated with public technical rules.
 - True funding/OI/on-chain PIT series not yet in evidence base.
 - Whether *any* low-frequency BTC spot edge survives costs + multiple testing is open.
-
-## LEDA notes (2026-07-29)
-
-- **Architecture** LEDA (F/R/P/X + numeric channels) is the lab default; scaffold LEDA-0…7 implemented.
-- **LEDA-1** lagged RV has strong skill (~0.96 Pearson) as **risk** evidence — not trade alpha.
-- **LEDA-4** thin map (trend score long + vol veto) **fails** exploratory hard gates on test (Sharpe~0, underperforms B&H). Knowledge: architecture works; this map is not an edge.
-- **LEDA-5a** ETH→BTC lagged mom rank IC ~null on pinned daily data.
-- **LEDA-5b** B&H + fixed vol veto: train excess vs B&H positive; **test fails** (underperforms B&H). Vol skill ≠ free risk policy.
-- **LEDA-6** pre-reg thr grid {0.7,0.8,0.9,0.95}: **0** exploratory hard-gate passes (thr=0.7 has +excess but n_trades<30).
-- Shadow/live still **not** justified. See `docs/LEDA_RESULTS_LOG.md`.
-
-## Market property notes (2026-07-29)
-
-- Philosophy: **market properties** (`docs/MARKET_PROPERTIES_DIRECTIVE.md`) — scientific description of behaviour, not indicator mining.
-- **`kline_aggression`:** intensity ↔ next RV ~-0.26; tbr ↔ ret ~0.36; LEDA refused.
-- **`perp_premium`:** continuous mark–index premium; autocorr ~0.78; corr vs funding ~0.68; vs fwd_ret ~0; vs next RV ~0.16. **LEDA refused**.
-- **`premium_residual`:** expanding residual vs funding → **linear next-RV IC ~0**; premium’s linear uncertainty association is largely funding-collinear. Understanding win; not an edge.
-- **`stablecoin_agg_supply`:** DefiLlama aggregate circulating USD; dlog30_lag ↔ next RV ~**0.29**, vs fwd_ret ~0; partially independent of funding/premium. Liquidity stock property; **LEDA refused**.
-- **`defi_agg_tvl`:** DeFi capital lock; distinct from stable growth (~0.20); **null** linear association with BTC next return/RV. Understanding null; **LEDA refused**.
-- **`cross_venue_basis`:** BN vs Coinbase log ratio (calendar-day aligned); persistent (~0.90); weak next-RV; not a return clone. **LEDA refused**.
-- **Property Synthesis Review (2026-07-29):** pre-reg equal-rank stress composite **fails** vs rv_lag baseline (composite IC ~0.26 vs ~0.96); family `leda_synth_stress_equal_rank_v1` **retired**. No composite LEDA programme.
-- **Mechanism mode:** primary directive is mechanism discovery (`MECHANISM_DISCOVERY_DIRECTIVE.md`).
-- **`vol_clustering` v1:** high-RV persistence lift ~3.4×; leverage/liquidity cofactors **do not** increase persistence under pre-reg design. Working description = pure RV inertia for this claim.
-- **`leverage_cycle` v1:** OI-build (+ funding/premium stress) has higher mean next-RV than OI-unwind (margin ~0.006). Descriptive mechanism support; **not** LEDA candidate without new pre-reg skill claim vs rv_lag.
-- **`uncertainty_behaviour` v1:** high RV co-occurs with **higher** intensity and elevated |funding|/|premium|; intensity-drop hypothesis rejected; basis not wider.
-- **Ops readiness track:** checklist 11/11 pass (flat + flip paper, kill switch, limits, audit); **does not** authorize trading or soften gates.
-- **Incremental next-RV skill frontier:** OI-build residual IC ~0.027 (**retired**); ETH RV residual IC ~-0.03 (**retired**). Working model: **RV lag dominates**.
-- **Dislocation under stress:** mean |basis| ~2× in high RV vs low RV (descriptive).
-- Shadow alpha still unjustified. Roadmap: `docs/RESEARCH_ROADMAP_SCIENCE.md`.
 
 ## Mechanisms
 

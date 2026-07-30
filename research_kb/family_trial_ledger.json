@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-07-28T07:42:17.967279+00:00",
-  "total_exploratory_trials": 43,
+  "updated_at": "2026-07-30T02:06:17.339329+00:00",
+  "total_exploratory_trials": 47,
   "families": {
     "family_flow_level": {
       "n_trials": 8,
@@ -42,6 +42,11 @@
       "n_trials": 5,
       "n_programmes": 1,
       "last_programme": "macro_regime_v1"
+    },
+    "family_etf_flow_ineff_v1": {
+      "n_trials": 4,
+      "n_programmes": 1,
+      "last_programme": "etf_flow_ineff_v1"
     }
   },
   "programmes": {
@@ -124,6 +129,16 @@
       "n_candidates": 0,
       "dataset_id": "binance_public_BTCUSDT_1d_79cfad335046",
       "recorded_at": "2026-07-28T07:42:17.966397+00:00"
+    },
+    "etf_flow_ineff_v1": {
+      "n_trials": 4,
+      "family_counts": {
+        "family_etf_flow_ineff_v1": 4
+      },
+      "n_passed_val": 0,
+      "n_candidates": 0,
+      "dataset_id": "window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486",
+      "recorded_at": "2026-07-30T02:06:17.339191+00:00"
     }
   },
   "events": [
@@ -180,6 +195,13 @@
       "at": "2026-07-28T07:42:17.966462+00:00",
       "programme": "macro_regime_v1",
       "n_trials": 5,
+      "n_passed_val": 0,
+      "n_candidates": 0
+    },
+    {
+      "at": "2026-07-30T02:06:17.339194+00:00",
+      "programme": "etf_flow_ineff_v1",
+      "n_trials": 4,
       "n_passed_val": 0,
       "n_candidates": 0
     }

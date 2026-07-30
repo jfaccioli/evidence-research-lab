@@ -2,9 +2,127 @@
   "programme": "research_director",
   "role": "principal_investigator",
   "annual_objective": "Increase the laboratory's understanding of how markets function while maximising the probability of discovering economically meaningful, reproducible trading advantages under frozen scientific standards.",
-  "updated_at": "2026-07-30T01:14:10.156221+00:00",
+  "updated_at": "2026-07-30T02:09:21.958557+00:00",
   "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
   "suspended": "immediate_deployable_strategy_search_from_free_shelf",
+  "phase1": {
+    "phase": "1",
+    "doc": "docs/PHASE1_COMPLETION_CRITERIA.md",
+    "architecture_frozen": true,
+    "started_on": "2026-07-30",
+    "ends_on": "2026-10-28",
+    "etf_data_deadline": "2026-08-13",
+    "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+    "suspended": [
+      "immediate_deployable_strategy_search_from_free_shelf_without_new_data_class",
+      "new_organisational_programmes",
+      "parallel_exploratory_science_programmes"
+    ],
+    "caps": {
+      "max_major_inefficiency_programmes": 3,
+      "max_external_datasets": 2,
+      "max_paid_spend_usd_default": 0,
+      "max_calendar_days": 90,
+      "max_confirmatory_class_evals": 10,
+      "max_exploratory_hyps_per_programme": 4,
+      "max_parallel_science_programmes": 1
+    },
+    "usage": {
+      "major_inefficiency_programmes_opened": 1,
+      "major_inefficiency_programmes_completed": 1,
+      "external_datasets_pinned": 1,
+      "paid_spend_usd": 0,
+      "confirmatory_class_evals": 2,
+      "notes_on_confirmatory_count": "PCS_VOL_SCALE + PCS_BASIS_RISKOFF counted as confirmatory-class one-shot evals before Phase1 doc; remaining budget = 8",
+      "active_science_programme_id": null,
+      "programmes_log": [
+        {
+          "id": "pcs_vol_scale_v1",
+          "result": "C_rejected",
+          "date": "2026-07-29",
+          "counts_as_confirmatory_class": true,
+          "before_phase1_budget_doc": true
+        },
+        {
+          "id": "pcs_basis_riskoff_v1",
+          "result": "C_rejected",
+          "date": "2026-07-29",
+          "counts_as_confirmatory_class": true,
+          "before_phase1_budget_doc": true
+        },
+        {
+          "event": "dataset_pinned",
+          "date": "2026-07-30",
+          "id": "etf_flow_ineff_v1",
+          "notes": "Pinned us_spot_btc_etf_net_flow_usd_m_farside_v1 n=654 hash=faa7bb976e73"
+        },
+        {
+          "event": "programme_opened",
+          "date": "2026-07-30",
+          "id": "etf_flow_ineff_v1",
+          "notes": "Opened PROGRAMME_ETF_FLOW_INEFF_V1; PIT audit passed; series pinned"
+        },
+        {
+          "event": "programme_completed",
+          "date": "2026-07-30",
+          "id": "etf_flow_ineff_v1",
+          "result": "rejected_exploratory_null",
+          "notes": "4/4 failed_val; 0 confirmatory. Family family_etf_flow_ineff_v1 retired."
+        }
+      ]
+    },
+    "remaining": {
+      "major_inefficiency_programmes": 2,
+      "external_datasets": 1,
+      "confirmatory_class_evals": 8,
+      "calendar_days_left": 90,
+      "ends_on": "2026-10-28",
+      "etf_data_deadline": "2026-08-13"
+    },
+    "queued_science": [
+      {
+        "order": 1,
+        "id": "etf_flow_ineff_v1",
+        "status": "completed_rejected",
+        "result": "rejected_exploratory_null",
+        "eir": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+      }
+    ],
+    "etf_deadline_status": {
+      "deadline": "2026-08-13",
+      "days_to_deadline": 14,
+      "still_blocked_on_etf_data": false,
+      "overdue": false,
+      "action_if_overdue": null
+    },
+    "must_conclude": {
+      "must_conclude": false,
+      "already_concluded": false,
+      "conclusion": null,
+      "reasons": [],
+      "forced_default": "C_unlikely_robust_edge_under_constraints",
+      "etf_deadline": {
+        "deadline": "2026-08-13",
+        "days_to_deadline": 14,
+        "still_blocked_on_etf_data": false,
+        "overdue": false,
+        "action_if_overdue": null
+      }
+    },
+    "phase1_conclusion": null,
+    "allowed_conclusions": [
+      "A_deployable_candidate_path",
+      "B_richer_data_justified",
+      "C_unlikely_robust_edge_under_constraints"
+    ],
+    "conclusion_labels": {
+      "A_deployable_candidate_path": "A strategy (or risk policy) passed confirmatory under frozen gates and is eligible for live-data shadow under existing dual-track rules.",
+      "B_richer_data_justified": "Budgeted programmes null'd on obtainable data, and EIR ranks a specific paid dataset with EV above remaining free options. Human decides whether to fund Phase 1b or stop.",
+      "C_unlikely_robust_edge_under_constraints": "Under Phase 1 constraints (BTC spot, long/flat, no leverage, daily/4h admissible data within budget), we did not find a confirmatory-grade edge. Public/free-style daily prediction under our gates is unlikely to contain a sufficiently robust, deployable advantage without a qualitatively richer information class or a material change of mandate."
+    },
+    "next_action": "ETF-flow programme complete or no open queue item \u2014 open next ranked inefficiency only if budget allows; else conclude Phase 1.",
+    "as_of": "2026-07-30T02:09:21.958728+00:00"
+  },
   "programmes": [
     {
       "id": "research_director",
@@ -323,7 +441,7 @@
   ],
   "economic_inefficiency": {
     "programme": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
-    "updated_at": "2026-07-30T01:14:10.156208+00:00",
+    "updated_at": "2026-07-30T02:09:21.958538+00:00",
     "objective": "Identify economically plausible reasons BTC might be temporarily predictable; find smallest extra information for the best remaining inefficiency",
     "suspended": "immediate_deployable_strategy_search_from_free_shelf",
     "n_inefficiencies": 10,

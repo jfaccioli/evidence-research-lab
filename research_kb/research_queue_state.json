@@ -17,8 +17,17 @@
     "next: free X archive discovery (if any)",
     "next: vendor series drop-in runbook (human)"
   ],
-  "completed": [],
+  "completed": [
+    {
+      "completed_at": "2026-07-30T02:06:17.330122+00:00",
+      "id": "etf_flow_ineff_v1",
+      "n_candidates": 0,
+      "n_passed_val": 0,
+      "n_run": 4,
+      "notes": "dataset=window_etf_flow_ineff_v1_BTCUSDT_1d_09b384293486"
+    }
+  ],
   "policy": "no_low_ev_free_btc_technical_clones; wait_time_build_capability",
-  "updated_at": "2026-07-28T06:30:14.809664+00:00",
+  "updated_at": "2026-07-30T02:06:17.330341+00:00",
   "version": 1
 }

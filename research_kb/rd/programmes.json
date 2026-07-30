@@ -8,7 +8,23 @@
       "role": "Principal investigator: prioritise, map knowledge, prevent waste",
       "status": "active",
       "owns_production_strategies": false,
-      "docs": ["docs/RESEARCH_DIRECTOR_PROGRAMME.md", "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md"]
+      "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+      "docs": [
+        "docs/RESEARCH_DIRECTOR_PROGRAMME.md",
+        "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md",
+        "docs/ECONOMIC_INEFFICIENCY_PROGRAMME_V1.md"
+      ]
+    },
+    {
+      "id": "economic_inefficiency",
+      "name": "Economic Inefficiency Programme",
+      "role": "Why BTC might be temporarily predictable; min extra information",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/ECONOMIC_INEFFICIENCY_PROGRAMME_V1.md",
+        "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+      ]
     },
     {
       "id": "alpha_discovery",

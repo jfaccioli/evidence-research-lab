@@ -12,6 +12,12 @@ from crl.research_director.core import (
     ranked_directions,
     sync_rd_state,
 )
+from crl.research_director.inefficiency import (
+    eir_required,
+    inefficiency_report,
+    ranked_inefficiencies,
+    top_inefficiency,
+)
 
 __all__ = [
     "composite_score",
@@ -20,4 +26,8 @@ __all__ = [
     "list_programmes",
     "ranked_directions",
     "sync_rd_state",
+    "inefficiency_report",
+    "ranked_inefficiencies",
+    "top_inefficiency",
+    "eir_required",
 ]

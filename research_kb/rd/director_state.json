@@ -2,7 +2,9 @@
   "programme": "research_director",
   "role": "principal_investigator",
   "annual_objective": "Increase the laboratory's understanding of how markets function while maximising the probability of discovering economically meaningful, reproducible trading advantages under frozen scientific standards.",
-  "updated_at": "2026-07-29T08:35:48.732097+00:00",
+  "updated_at": "2026-07-30T01:14:10.156221+00:00",
+  "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+  "suspended": "immediate_deployable_strategy_search_from_free_shelf",
   "programmes": [
     {
       "id": "research_director",
@@ -10,9 +12,22 @@
       "role": "Principal investigator: prioritise, map knowledge, prevent waste",
       "status": "active",
       "owns_production_strategies": false,
+      "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
       "docs": [
         "docs/RESEARCH_DIRECTOR_PROGRAMME.md",
-        "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md"
+        "docs/STANDING_RESEARCH_DIRECTOR_DIRECTIVE.md",
+        "docs/ECONOMIC_INEFFICIENCY_PROGRAMME_V1.md"
+      ]
+    },
+    {
+      "id": "economic_inefficiency",
+      "name": "Economic Inefficiency Programme",
+      "role": "Why BTC might be temporarily predictable; min extra information",
+      "status": "active",
+      "owns_production_strategies": false,
+      "docs": [
+        "docs/ECONOMIC_INEFFICIENCY_PROGRAMME_V1.md",
+        "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
       ]
     },
     {
@@ -306,6 +321,209 @@
       "composite_score": 0.65
     }
   ],
+  "economic_inefficiency": {
+    "programme": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+    "updated_at": "2026-07-30T01:14:10.156208+00:00",
+    "objective": "Identify economically plausible reasons BTC might be temporarily predictable; find smallest extra information for the best remaining inefficiency",
+    "suspended": "immediate_deployable_strategy_search_from_free_shelf",
+    "n_inefficiencies": 10,
+    "ranked": [
+      {
+        "rank": 1,
+        "id": "ineff_etf_create_redeem",
+        "name": "Spot BTC ETF creation/redemption and AP inventory pressure",
+        "IScore": 23.55,
+        "status": "eir_required",
+        "lab_has_observables": false,
+        "min_additional_data": "Daily aggregate US spot BTC ETF net flows (BTC or USD) with documented publish lag for PIT; ideally multi-fund series since 2024-01-11",
+        "scores": {
+          "Dur": 4.0,
+          "EV": 4.5,
+          "Obs": 4.0,
+          "DataCost": 3.0,
+          "Pa": 3.5,
+          "Overlap": 1.0
+        }
+      },
+      {
+        "rank": 2,
+        "id": "ineff_options_dealer_hedge",
+        "name": "Options dealer gamma/hedging flows into spot/perp",
+        "IScore": 18.75,
+        "status": "deferred_eir_after_etf",
+        "lab_has_observables": false,
+        "min_additional_data": "Historical options OI / greeks or published dealer-gamma proxy with timestamps; Deribit-class history often paid or incomplete free",
+        "scores": {
+          "Dur": 3.5,
+          "EV": 4.0,
+          "Obs": 2.5,
+          "DataCost": 1.5,
+          "Pa": 3.0,
+          "Overlap": 0.5
+        }
+      },
+      {
+        "rank": 3,
+        "id": "ineff_stablecoin_transmission",
+        "name": "Stablecoin liquidity creation/transmission into BTC risk",
+        "IScore": 18.05,
+        "status": "data_gap",
+        "lab_has_observables": "partial",
+        "min_additional_data": "Daily USDT+USDC mint/burn or net issuance with publish lag",
+        "scores": {
+          "Dur": 3.5,
+          "EV": 3.5,
+          "Obs": 3.5,
+          "DataCost": 3.0,
+          "Pa": 2.5,
+          "Overlap": 2.0
+        }
+      },
+      {
+        "rank": 4,
+        "id": "ineff_institutional_execution",
+        "name": "Institutional TWAP/VWAP and scheduled execution",
+        "IScore": 15.35,
+        "status": "deferred_high_cost",
+        "lab_has_observables": false,
+        "min_additional_data": "Intraday multi-venue volume/order flow or institutional print data",
+        "scores": {
+          "Dur": 3.0,
+          "EV": 3.5,
+          "Obs": 2.0,
+          "DataCost": 1.5,
+          "Pa": 2.5,
+          "Overlap": 1.0
+        }
+      },
+      {
+        "rank": 5,
+        "id": "ineff_miner_selling",
+        "name": "Miner treasury selling and hashprice stress",
+        "IScore": 13.05,
+        "status": "deferred",
+        "lab_has_observables": false,
+        "min_additional_data": "Miner-to-exchange flow or miner balance series (often vendor)",
+        "scores": {
+          "Dur": 3.0,
+          "EV": 2.5,
+          "Obs": 2.5,
+          "DataCost": 2.0,
+          "Pa": 2.0,
+          "Overlap": 2.0
+        }
+      },
+      {
+        "rank": 6,
+        "id": "ineff_macro_regulatory_info",
+        "name": "Macro and regulatory information transmission",
+        "IScore": 12.8,
+        "status": "low_priority_after_fred_null",
+        "lab_has_observables": "partial",
+        "min_additional_data": "Event surprise residuals or better event calendar if reopening",
+        "scores": {
+          "Dur": 2.5,
+          "EV": 2.5,
+          "Obs": 3.5,
+          "DataCost": 4.0,
+          "Pa": 1.5,
+          "Overlap": 3.5
+        }
+      },
+      {
+        "rank": 7,
+        "id": "ineff_forced_liquidation",
+        "name": "Forced liquidations and cascade selling/buying",
+        "IScore": 12.5,
+        "status": "low_priority_high_overlap",
+        "lab_has_observables": "partial",
+        "min_additional_data": "If re-opening: vendor or free series with better PIT than CMD long-liq conf-null operationalisation; else do not re-mine same free series",
+        "scores": {
+          "Dur": 2.5,
+          "EV": 3.0,
+          "Obs": 3.0,
+          "DataCost": 3.5,
+          "Pa": 2.0,
+          "Overlap": 4.0
+        }
+      },
+      {
+        "rank": 8,
+        "id": "ineff_treasury_accumulation",
+        "name": "Corporate/sovereign treasury BTC accumulation",
+        "IScore": 12.1,
+        "status": "low_priority",
+        "lab_has_observables": false,
+        "min_additional_data": "Event list of treasury purchases with as-of dates",
+        "scores": {
+          "Dur": 2.5,
+          "EV": 2.5,
+          "Obs": 2.0,
+          "DataCost": 2.5,
+          "Pa": 1.5,
+          "Overlap": 1.5
+        }
+      },
+      {
+        "rank": 9,
+        "id": "ineff_behavioural_underreaction",
+        "name": "Behavioural underreaction / slow information diffusion",
+        "IScore": 9.6,
+        "status": "retired_exhausted",
+        "lab_has_observables": true,
+        "min_additional_data": "None for classic TSMOM \u2014 but family exhausted on free public ops",
+        "scores": {
+          "Dur": 1.5,
+          "EV": 2.0,
+          "Obs": 4.0,
+          "DataCost": 5.0,
+          "Pa": 1.0,
+          "Overlap": 5.0
+        }
+      },
+      {
+        "rank": 10,
+        "id": "ineff_exchange_inventory",
+        "name": "Exchange inventory / reserve constraints",
+        "IScore": 8.9,
+        "status": "retired_family_overlap",
+        "lab_has_observables": "partial_exhausted",
+        "min_additional_data": "Vendor non-revised PIT reserves only if EIR still ranks above ETF free path",
+        "scores": {
+          "Dur": 2.5,
+          "EV": 2.5,
+          "Obs": 3.0,
+          "DataCost": 2.0,
+          "Pa": 1.5,
+          "Overlap": 4.5
+        }
+      }
+    ],
+    "top": {
+      "id": "ineff_etf_create_redeem",
+      "name": "Spot BTC ETF creation/redemption and AP inventory pressure",
+      "IScore": 23.55,
+      "why_exists": "Authorized participants and ETF issuers must create/redeem shares against underlying BTC (or cash-equivalent baskets). Large net creations force buy pressure in BTC spot/perp; redemptions force sell pressure. Flow is lumpy, predictable around NAV windows and settlement, not continuous free-float trading.",
+      "who_creates": "Authorized participants (APs), ETF issuers (IBIT, FBTC, GBTC, \u2026), institutional allocators, market makers facilitating creations",
+      "why_not_arbed_immediately": "Creation/redemption has operational lag, AP capital and inventory constraints, primary-market hours, and risk of adverse selection around NAV. Secondary ETF price can diverge from NAV short-term; arb requires inventory and is capacity-limited. Post-2024 spot ETFs introduced a large new structural channel not present in pre-ETF free OHLCV history.",
+      "observables": [
+        "daily net ETF flows (USD and BTC)",
+        "shares outstanding / AUM by fund",
+        "ETF premium/discount to NAV",
+        "lagged flow aggregates (T+0 published often with lag)"
+      ],
+      "lab_has_observables": false,
+      "min_additional_data": "Daily aggregate US spot BTC ETF net flows (BTC or USD) with documented publish lag for PIT; ideally multi-fund series since 2024-01-11"
+    },
+    "eir_required": true,
+    "eir_path": "docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md",
+    "recommendation": "Acquire free delayed US spot BTC ETF net flow series with PIT lag; do not pay for vendor API until free path fails; do not re-mine free shelf strategies",
+    "standards": {
+      "gates_frozen": true,
+      "not_dataset_first": true,
+      "platform_is_not_alpha": true
+    }
+  },
   "top_openable_direction": {
     "id": "dir_etf_flow_free",
     "title": "Spot BTC ETF flow as institutional liquidity pipe (free delayed first)",
@@ -371,12 +589,13 @@
   ],
   "retired_family_count": 8,
   "allocation_guidance": {
-    "alpha_discovery": "Only path to production strategies; highest P\u03b1 work only",
-    "mechanism_discovery": "Prefer unblocked mechanisms with new observables",
-    "trading_platform": "Engineering effort; no science budget from alpha",
+    "alpha_discovery": "Execute only RD-opened inefficiency programmes under frozen gates",
+    "economic_inefficiency": "Primary science initiative \u2014 market economics first",
+    "mechanism_discovery": "Subordinate to inefficiency catalogue",
+    "trading_platform": "Engineering only; no science budget from alpha",
     "ops_governance": "Maintain; do not expand for novelty"
   },
-  "current_scientific_model": "Next-RV dominated by RV lag; leverage/ETH residual skill retired; dislocation widens under stress (descriptive); 0 confirmatory trading candidates",
+  "current_scientific_model": "Next-RV dominated by RV lag; free-shelf deployable strategies null under PCS; most plausible remaining temporary predictability is structural ETF create/redeem flow \u2014 requires data not on free OHLCV shelf; 0 confirmatory trading candidates",
   "standards": {
     "gates": "frozen",
     "trading_platform_is_alpha": false,
@@ -384,7 +603,7 @@
   },
   "interrupt_policy": [
     "new high-value programme open",
-    "external data scientifically justified",
+    "external data scientifically justified (EIR)",
     "confirmatory survivor",
     "major model contradiction",
     "strategic human judgement required"

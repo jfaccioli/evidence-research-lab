@@ -530,8 +530,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_rd.add_argument(
         "action",
-        choices=["status", "programmes", "areas", "rank", "graph", "check", "sync", "report"],
-        help="status|programmes|areas|rank|graph|check|sync|report",
+        choices=[
+            "status",
+            "programmes",
+            "areas",
+            "rank",
+            "graph",
+            "check",
+            "sync",
+            "report",
+            "inefficiencies",
+            "eir",
+        ],
+        help="status|programmes|areas|rank|graph|check|sync|report|inefficiencies|eir",
     )
     p_rd.add_argument(
         "--query",
@@ -1777,6 +1788,42 @@ def cmd_rd(args: argparse.Namespace) -> int:
             print("rd check requires --query", file=sys.stderr)
             return 2
         print(json.dumps(is_duplicate_or_retired(q), indent=2))
+        return 0
+    if action == "inefficiencies":
+        from crl.research_director.inefficiency import inefficiency_report
+
+        print(json.dumps(inefficiency_report(), indent=2))
+        return 0
+    if action == "eir":
+        from pathlib import Path
+
+        from crl.research_director.inefficiency import eir_required, top_inefficiency
+        from crl.shared.config import project_root
+
+        top = top_inefficiency()
+        eir_path = (
+            project_root()
+            / "docs"
+            / "EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md"
+        )
+        print(
+            json.dumps(
+                {
+                    "eir_required": eir_required(top),
+                    "top_inefficiency": top.get("id") if top else None,
+                    "eir_path": str(eir_path) if eir_path.exists() else None,
+                    "recommendation": (
+                        "Free delayed US spot BTC ETF net flows with PIT lag; "
+                        "no paid API until free path fails"
+                    ),
+                },
+                indent=2,
+            )
+        )
+        if eir_path.exists():
+            # print first ~80 lines of EIR for operator visibility
+            lines = eir_path.read_text().splitlines()
+            print("\n".join(lines[:80]))
         return 0
     return 2
 

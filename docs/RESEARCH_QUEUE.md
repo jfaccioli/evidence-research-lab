@@ -1,47 +1,40 @@
 # Living research queue (Research Director)
 
-**Updated:** 2026-07-29  
-**RD programme:** `docs/RESEARCH_DIRECTOR_PROGRAMME.md`  
-**Science roadmap:** `docs/RESEARCH_ROADMAP_SCIENCE.md`  
-**Platform:** `docs/TRADING_PLATFORM_V1.md`
+**Updated:** 2026-07-30  
+**Active initiative:** **Economic Inefficiency Programme V1**  
+**Suspended:** Immediate deployable-strategy search from free shelf  
 
-## Top-level programmes
+## Objective
 
-| Programme | Role |
-|-----------|------|
-| **Research Director** | Prioritise, knowledge graph, prevent waste |
-| **Alpha Discovery** | Only path to production strategies |
-| **Mechanism Discovery** | Economic mechanisms |
-| **LEDA** | Decision architecture (stable scaffold) |
-| **Trading Platform** | Engineering deploy readiness |
-| **Ops / Governance** | Safety, frozen gates |
+Identify **economically plausible reasons** BTC might be temporarily predictable,  
+and the **smallest additional information** needed to test them.
 
-## Current model
+## Top inefficiency
 
-RV lag dominates next-RV skill. Incremental leverage/ETH residual families **retired**.
-Dislocation widens under stress (descriptive). **0** confirmatory trading candidates.
+| Rank | ID | Status |
+|------|-----|--------|
+| **1** | Spot BTC **ETF create/redeem** | **EIR issued** — free delayed flow data required |
+| 2 | Options dealer hedging | Deferred (data cost) after ETF |
+| 3 | Forced liquidations | Low priority (overlap with conf-null free series) |
+| 4 | Stablecoin mint/burn transmission | Data gap (stock have; creation missing) |
 
-## RD commands
+## Human / next action
 
-```bash
-python -m crl rd status          # full director report
-python -m crl rd rank            # scored future directions
-python -m crl rd graph           # knowledge graph
-python -m crl rd programmes      # programme map
-python -m crl rd areas           # research areas
-python -m crl rd check --query "daily momentum"   # anti-duplication
-python -m crl rd sync            # refresh research_kb/rd/director_state.json + RD_STATUS.md
-```
+See **`docs/EVIDENCE_INVESTMENT_REVIEW_INEFFICIENCY_2026-07-30.md`**:
 
-## Parallel execution
+- Prefer **free delayed** aggregate US spot BTC ETF net flows + PIT lag  
+- **Do not pay** for vendor API until free path fails  
+- Open Alpha Discovery programme only after series is pinned  
+
+## Commands
 
 ```bash
-# Science
-python -m crl observe mechanisms
-
-# Platform (engineering)
-python -m crl platform list
-
-# Ops
-python -m crl ops-readiness check
+python -m crl rd inefficiencies
+python -m crl rd eir
+python -m crl rd status
+python -m crl rd sync
 ```
+
+## Gates
+
+Unchanged. Platform ≠ alpha. No LIVE without confirmatory + dual flags.

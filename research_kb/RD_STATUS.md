@@ -1,16 +1,17 @@
 # Research Director Status
 
-**Updated:** 2026-07-29T08:35:48.732097+00:00
+**Updated:** 2026-07-30T01:14:10.156221+00:00
 
 **Objective:** Increase the laboratory's understanding of how markets function while maximising the probability of discovering economically meaningful, reproducible trading advantages under frozen scientific standards.
 
 ## Current model
 
-Next-RV dominated by RV lag; leverage/ETH residual skill retired; dislocation widens under stress (descriptive); 0 confirmatory trading candidates
+Next-RV dominated by RV lag; free-shelf deployable strategies null under PCS; most plausible remaining temporary predictability is structural ETF create/redeem flow — requires data not on free OHLCV shelf; 0 confirmatory trading candidates
 
 ## Programmes
 
 - **Research Director** (`research_director`): active — Principal investigator: prioritise, map knowledge, prevent waste
+- **Economic Inefficiency Programme** (`economic_inefficiency`): active — Why BTC might be temporarily predictable; min extra information
 - **Alpha Discovery** (`alpha_discovery`): active — Only path from evidence to production strategies under frozen gates
 - **Mechanism Discovery** (`mechanism_discovery`): active — Economic/behavioural mechanisms before properties
 - **LEDA** (`leda`): stable_scaffold — Layered Evidence Decision Architecture (F/R/P/X + channels)

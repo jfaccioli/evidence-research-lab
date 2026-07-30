@@ -59,3 +59,25 @@ def test_graph_and_sync():
     assert "gates" in rep["standards"]
     assert rep["standards"]["weaken_gates_for_platform"] is False
     assert "understanding" in annual_objective().lower()
+    assert rep.get("active_initiative") == "ECONOMIC_INEFFICIENCY_PROGRAMME_V1"
+    assert "economic_inefficiency" in rep
+
+
+def test_inefficiency_catalogue_ranks_etf_first():
+    from crl.research_director.inefficiency import (
+        eir_required,
+        inefficiency_report,
+        ranked_inefficiencies,
+        top_inefficiency,
+    )
+
+    rows = ranked_inefficiencies()
+    assert rows
+    assert rows[0]["id"] == "ineff_etf_create_redeem"
+    assert "IScore" in rows[0]
+    top = top_inefficiency()
+    assert top is not None
+    assert eir_required(top) is True
+    rep = inefficiency_report()
+    assert rep["eir_required"] is True
+    assert "etf" in rep["recommendation"].lower()

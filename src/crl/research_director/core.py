@@ -211,11 +211,19 @@ def director_report() -> dict[str, Any]:
         in ("blocked_missing_free_series", "deferred_eir", "forbidden")
     ]
     top = ranked[0] if ranked else None
+    try:
+        from crl.research_director.inefficiency import inefficiency_report
+
+        ineff = inefficiency_report()
+    except Exception as exc:  # pragma: no cover
+        ineff = {"error": str(exc)}
     return {
         "programme": "research_director",
         "role": "principal_investigator",
         "annual_objective": annual_objective(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
+        "active_initiative": "ECONOMIC_INEFFICIENCY_PROGRAMME_V1",
+        "suspended": "immediate_deployable_strategy_search_from_free_shelf",
         "programmes": list_programmes(),
         "n_research_areas": len(list_areas()),
         "areas": [
@@ -229,6 +237,7 @@ def director_report() -> dict[str, Any]:
         ],
         "knowledge_graph": knowledge_graph_summary(),
         "ranked_directions": ranked,
+        "economic_inefficiency": ineff,
         "top_openable_direction": next(
             (
                 d
@@ -249,14 +258,16 @@ def director_report() -> dict[str, Any]:
         ][:5],
         "retired_family_count": len(load_retired_families()),
         "allocation_guidance": {
-            "alpha_discovery": "Only path to production strategies; highest Pα work only",
-            "mechanism_discovery": "Prefer unblocked mechanisms with new observables",
-            "trading_platform": "Engineering effort; no science budget from alpha",
+            "alpha_discovery": "Execute only RD-opened inefficiency programmes under frozen gates",
+            "economic_inefficiency": "Primary science initiative — market economics first",
+            "mechanism_discovery": "Subordinate to inefficiency catalogue",
+            "trading_platform": "Engineering only; no science budget from alpha",
             "ops_governance": "Maintain; do not expand for novelty",
         },
         "current_scientific_model": (
-            "Next-RV dominated by RV lag; leverage/ETH residual skill retired; "
-            "dislocation widens under stress (descriptive); 0 confirmatory trading candidates"
+            "Next-RV dominated by RV lag; free-shelf deployable strategies null under PCS; "
+            "most plausible remaining temporary predictability is structural ETF create/redeem "
+            "flow — requires data not on free OHLCV shelf; 0 confirmatory trading candidates"
         ),
         "standards": {
             "gates": "frozen",
@@ -265,7 +276,7 @@ def director_report() -> dict[str, Any]:
         },
         "interrupt_policy": [
             "new high-value programme open",
-            "external data scientifically justified",
+            "external data scientifically justified (EIR)",
             "confirmatory survivor",
             "major model contradiction",
             "strategic human judgement required",

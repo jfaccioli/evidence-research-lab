@@ -129,6 +129,13 @@
       "moves": [
         "H1_basis_mr"
       ]
+    },
+    {
+      "date": "2026-07-31",
+      "summary": "joint fund+prem REJECT_EXPLORATORY",
+      "moves": [
+        "H1_joint"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
@@ -143,7 +150,7 @@
     "gate_softening"
   ],
   "last_autonomous_action": {
-    "programme": "ms_basis_meanrev_v1",
+    "programme": "ms_funding_premium_joint_v1",
     "decision": "REJECT_EXPLORATORY"
   },
   "human_authorizations": [

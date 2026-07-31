@@ -1,0 +1,67 @@
+{
+  "programme": "ms_funding_premium_joint_v1",
+  "hypothesis": "H1",
+  "n_passed_val": 0,
+  "results": [
+    {
+      "id": "fund_pos_prem_high",
+      "status": "failed_val",
+      "val_sharpe": -5.370146037282932,
+      "val_trades": 34,
+      "ci_lo": -6.329730637091085,
+      "stress": -6.078322542425327,
+      "full_sharpe": -5.298018352423483,
+      "reasons": [
+        "sharpe -5.370<0.2",
+        "ci_lo -6.330<0",
+        "stress -6.078<0"
+      ]
+    },
+    {
+      "id": "fund_pos",
+      "status": "failed_val",
+      "val_sharpe": -6.059274850223673,
+      "val_trades": 39,
+      "ci_lo": -6.832605573073497,
+      "stress": -6.707601379265352,
+      "full_sharpe": -6.1944712995568185,
+      "reasons": [
+        "sharpe -6.059<0.2",
+        "ci_lo -6.833<0",
+        "stress -6.708<0"
+      ]
+    },
+    {
+      "id": "fund_z_prem_z",
+      "status": "failed_val",
+      "val_sharpe": -7.014704619311275,
+      "val_trades": 46,
+      "ci_lo": -7.782818974009491,
+      "stress": -7.583684743883606,
+      "full_sharpe": -8.10005622787164,
+      "reasons": [
+        "sharpe -7.015<0.2",
+        "ci_lo -7.783<0",
+        "stress -7.584<0"
+      ]
+    },
+    {
+      "id": "fund_pos_prem_z",
+      "status": "failed_val",
+      "val_sharpe": -8.144404258734346,
+      "val_trades": 58,
+      "ci_lo": -8.970257224837585,
+      "stress": -8.728388007099927,
+      "full_sharpe": -8.789089416591679,
+      "reasons": [
+        "sharpe -8.144<0.2",
+        "ci_lo -8.970<0",
+        "stress -8.728<0"
+      ]
+    }
+  ],
+  "confirmatory": [],
+  "decision": "REJECT_EXPLORATORY",
+  "ran_at": "2026-07-31T04:45:48.874095+00:00",
+  "live": false
+}

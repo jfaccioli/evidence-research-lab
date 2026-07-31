@@ -1,0 +1,72 @@
+{
+  "programme": "ms_basis_meanrev_v1",
+  "hypothesis": "H1",
+  "n_passed_val": 0,
+  "results": [
+    {
+      "id": "fade_high_z",
+      "status": "failed_val",
+      "val_sharpe": -13.168310673804259,
+      "val_trades": 98,
+      "ci_lo": -14.145078451954625,
+      "stress": -13.230982564769038,
+      "full_sharpe": -13.684601980448313,
+      "full_ret": -0.9490035477460734,
+      "reasons": [
+        "sharpe -13.168<0.2",
+        "ci_lo -14.145<0",
+        "stress -13.231<0"
+      ]
+    },
+    {
+      "id": "fade_high_level",
+      "status": "failed_val",
+      "val_sharpe": -6.870364737220274,
+      "val_trades": 2,
+      "ci_lo": -7.675706246467365,
+      "stress": -6.941705141010641,
+      "full_sharpe": -7.768132189252095,
+      "full_ret": -0.8995511364868344,
+      "reasons": [
+        "n_trades 2<30",
+        "sharpe -6.870<0.2",
+        "ci_lo -7.676<0",
+        "stress -6.942<0"
+      ]
+    },
+    {
+      "id": "fade_extreme_z",
+      "status": "failed_val",
+      "val_sharpe": -8.717255614366263,
+      "val_trades": 53,
+      "ci_lo": -9.566991058006845,
+      "stress": -8.751391697342857,
+      "full_sharpe": -8.859568771147261,
+      "full_ret": -0.7684357415930114,
+      "reasons": [
+        "sharpe -8.717<0.2",
+        "ci_lo -9.567<0",
+        "stress -8.751<0"
+      ]
+    },
+    {
+      "id": "short_prem_only_high",
+      "status": "failed_val",
+      "val_sharpe": -8.477387651571073,
+      "val_trades": 51,
+      "ci_lo": -9.347510864355348,
+      "stress": -8.531619617129534,
+      "full_sharpe": -9.065445720164446,
+      "full_ret": -0.7724975158395262,
+      "reasons": [
+        "sharpe -8.477<0.2",
+        "ci_lo -9.348<0",
+        "stress -8.532<0"
+      ]
+    }
+  ],
+  "confirmatory": [],
+  "decision": "REJECT_EXPLORATORY",
+  "ran_at": "2026-07-31T04:44:07.309313+00:00",
+  "live": false
+}

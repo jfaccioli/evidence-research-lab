@@ -1,21 +1,22 @@
 # Living research queue
 
 **Updated:** 2026-07-31  
-**Always-on:** ON · budget ~90–120m · ≤2 tests/session  
+**Always-on:** ON · Human: continue long-horizon (post-2026 window)  
 **Hedged research:** yes · **Live:** OFF
 
-## This session
+## Recent results
 
 | Test | Result |
 |------|--------|
-| MS funding carry v3 (dual + edge filter) | **REJECT** 0/4 exploratory |
+| Cycle/halving autotrade rules | REJECT |
+| Funding carry v1–v3 | REJECT / conf fail |
+| Basis mean-reversion v1 | REJECT 0/4 |
 
-Prior: cycle null; carry v1 null; carry v2 conf fail.
+## Note on “buy before next halving”
 
-## H1 status
+Next halving ≈ **2028-04**; **~500 days before ≈ Dec 2026**.  
+That is a **popular calendar idea** — our lab already showed simple long/flat rules on it **don’t pass autotrade gates**. Holding BTC as a personal plan ≠ a validated bot rule.
 
-Market-structure **still leading hypothesis**, but **first three operationalisations did not pass**. Next session: different MS angle (e.g. basis mean-reversion / premium fade as hedged-style) or re-rank — not more free threshold spam on same carry model.
+## Next
 
-## Human only
-
-Keys · paid data · real money  
+Different MS angles / free data; dual-Grok; no live without survivor + you.

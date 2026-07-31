@@ -100,6 +100,14 @@
         "H2_style_calendar_public_claim_null",
         "H1_still_leading_untested_as_book"
       ]
+    },
+    {
+      "date": "2026-07-31",
+      "summary": "Human authorized hedged research. MS funding carry v1 (residual_beta=0.05) exploratory REJECT 0/4. Pure funding income strong; residual risk model kills edge. H1 not retired; next needs better residual (basis).",
+      "moves": [
+        "H1_first_ops_null_harsh_residual",
+        "hedged_research_authorized"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
@@ -117,5 +125,8 @@
     "programme": "cycle_halving_v1",
     "result": "rejected_exploratory_null",
     "handoff": "0040"
-  }
+  },
+  "human_authorizations": [
+    "hedged_research_2026-07-31"
+  ]
 }

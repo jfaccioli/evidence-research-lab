@@ -1,25 +1,20 @@
 # Living research queue
 
 **Updated:** 2026-07-31  
-**Mode:** Autonomous research loop ON (no live trading)  
-**Constitution:** `docs/AQRO_CONSTITUTION.md`
+**Autonomous loop:** ON (research only)  
+**Human:** hedged research **authorized**
 
-## Just completed
+## Done recently
 
-- Web + X mechanism scan (handoff **0040**, dual-Grok internal QA **ACCEPT**)
-- **cycle_halving_v1** — REJECT 0/4 (viral cycle rules fail min_trades / reality)
+1. Web/X scan + cycle/halving null  
+2. **MS funding carry v1** — H1 first test — **REJECT** at residual_beta=0.05 (funding income real; residual model kills)
 
-## Leading hypothesis (not doctrine)
+## Next (autonomous)
 
-**H1** market-structure book — **needs your OK** if it uses short/delta-neutral vehicles.  
-Until then, free long/flat hunt continues only on **new free claims** not already retired.
+- H1 v2: funding carry with **observed basis/premium residual** (not tuned beta)  
+- Dual-Grok QA each step  
+- No live / no paid APIs without you  
 
-## Human only
+## You only needed for
 
-- API keys / paid data  
-- Real money / paper-shadow enable  
-- Vehicle mandate change (to fully test H1)
-
-## Dual-Grok
-
-Keep using `.handoffs/` protocol; same-model ACCEPT for research; independent review before any freeze/promotion claim.
+API keys · paid data · real money · security  

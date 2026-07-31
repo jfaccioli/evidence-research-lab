@@ -1,0 +1,119 @@
+{
+  "programme": "ms_funding_carry_v1",
+  "hypothesis": "H1_market_structure",
+  "model": "funding_carry_approx_v1",
+  "residual_beta": 0.05,
+  "human_auth": "hedged_research_2026-07-31",
+  "n_run": 4,
+  "n_passed_val": 0,
+  "n_failed_val": 4,
+  "results": [
+    {
+      "id": "carry_always",
+      "description": "Always in carry (benchmark premium harvest)",
+      "status": "failed_val",
+      "val_sharpe": -14.087074168352606,
+      "val_trades": 1,
+      "val_total_return": -0.4809049750007236,
+      "val_max_dd": 0.4809049750007236,
+      "bootstrap_ci_lo": -15.012038526313221,
+      "stress_sharpe": -13.891221619629789,
+      "full_sharpe": -13.370901302588287,
+      "full_trades": 1,
+      "reasons": [
+        "n_trades 1 < 30",
+        "sharpe -14.087 < 0.2",
+        "bootstrap sharpe CI lo -15.012 < 0",
+        "2x cost stress sharpe -13.891 < 0"
+      ]
+    },
+    {
+      "id": "carry_fund_pos",
+      "description": "Carry when last funding rate > 0",
+      "status": "failed_val",
+      "val_sharpe": -15.602492530389132,
+      "val_trades": 76,
+      "val_total_return": -0.6412075730182512,
+      "val_max_dd": 0.6412075730182512,
+      "bootstrap_ci_lo": -16.39615651571313,
+      "stress_sharpe": -13.451097723347555,
+      "full_sharpe": -11.176698885938036,
+      "full_trades": 200,
+      "reasons": [
+        "sharpe -15.602 < 0.2",
+        "bootstrap sharpe CI lo -16.396 < 0",
+        "2x cost stress sharpe -13.451 < 0"
+      ]
+    },
+    {
+      "id": "carry_fund_high",
+      "description": "Carry when funding > expanding median",
+      "status": "failed_val",
+      "val_sharpe": -13.775276134006429,
+      "val_trades": 100,
+      "val_total_return": -0.6212431316335542,
+      "val_max_dd": 0.6212431316335542,
+      "bootstrap_ci_lo": -14.579015088446459,
+      "stress_sharpe": -12.858399792450502,
+      "full_sharpe": -3.9678083168398723,
+      "full_trades": 75,
+      "reasons": [
+        "sharpe -13.775 < 0.2",
+        "bootstrap sharpe CI lo -14.579 < 0",
+        "2x cost stress sharpe -12.858 < 0"
+      ]
+    },
+    {
+      "id": "carry_z_pos",
+      "description": "Carry when funding z60 > 0",
+      "status": "failed_val",
+      "val_sharpe": -13.886535362959435,
+      "val_trades": 109,
+      "val_total_return": -0.6467169798417602,
+      "val_max_dd": 0.6467169798417602,
+      "bootstrap_ci_lo": -14.686940823247836,
+      "stress_sharpe": -13.258113579293095,
+      "full_sharpe": -10.440571250157372,
+      "full_trades": 300,
+      "reasons": [
+        "sharpe -13.887 < 0.2",
+        "bootstrap sharpe CI lo -14.687 < 0",
+        "2x cost stress sharpe -13.258 < 0"
+      ]
+    }
+  ],
+  "ran_at": "2026-07-31T01:57:02.649291+00:00",
+  "decision": "REJECT_FAMILY_EXPLORATORY",
+  "live": false,
+  "sensitivity_residual_beta_not_for_promotion": [
+    {
+      "residual_beta": 0.0,
+      "full_sharpe": -3.4755872382242843,
+      "total_return": -0.4721332557746858,
+      "n_trades": 200,
+      "promotional": false
+    },
+    {
+      "residual_beta": 0.01,
+      "full_sharpe": -6.0361039790757784,
+      "total_return": -0.662970174352276,
+      "n_trades": 200,
+      "promotional": false
+    },
+    {
+      "residual_beta": 0.02,
+      "full_sharpe": -8.450962298876902,
+      "total_return": -0.7848607966260481,
+      "n_trades": 200,
+      "promotional": false
+    },
+    {
+      "residual_beta": 0.05,
+      "full_sharpe": -13.451713388642276,
+      "total_return": -0.9441125134612859,
+      "n_trades": 200,
+      "promotional": false
+    }
+  ],
+  "learning": "Pre-reg residual_beta=0.05 \u2192 exploratory null. Sensitivity: residual_beta=0 funding income is large positive; edge dies as residual haircut rises. Next H1 version should model residual with observed basis/premium (not tune beta after the fact)."
+}

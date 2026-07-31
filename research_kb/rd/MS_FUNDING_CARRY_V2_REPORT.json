@@ -1,0 +1,76 @@
+{
+  "programme": "ms_funding_carry_v2_premium_residual",
+  "hypothesis": "H1",
+  "residual": "abs_delta_premium_close_lag1",
+  "n_passed_val": 1,
+  "results": [
+    {
+      "id": "carry_always",
+      "status": "passed_val",
+      "val_sharpe": 2.391629143553754,
+      "val_trades": 1,
+      "ci_lo": 1.1445734820952989,
+      "stress_sharpe": 1.5845353288448292,
+      "full_sharpe": 1.6275329437757065,
+      "full_ret": 0.11120642168979322,
+      "reasons": []
+    },
+    {
+      "id": "carry_fund_pos",
+      "status": "failed_val",
+      "val_sharpe": -6.059274850223673,
+      "val_trades": 39,
+      "ci_lo": -6.832605573073497,
+      "stress_sharpe": -6.707601379265352,
+      "full_sharpe": -6.1944712995568185,
+      "full_ret": -0.651282368013896,
+      "reasons": [
+        "sharpe -6.059<0.2",
+        "ci_lo -6.833<0",
+        "stress -6.708<0"
+      ]
+    },
+    {
+      "id": "carry_fund_high",
+      "status": "failed_val",
+      "val_sharpe": -6.218193068908866,
+      "val_trades": 39,
+      "ci_lo": -7.171025209615852,
+      "stress_sharpe": -6.812782954917804,
+      "full_sharpe": -2.4556886486326084,
+      "full_ret": -0.24377331233665156,
+      "reasons": [
+        "sharpe -6.218<0.2",
+        "ci_lo -7.171<0",
+        "stress -6.813<0"
+      ]
+    },
+    {
+      "id": "carry_z_pos",
+      "status": "failed_val",
+      "val_sharpe": -7.761623562515733,
+      "val_trades": 53,
+      "ci_lo": -8.695383526511483,
+      "stress_sharpe": -8.315817170451092,
+      "full_sharpe": -9.239677857610722,
+      "full_ret": -0.8259318455726985,
+      "reasons": [
+        "sharpe -7.762<0.2",
+        "ci_lo -8.695<0",
+        "stress -8.316<0"
+      ]
+    }
+  ],
+  "confirmatory": [
+    {
+      "id": "carry_always",
+      "status": "failed_test",
+      "test_sharpe": -2.661608754270214,
+      "test_trades": 1,
+      "ci_lo": -3.7312852705165884
+    }
+  ],
+  "decision": "REJECT_CONFIRMATORY",
+  "ran_at": "2026-07-31T01:58:50.179913+00:00",
+  "live": false
+}

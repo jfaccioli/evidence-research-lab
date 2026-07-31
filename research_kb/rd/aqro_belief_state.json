@@ -108,6 +108,13 @@
         "H1_first_ops_null_harsh_residual",
         "hedged_research_authorized"
       ]
+    },
+    {
+      "date": "2026-07-31",
+      "summary": "MS funding carry v2 premium residual: REJECT_CONFIRMATORY n_pass=1 conf=[{'id': 'carry_always', 'status': 'failed_test', 'test_sharpe': -2.661608754270214, 'test_trades': 1, 'ci_lo': -3.7312852705165884}]",
+      "moves": [
+        "H1_v2_result"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",

@@ -1,20 +1,24 @@
 # Living research queue
 
 **Updated:** 2026-07-31  
-**Autonomous loop:** ON (research only)  
-**Human:** hedged research **authorized**
+**Autonomous loop:** ON · **Hedged research:** authorized · **Live trading:** OFF
 
-## Done recently
+## Latest science
 
-1. Web/X scan + cycle/halving null  
-2. **MS funding carry v1** — H1 first test — **REJECT** at residual_beta=0.05 (funding income real; residual model kills)
+| Test | Result |
+|------|--------|
+| Cycle/halving long-flat | REJECT 0/4 |
+| MS funding carry v1 (residual β=0.05) | REJECT exploratory |
+| MS funding carry v2 (premium Δ residual) | val tease on always-carry → **failed confirmatory holdout** |
 
-## Next (autonomous)
+**H1 not promoted.** Always-on funding harvest did not survive unseen test period under our costs/residual model.
 
-- H1 v2: funding carry with **observed basis/premium residual** (not tuned beta)  
-- Dual-Grok QA each step  
-- No live / no paid APIs without you  
+## Next autonomous
 
-## You only needed for
+- Refine H1 residual/cost model only with **pre-registered** changes (not free tuning)  
+- Or re-rank toward H3 (options) if free path still blocked  
+- Dual-Grok QA continues  
 
-API keys · paid data · real money · security  
+## You only for
+
+Keys · paid data · real money  

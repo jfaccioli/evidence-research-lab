@@ -1,0 +1,19 @@
+id: hyp_cyc_pre365_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cycle_halving_v1
+direction: long_only
+entry:
+  expression: cyc_last <= 365
+exit:
+  expression: cyc_last > 365
+rationale: >
+  Tighter pre-halving year window (not grid-searched post hoc; fixed 365d).
+  Programme: docs/PROGRAMME_CYCLE_HALVING_V1.md.
+expected_outcome: Exploratory.
+feature_tags: [cycle, halving, calendar, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

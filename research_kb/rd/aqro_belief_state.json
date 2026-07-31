@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-30",
+  "updated_at": "2026-07-31",
   "organisation": "AQRO",
   "constitution": "docs/AQRO_CONSTITUTION.md",
   "permanent_objective": "Maximise the probability of responsibly managing real capital autonomously over a five-year horizon while maintaining scientific integrity.",
@@ -80,20 +80,42 @@
     {
       "date": "2026-07-30",
       "summary": "Phase 1 free-path directional and free structural long/flat programmes did not yield confirmatory survivors; strengthens H2; leaves H1 untested as capital book.",
-      "moves": ["H2_strengthen", "H1_untested"]
+      "moves": [
+        "H2_strengthen",
+        "H1_untested"
+      ]
     },
     {
       "date": "2026-07-30",
       "summary": "Human accepted AQRO identity; rejected market-structure as permanent spine; H1 remains leading hypothesis only.",
-      "moves": ["constitutional_lock", "H1_not_doctrine"]
+      "moves": [
+        "constitutional_lock",
+        "H1_not_doctrine"
+      ]
+    },
+    {
+      "date": "2026-07-31",
+      "summary": "Web/X scan: funding/MS remains H1; options H3 blocked free; viral cycle/halving long-flat 0/4 exploratory (trade count / reality). Dual-Grok 0040 ACCEPT.",
+      "moves": [
+        "H2_style_calendar_public_claim_null",
+        "H1_still_leading_untested_as_book"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
-  "contender_watchlist": ["H3", "H4"],
+  "contender_watchlist": [
+    "H3",
+    "H4"
+  ],
   "forbidden_until_human": [
     "mandate_vehicle_change_to_delta_neutral",
     "paid_data_purchase",
     "live_capital",
     "gate_softening"
-  ]
+  ],
+  "last_autonomous_action": {
+    "programme": "cycle_halving_v1",
+    "result": "rejected_exploratory_null",
+    "handoff": "0040"
+  }
 }

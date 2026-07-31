@@ -1,0 +1,21 @@
+id: hyp_cyc_post500_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cycle_halving_v1
+direction: long_only
+entry:
+  expression: cyc_last > 500
+exit:
+  expression: cyc_last <= 500
+rationale: >
+  Complement window: long when NOT inside pre-500d (approx post-halving /
+  mid-cycle under single next-halving clock). Public "sell after 500d post"
+  maps poorly to one series; this tests the complement of pre-window.
+  Programme: docs/PROGRAMME_CYCLE_HALVING_V1.md.
+expected_outcome: Exploratory.
+feature_tags: [cycle, halving, calendar, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

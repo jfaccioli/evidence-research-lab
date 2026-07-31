@@ -1,0 +1,20 @@
+id: hyp_cyc_pre500_long
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cycle_halving_v1
+direction: long_only
+entry:
+  expression: cyc_last <= 500
+exit:
+  expression: cyc_last > 500
+rationale: >
+  Public mechanical claim: hold long in the ~500 days before a BTC halving
+  (cycle accumulation window). Falsify under frozen gates + costs.
+  Programme: docs/PROGRAMME_CYCLE_HALVING_V1.md.
+expected_outcome: Exploratory falsification of viral cycle rule.
+feature_tags: [cycle, halving, calendar, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

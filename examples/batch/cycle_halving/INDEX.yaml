@@ -1,0 +1,17 @@
+programme: cycle_halving_v1
+design: docs/PROGRAMME_CYCLE_HALVING_V1.md
+live_data: true
+external:
+  kind: external
+  series_id: btc_days_to_halving_v1
+  path: data/processed/external/btc_days_to_halving_v1.parquet
+  prefix: cyc
+  publish_lag_days: 0
+dataset:
+  symbol: BTCUSDT
+  interval: 1d
+hypotheses:
+  - hyp_cyc_pre500_long.yaml
+  - hyp_cyc_post500_long.yaml
+  - hyp_cyc_pre365_long.yaml
+  - hyp_cyc_pre500_trend.yaml

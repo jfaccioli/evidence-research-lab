@@ -1,0 +1,19 @@
+id: hyp_cyc_pre500_trend
+version: 1
+asset: BTC/USDT
+timeframe: 1d
+taxonomy: other
+family_id: family_cycle_halving_v1
+direction: long_only
+entry:
+  expression: cyc_last <= 500 and above_sma_200 == 1
+exit:
+  expression: cyc_last > 500 or above_sma_200 == 0
+rationale: >
+  Pre-500d cycle window only when slow trend up — deployable long/flat blend
+  of public cycle claim + non-collapse filter. Programme: docs/PROGRAMME_CYCLE_HALVING_V1.md.
+expected_outcome: Exploratory.
+feature_tags: [cycle, halving, calendar, trend, external_pit]
+literature_refs: []
+falsification:
+  min_trades: 30

@@ -1,7 +1,9 @@
 # Living research queue
 
 **Updated:** 2026-07-31  
-**Autonomous loop:** ON · **Hedged research:** authorized · **Live trading:** OFF
+**Always-on protocol:** **ON** (`docs/ALWAYS_ON_PROTOCOL.md`)  
+**Session budget default:** ~**90–120 min**, ≤**2** major tests  
+**Hedged research:** authorized · **Live trading:** OFF
 
 ## Latest science
 

@@ -1,0 +1,77 @@
+{
+  "programme": "ms_funding_carry_v3_dual_edge",
+  "hypothesis": "H1",
+  "residual": "abs_delta_premium",
+  "n_passed_val": 0,
+  "results": [
+    {
+      "id": "always_dual",
+      "status": "failed_val",
+      "val_sharpe": -6.764542816925394,
+      "val_trades": 1,
+      "active_frac": 0.9983388704318937,
+      "ci_lo": -7.432344750550957,
+      "stress": -7.037797851564201,
+      "full_sharpe": -7.365981815376271,
+      "full_ret": -0.9060282112340643,
+      "reasons": [
+        "sharpe -6.765<0.2",
+        "ci_lo -7.432<0",
+        "stress -7.038<0"
+      ]
+    },
+    {
+      "id": "always_pos_only",
+      "status": "failed_val",
+      "val_sharpe": -6.059274850223673,
+      "val_trades": 39,
+      "active_frac": 0.8870431893687708,
+      "ci_lo": -6.832605573073497,
+      "stress": -6.707601379265352,
+      "full_sharpe": -6.1944712995568185,
+      "full_ret": -0.651282368013896,
+      "reasons": [
+        "sharpe -6.059<0.2",
+        "ci_lo -6.833<0",
+        "stress -6.708<0"
+      ]
+    },
+    {
+      "id": "edge_dual_k1",
+      "status": "failed_val",
+      "val_sharpe": -9.126494096486015,
+      "val_trades": 69,
+      "active_frac": 0.7159468438538206,
+      "ci_lo": -10.1120031215777,
+      "stress": -9.768427778732116,
+      "full_sharpe": -9.847407197979534,
+      "full_ret": -0.8798070721722852,
+      "reasons": [
+        "sharpe -9.126<0.2",
+        "ci_lo -10.112<0",
+        "stress -9.768<0"
+      ]
+    },
+    {
+      "id": "edge_dual_k2",
+      "status": "failed_val",
+      "val_sharpe": -7.88569336375443,
+      "val_trades": 53,
+      "active_frac": 0.26744186046511625,
+      "ci_lo": -8.736786212731532,
+      "stress": -8.37667501334607,
+      "full_sharpe": -6.965260931564494,
+      "full_ret": -0.6882559709539934,
+      "reasons": [
+        "sharpe -7.886<0.2",
+        "ci_lo -8.737<0",
+        "stress -8.377<0"
+      ]
+    }
+  ],
+  "confirmatory": [],
+  "decision": "REJECT_EXPLORATORY",
+  "ran_at": "2026-07-31T04:19:28.543172+00:00",
+  "live": false,
+  "note": "Dual-sided hedged carry; edge filter uses lag funding vs rolling residual scale"
+}

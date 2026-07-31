@@ -115,6 +115,13 @@
       "moves": [
         "H1_v2_result"
       ]
+    },
+    {
+      "date": "2026-07-31",
+      "summary": "always-on session: MS carry v3 dual/edge REJECT_EXPLORATORY n_pass=0 conf=[]",
+      "moves": [
+        "H1_v3"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
@@ -129,9 +136,8 @@
     "gate_softening"
   ],
   "last_autonomous_action": {
-    "programme": "cycle_halving_v1",
-    "result": "rejected_exploratory_null",
-    "handoff": "0040"
+    "programme": "ms_funding_carry_v3",
+    "decision": "REJECT_EXPLORATORY"
   },
   "human_authorizations": [
     "hedged_research_2026-07-31"

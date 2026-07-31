@@ -1,26 +1,21 @@
 # Living research queue
 
 **Updated:** 2026-07-31  
-**Always-on protocol:** **ON** (`docs/ALWAYS_ON_PROTOCOL.md`)  
-**Session budget default:** ~**90–120 min**, ≤**2** major tests  
-**Hedged research:** authorized · **Live trading:** OFF
+**Always-on:** ON · budget ~90–120m · ≤2 tests/session  
+**Hedged research:** yes · **Live:** OFF
 
-## Latest science
+## This session
 
 | Test | Result |
 |------|--------|
-| Cycle/halving long-flat | REJECT 0/4 |
-| MS funding carry v1 (residual β=0.05) | REJECT exploratory |
-| MS funding carry v2 (premium Δ residual) | val tease on always-carry → **failed confirmatory holdout** |
+| MS funding carry v3 (dual + edge filter) | **REJECT** 0/4 exploratory |
 
-**H1 not promoted.** Always-on funding harvest did not survive unseen test period under our costs/residual model.
+Prior: cycle null; carry v1 null; carry v2 conf fail.
 
-## Next autonomous
+## H1 status
 
-- Refine H1 residual/cost model only with **pre-registered** changes (not free tuning)  
-- Or re-rank toward H3 (options) if free path still blocked  
-- Dual-Grok QA continues  
+Market-structure **still leading hypothesis**, but **first three operationalisations did not pass**. Next session: different MS angle (e.g. basis mean-reversion / premium fade as hedged-style) or re-rank — not more free threshold spam on same carry model.
 
-## You only for
+## Human only
 
 Keys · paid data · real money  

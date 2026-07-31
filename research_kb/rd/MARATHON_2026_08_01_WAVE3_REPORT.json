@@ -1,0 +1,112 @@
+{
+  "wave": 3,
+  "programmes": [
+    {
+      "programme": "calendar_structure_v1",
+      "results": [
+        {
+          "id": "tom_trend",
+          "status": "failed_val",
+          "val_sharpe": 0.08361391967822684,
+          "val_trades": 18,
+          "ci_lo": -1.1456243782246174,
+          "reasons": [
+            "n_trades 18",
+            "sharpe 0.084",
+            "ci -1.146",
+            "stress -0.132"
+          ]
+        },
+        {
+          "id": "not_tom_trend",
+          "status": "failed_val",
+          "val_sharpe": 1.4870298402731932,
+          "val_trades": 20,
+          "ci_lo": 0.3139010797042395,
+          "reasons": [
+            "n_trades 20"
+          ]
+        },
+        {
+          "id": "mid_month_trend",
+          "status": "failed_val",
+          "val_sharpe": 0.3046338480829934,
+          "val_trades": 19,
+          "ci_lo": -0.9844492907532298,
+          "reasons": [
+            "n_trades 19",
+            "ci -0.984"
+          ]
+        },
+        {
+          "id": "avoid_tom_or_quiet",
+          "status": "failed_val",
+          "val_sharpe": 1.747165980640154,
+          "val_trades": 18,
+          "ci_lo": 0.5832675284163945,
+          "reasons": [
+            "n_trades 18"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    },
+    {
+      "programme": "cb_premium_directional_v2",
+      "results": [
+        {
+          "id": "cb_z_low_long",
+          "status": "failed_val",
+          "val_sharpe": 0.9278555308044184,
+          "val_trades": 50,
+          "ci_lo": -0.3014035172543435,
+          "reasons": [
+            "ci -0.301"
+          ]
+        },
+        {
+          "id": "cb_z_high_flat",
+          "status": "failed_val",
+          "val_sharpe": 0.678750381895728,
+          "val_trades": 40,
+          "ci_lo": -0.47588384493914077,
+          "reasons": [
+            "ci -0.476"
+          ]
+        },
+        {
+          "id": "cb_neg_long",
+          "status": "passed_val",
+          "val_sharpe": 1.5912821578721295,
+          "val_trades": 45,
+          "ci_lo": 0.375585050900222,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.5254696399445336
+          }
+        },
+        {
+          "id": "cb_pos_trend",
+          "status": "failed_val",
+          "val_sharpe": 0.5704385668990014,
+          "val_trades": 48,
+          "ci_lo": -0.6417306578274088,
+          "reasons": [
+            "ci -0.642"
+          ]
+        }
+      ],
+      "n_passed_val": 1
+    }
+  ],
+  "survivors": [],
+  "diagnostic_carry": {
+    "full_sharpe_r0": 9.942556207246135,
+    "val_sharpe_r0": 14.261261923620397,
+    "test_sharpe_r0": 10.610711210677705,
+    "note": "diagnostic residual=0 only"
+  },
+  "decision": "NO_SURVIVOR",
+  "ran_at": "2026-07-31T23:51:57.885900+00:00"
+}

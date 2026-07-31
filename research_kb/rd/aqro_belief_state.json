@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-31",
+  "updated_at": "2026-08-01",
   "organisation": "AQRO",
   "constitution": "docs/AQRO_CONSTITUTION.md",
   "permanent_objective": "Maximise the probability of responsibly managing real capital autonomously over a five-year horizon while maintaining scientific integrity.",
@@ -136,6 +136,14 @@
       "moves": [
         "H1_joint"
       ]
+    },
+    {
+      "date": "2026-08-01",
+      "summary": "24h-budget marathon waves 1-3: 9+ programme families, 0 confirmatory survivors. Val teases fail holdout repeatedly. Diagnostic: funding carry residual=0 strong on test but not promotable.",
+      "moves": [
+        "H1_still_open_residual_problem",
+        "many_nulls_long_flat_and_hedged"
+      ]
     }
   ],
   "next_best_ev_if_H1_fails": "H3_options_structure_or_recompute_ev_table",
@@ -150,8 +158,14 @@
     "gate_softening"
   ],
   "last_autonomous_action": {
-    "programme": "ms_funding_premium_joint_v1",
-    "decision": "REJECT_EXPLORATORY"
+    "session": "24h_budget_marathon",
+    "decision": "NO_SURVIVOR_CONTINUE",
+    "reports": [
+      "MARATHON_2026_08_01_REPORT.json",
+      "MARATHON_2026_08_01_WAVE2_REPORT.json",
+      "MARATHON_2026_08_01_WAVE3_REPORT.json",
+      "MARATHON_2026_08_01_SYNTHESIS.md"
+    ]
   },
   "human_authorizations": [
     "hedged_research_2026-07-31"

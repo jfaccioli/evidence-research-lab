@@ -26,8 +26,8 @@ Every session (or scheduled run), without waiting for “what next?”:
 
 | Limit | Default | Why |
 |-------|---------|-----|
-| **Wall clock** | **~90–120 minutes** per continuous agent session | ~2h is a good cap; enough for 1–3 real tests, not an all-day drain |
-| **Major science programmes** | **≤ 2** full exploratories per session | Quality > spam |
+| **Wall clock** | **Default ~90–120 min**; **override up to ~24h** when human says so (tokens available) | Long runs OK if prioritised; still soft-stop cleanly |
+| **Major science programmes** | Default **≤ 2**; long-run **≤ ~8–12** distinct pre-reg families (not threshold spam) | Quality > spam; new angle each time |
 | **Confirmatory runs** | **≤ 1** per session (only if earned) | Confirmatory budget is scarce |
 | **Commits** | Prefer batching; push at end of each programme | Avoid noise |
 | **New architecture** | None unless a test is blocked | Stay evidence-driven |

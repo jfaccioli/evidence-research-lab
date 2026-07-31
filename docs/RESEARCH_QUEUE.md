@@ -1,14 +1,21 @@
 # Living research queue
 
-**Updated:** 2026-07-31  
-**Always-on:** ON · long horizon OK · **Live:** OFF
+**Updated:** 2026-08-01  
+**Always-on:** ON · **This run:** extended 24h token budget  
+**Live:** OFF · **Hedged research:** yes  
 
-## Latest
+## Marathon result
 
-| Test | Result |
-|------|--------|
-| MS funding+premium joint v1 | **REJECT** 0/4 |
+**0 confirmatory survivors** across many distinct programmes (basis, OI, premium, ETH, 4h, calendar, CB premium, carry variants).
 
-H1 still leading as *hypothesis*; several operationalisations failed. Next: new angle (not same carry family spam).
+See `research_kb/rd/MARATHON_2026_08_01_SYNTHESIS.md`.
 
-Human only: keys · paid data · real money  
+## Notable diagnostic (not tradable yet)
+
+Funding harvest with **zero residual risk** looks strong — but **with realistic residual it fails**. Next science should attack the residual problem carefully (pre-registered), not soft-pedal costs.
+
+## You only for
+
+API keys · paid data · real money  
+
+## Next session continues automatically

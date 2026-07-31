@@ -1,0 +1,182 @@
+{
+  "wave": 2,
+  "programmes": [
+    {
+      "programme": "eth_trend_v1",
+      "results": [
+        {
+          "id": "eth_sma200",
+          "status": "failed_val",
+          "val_sharpe": 0.921496696661653,
+          "val_trades": 4,
+          "ci_lo": -0.19507359046445888,
+          "stress": 0.9081091490291354,
+          "full_sharpe": 0.7222347382731437,
+          "reasons": [
+            "n_trades 4<30",
+            "ci_lo -0.195<0"
+          ]
+        },
+        {
+          "id": "eth_sma50",
+          "status": "failed_val",
+          "val_sharpe": 0.5313454365155242,
+          "val_trades": 23,
+          "ci_lo": -0.44972120481272926,
+          "stress": 0.4552280068412044,
+          "full_sharpe": 0.9990618094970154,
+          "reasons": [
+            "n_trades 23<30",
+            "ci_lo -0.450<0"
+          ]
+        },
+        {
+          "id": "eth_sma50_200",
+          "status": "failed_val",
+          "val_sharpe": 0.7797005359999744,
+          "val_trades": 15,
+          "ci_lo": -0.2612683509714059,
+          "stress": 0.7142942273083712,
+          "full_sharpe": 0.9841846498552839,
+          "reasons": [
+            "n_trades 15<30",
+            "ci_lo -0.261<0"
+          ]
+        },
+        {
+          "id": "eth_sma200_quiet",
+          "status": "failed_val",
+          "val_sharpe": 0.8745967877067108,
+          "val_trades": 5,
+          "ci_lo": -0.2094446812097865,
+          "stress": 0.8565930156941699,
+          "full_sharpe": 0.8602798353861685,
+          "reasons": [
+            "n_trades 5<30",
+            "ci_lo -0.209<0"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    },
+    {
+      "programme": "btc_4h_fund_filter_v1",
+      "results": [
+        {
+          "id": "h4_sma200",
+          "status": "failed_val",
+          "val_sharpe": 0.8995436970867638,
+          "val_trades": 76,
+          "ci_lo": -0.03252304899506346,
+          "stress": 0.5840080804693221,
+          "full_sharpe": 0.9312075823012127,
+          "reasons": [
+            "ci_lo -0.033<0"
+          ]
+        },
+        {
+          "id": "h4_trend_fund_ok",
+          "status": "failed_val",
+          "val_sharpe": 0.5569597303593493,
+          "val_trades": 148,
+          "ci_lo": -0.38748535120374134,
+          "stress": -0.1355792825168167,
+          "full_sharpe": 0.7662315332176863,
+          "reasons": [
+            "ci_lo -0.387<0",
+            "stress -0.136<0"
+          ]
+        },
+        {
+          "id": "h4_trend_not_fund_ext",
+          "status": "failed_val",
+          "val_sharpe": -0.2817899379425945,
+          "val_trades": 205,
+          "ci_lo": -1.1977353027181228,
+          "stress": -1.1600647974336618,
+          "full_sharpe": 0.10195324967153196,
+          "reasons": [
+            "sharpe -0.282<0.2",
+            "ci_lo -1.198<0",
+            "stress -1.160<0"
+          ]
+        },
+        {
+          "id": "h4_sma50_fund_neg",
+          "status": "failed_val",
+          "val_sharpe": -1.1241465169143852,
+          "val_trades": 93,
+          "ci_lo": -2.4460023840777136,
+          "stress": -2.314887711969266,
+          "full_sharpe": -0.363325532456465,
+          "reasons": [
+            "sharpe -1.124<0.2",
+            "ci_lo -2.446<0",
+            "stress -2.315<0"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    },
+    {
+      "programme": "btc_vol_quiet_long_v1",
+      "results": [
+        {
+          "id": "long_low_vol_sma50",
+          "status": "failed_val",
+          "val_sharpe": 1.86460169240213,
+          "val_trades": 18,
+          "ci_lo": 0.7007694535066515,
+          "stress": 1.756237757752783,
+          "full_sharpe": 0.8876897454421435,
+          "reasons": [
+            "n_trades 18<30"
+          ]
+        },
+        {
+          "id": "long_low_vol_sma200",
+          "status": "failed_val",
+          "val_sharpe": 1.4361501659445344,
+          "val_trades": 10,
+          "ci_lo": 0.3336205971603583,
+          "stress": 1.3854329223562492,
+          "full_sharpe": 0.6084358413674835,
+          "reasons": [
+            "n_trades 10<30"
+          ]
+        },
+        {
+          "id": "long_vol_declining",
+          "status": "failed_val",
+          "val_sharpe": -0.07840154561667441,
+          "val_trades": 39,
+          "ci_lo": -1.1860233057276117,
+          "stress": -0.38314624915698453,
+          "full_sharpe": 0.5678077970983281,
+          "reasons": [
+            "sharpe -0.078<0.2",
+            "ci_lo -1.186<0",
+            "stress -0.383<0"
+          ]
+        },
+        {
+          "id": "long_quiet_mom",
+          "status": "failed_val",
+          "val_sharpe": 1.8389050509247085,
+          "val_trades": 28,
+          "ci_lo": 0.6595319055688108,
+          "stress": 1.6657931163122977,
+          "full_sharpe": 0.7703847568158577,
+          "reasons": [
+            "n_trades 28<30"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    }
+  ],
+  "n_passed_val": 0,
+  "survivors": [],
+  "decision": "NO_SURVIVOR",
+  "ran_at": "2026-07-31T23:50:41.960476+00:00"
+}

@@ -1,0 +1,368 @@
+{
+  "marathon": "24h_budget_session_2026-08-01",
+  "n_programmes": 6,
+  "n_rules_total": 24,
+  "n_passed_val_total": 7,
+  "survivors_confirmatory": [],
+  "programmes": [
+    {
+      "programme": "ms_cross_venue_basis_mr_v1",
+      "results": [
+        {
+          "id": "basis_fade_z1",
+          "status": "failed_val",
+          "val_sharpe": -13.141621171396999,
+          "val_trades": 86,
+          "ci_lo": -14.114651401426725,
+          "stress": -13.098959427231854,
+          "full_sharpe": -11.460454299947278,
+          "reasons": [
+            "sharpe -13.142<0.2",
+            "ci_lo -14.115<0",
+            "stress -13.099<0"
+          ]
+        },
+        {
+          "id": "basis_fade_z15",
+          "status": "failed_val",
+          "val_sharpe": -8.916955134370927,
+          "val_trades": 48,
+          "ci_lo": -9.732911692385578,
+          "stress": -8.905028439635439,
+          "full_sharpe": -8.051462942342727,
+          "reasons": [
+            "sharpe -8.917<0.2",
+            "ci_lo -9.733<0",
+            "stress -8.905<0"
+          ]
+        },
+        {
+          "id": "basis_short_only_high",
+          "status": "failed_val",
+          "val_sharpe": -7.735995421135178,
+          "val_trades": 42,
+          "ci_lo": -8.57309571073694,
+          "stress": -7.9724237531172495,
+          "full_sharpe": -7.21418527896565,
+          "reasons": [
+            "sharpe -7.736<0.2",
+            "ci_lo -8.573<0",
+            "stress -7.972<0"
+          ]
+        },
+        {
+          "id": "basis_fade_level_med",
+          "status": "failed_val",
+          "val_sharpe": -9.809418732402921,
+          "val_trades": 1,
+          "ci_lo": -10.71848120318762,
+          "stress": -9.75215585621566,
+          "full_sharpe": -9.656698033739993,
+          "reasons": [
+            "n_trades 1<30",
+            "sharpe -9.809<0.2",
+            "ci_lo -10.718<0",
+            "stress -9.752<0"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    },
+    {
+      "programme": "ms_basis_directional_filter_v1",
+      "results": [
+        {
+          "id": "long_basis_z_low",
+          "status": "passed_val",
+          "val_sharpe": 1.8328576431738992,
+          "val_trades": 44,
+          "ci_lo": 0.4727623634294641,
+          "stress": 1.499070229129869,
+          "full_sharpe": 0.8960430573126136,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.5111712354095455
+          }
+        },
+        {
+          "id": "long_basis_not_ext",
+          "status": "failed_val",
+          "val_sharpe": 1.389071743907109,
+          "val_trades": 26,
+          "ci_lo": -0.048410305102872773,
+          "stress": 1.2527026858676265,
+          "full_sharpe": 0.17140306504093603,
+          "reasons": [
+            "n_trades 26<30",
+            "ci_lo -0.048<0"
+          ]
+        },
+        {
+          "id": "flat_basis_ext",
+          "status": "passed_val",
+          "val_sharpe": 1.760966227985687,
+          "val_trades": 34,
+          "ci_lo": 0.31432328131312126,
+          "stress": 1.5663009354220259,
+          "full_sharpe": 0.9436278539872356,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.20654783810798588
+          }
+        },
+        {
+          "id": "long_basis_neg_only",
+          "status": "passed_val",
+          "val_sharpe": 1.8688435036883468,
+          "val_trades": 42,
+          "ci_lo": 0.45358729789203067,
+          "stress": 1.596501872805638,
+          "full_sharpe": 1.0044438210800073,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.12003573806142621
+          }
+        }
+      ],
+      "n_passed_val": 3
+    },
+    {
+      "programme": "ms_oi_regime_directional_v1",
+      "results": [
+        {
+          "id": "long_oi_z_low",
+          "status": "failed_val",
+          "val_sharpe": 0.5840915240064062,
+          "val_trades": 39,
+          "ci_lo": -0.7577194783186735,
+          "stress": 0.29931205226346025,
+          "full_sharpe": 0.7986927802650449,
+          "reasons": [
+            "ci_lo -0.758<0"
+          ]
+        },
+        {
+          "id": "long_oi_not_rising",
+          "status": "passed_val",
+          "val_sharpe": 1.4686789001723974,
+          "val_trades": 52,
+          "ci_lo": 0.07488670704968212,
+          "stress": 1.1971536807017171,
+          "full_sharpe": 0.05341921218106964,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -1.3966716875736969
+          }
+        },
+        {
+          "id": "flat_oi_ext_high",
+          "status": "failed_val",
+          "val_sharpe": 1.7306106447469083,
+          "val_trades": 23,
+          "ci_lo": 0.19013487547507837,
+          "stress": 1.604307181937321,
+          "full_sharpe": 1.0294058557299646,
+          "reasons": [
+            "n_trades 23<30"
+          ]
+        },
+        {
+          "id": "long_oi_falling",
+          "status": "failed_val",
+          "val_sharpe": 0.8056615085207098,
+          "val_trades": 103,
+          "ci_lo": -0.694998745993398,
+          "stress": 0.0314719320875573,
+          "full_sharpe": 0.35484420435047476,
+          "reasons": [
+            "ci_lo -0.695<0"
+          ]
+        }
+      ],
+      "n_passed_val": 1
+    },
+    {
+      "programme": "ms_carry_oi_filter_v1",
+      "results": [
+        {
+          "id": "carry_fund_pos_oi_ok",
+          "status": "failed_val",
+          "val_sharpe": -11.460809823146503,
+          "val_trades": 82,
+          "ci_lo": -12.59254708726129,
+          "stress": -11.989765474191005,
+          "full_sharpe": -10.947701020230438,
+          "reasons": [
+            "sharpe -11.461<0.2",
+            "ci_lo -12.593<0",
+            "stress -11.990<0"
+          ]
+        },
+        {
+          "id": "carry_fund_pos_oi_low",
+          "status": "failed_val",
+          "val_sharpe": -9.367693888943815,
+          "val_trades": 60,
+          "ci_lo": -10.249185031400303,
+          "stress": -9.75123872115597,
+          "full_sharpe": -7.070199164304554,
+          "reasons": [
+            "sharpe -9.368<0.2",
+            "ci_lo -10.249<0",
+            "stress -9.751<0"
+          ]
+        },
+        {
+          "id": "carry_fund_z_oi_ok",
+          "status": "failed_val",
+          "val_sharpe": -8.4568620343078,
+          "val_trades": 53,
+          "ci_lo": -9.330184190772044,
+          "stress": -8.942091018315903,
+          "full_sharpe": -11.006870446465989,
+          "reasons": [
+            "sharpe -8.457<0.2",
+            "ci_lo -9.330<0",
+            "stress -8.942<0"
+          ]
+        },
+        {
+          "id": "carry_always_oi_ok",
+          "status": "failed_val",
+          "val_sharpe": -9.51378532138758,
+          "val_trades": 62,
+          "ci_lo": -10.588856681354176,
+          "stress": -9.942505501924607,
+          "full_sharpe": -8.633487719704974,
+          "reasons": [
+            "sharpe -9.514<0.2",
+            "ci_lo -10.589<0",
+            "stress -9.943<0"
+          ]
+        }
+      ],
+      "n_passed_val": 0
+    },
+    {
+      "programme": "ms_premium_directional_v1",
+      "results": [
+        {
+          "id": "long_prem_z_low",
+          "status": "failed_val",
+          "val_sharpe": 0.7063239716839262,
+          "val_trades": 37,
+          "ci_lo": -0.6126105622385549,
+          "stress": 0.3654612589241929,
+          "full_sharpe": 0.6322687226104143,
+          "reasons": [
+            "ci_lo -0.613<0"
+          ]
+        },
+        {
+          "id": "long_prem_not_ext",
+          "status": "failed_val",
+          "val_sharpe": 1.2428449381312952,
+          "val_trades": 33,
+          "ci_lo": -0.3164836973525284,
+          "stress": 1.0670493169681616,
+          "full_sharpe": -0.00015539531555612603,
+          "reasons": [
+            "ci_lo -0.316<0"
+          ]
+        },
+        {
+          "id": "flat_prem_high_z",
+          "status": "failed_val",
+          "val_sharpe": 0.8575446523618065,
+          "val_trades": 53,
+          "ci_lo": -0.7250124292990442,
+          "stress": 0.48685671259429225,
+          "full_sharpe": 0.4490448408688969,
+          "reasons": [
+            "ci_lo -0.725<0"
+          ]
+        },
+        {
+          "id": "long_prem_neg",
+          "status": "passed_val",
+          "val_sharpe": 1.4218047382470962,
+          "val_trades": 31,
+          "ci_lo": 0.13236368353416558,
+          "stress": 1.170842403659046,
+          "full_sharpe": 0.7793781555681715,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.125443007535664
+          }
+        }
+      ],
+      "n_passed_val": 1
+    },
+    {
+      "programme": "ms_triple_filter_v1",
+      "results": [
+        {
+          "id": "fbt_1",
+          "status": "passed_val",
+          "val_sharpe": 1.6155112354559171,
+          "val_trades": 40,
+          "ci_lo": 0.1882641978651319,
+          "stress": 1.3842711048434926,
+          "full_sharpe": 0.7894986200102515,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -0.4147973680631577
+          }
+        },
+        {
+          "id": "fbt_2",
+          "status": "passed_val",
+          "val_sharpe": 1.4374411233248097,
+          "val_trades": 55,
+          "ci_lo": 0.011175260582232957,
+          "stress": 1.14972307777775,
+          "full_sharpe": -0.00850823621482757,
+          "reasons": [],
+          "conf": {
+            "status": "failed_test",
+            "test_sharpe": -1.3662989321450938
+          }
+        },
+        {
+          "id": "fbt_3",
+          "status": "failed_val",
+          "val_sharpe": 0.6137308359903675,
+          "val_trades": 43,
+          "ci_lo": -0.8966328502991779,
+          "stress": 0.2778459504585284,
+          "full_sharpe": 0.39854868565923596,
+          "reasons": [
+            "ci_lo -0.897<0"
+          ]
+        },
+        {
+          "id": "fbt_4",
+          "status": "failed_val",
+          "val_sharpe": 1.0165490077876616,
+          "val_trades": 30,
+          "ci_lo": -0.3820358771687111,
+          "stress": 0.6399269308232133,
+          "full_sharpe": 0.5378225446343132,
+          "reasons": [
+            "ci_lo -0.382<0"
+          ]
+        }
+      ],
+      "n_passed_val": 2
+    }
+  ],
+  "decision": "NO_SURVIVOR_CONTINUE",
+  "ran_at": "2026-07-31T23:50:10.821514+00:00",
+  "live": false
+}

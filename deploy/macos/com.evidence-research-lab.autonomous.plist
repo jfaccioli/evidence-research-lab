@@ -7,7 +7,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>REPO_ROOT_PLACEHOLDER/.venv/bin/python</string>
-    <string>REPO_ROOT_PLACEHOLDER/scripts/autonomous_research_tick.py</string>
+    <string>REPO_ROOT_PLACEHOLDER/scripts/autonomous_watchdog.py</string>
   </array>
   <key>WorkingDirectory</key>
   <string>REPO_ROOT_PLACEHOLDER</string>
@@ -15,9 +15,11 @@
   <dict>
     <key>PYTHONPATH</key>
     <string>REPO_ROOT_PLACEHOLDER/src</string>
+    <key>CRL_MARATHON_HOURS</key>
+    <string>24</string>
   </dict>
   <key>StartInterval</key>
-  <integer>86400</integer>
+  <integer>3600</integer>
   <key>RunAtLoad</key>
   <true/>
   <key>StandardOutPath</key>

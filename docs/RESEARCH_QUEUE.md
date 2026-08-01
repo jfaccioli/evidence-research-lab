@@ -1,27 +1,26 @@
 # Living research queue
 
 **Updated:** 2026-08-01  
-**Always-on chat:** ON when in session  
-**Mac schedule:** **INSTALLED** (every **24h** while awake) — `docs/AUTONOMOUS_SCHEDULE.md`  
-**Live:** OFF  
+**Mode B+C:** **ON and started**
 
-## Scheduler
+| Piece | Status |
+|-------|--------|
+| **B – 24h marathon** | **RUNNING** now (until ~24h from start) |
+| **C – hourly watchdog** | **ON** (every 1 hour; restarts marathon if crashed) |
+| Live trading | OFF |
 
-- Install done: `com.evidence-research-lab.autonomous`  
-- Pause: `touch research_kb/rd/AUTONOMOUS_PAUSE`  
-- Logs: `logs/autonomous/`  
-- Status: `research_kb/rd/AUTONOMOUS_TICK_STATUS.json`  
+## Check
 
-## Recent ticket results
+```bash
+cat research_kb/rd/MARATHON_STATE.json
+cat research_kb/rd/WATCHDOG_STATUS.json
+tail -20 logs/autonomous/marathon.log
+```
 
-| Ticket | Result |
-|--------|--------|
-| ms_vol_funding_spot_v1 | REJECT |
-| ms_oi_dir_v1 | REJECT (val tease → conf fail) |
-| ms_basis_long_v1 | REJECT (val teases → conf fail) |
+## Pause
 
-Still **no** autotrade survivor.
+```bash
+touch research_kb/rd/AUTONOMOUS_PAUSE
+```
 
-## Human only
-
-Keys · paid data · real money  
+Docs: `docs/AUTONOMOUS_SCHEDULE.md`

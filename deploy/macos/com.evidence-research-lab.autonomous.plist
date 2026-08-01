@@ -6,11 +6,16 @@
   <string>com.evidence-research-lab.autonomous</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/bin/zsh</string>
-    <string>REPO_ROOT_PLACEHOLDER/scripts/autonomous_research_tick.sh</string>
+    <string>REPO_ROOT_PLACEHOLDER/.venv/bin/python</string>
+    <string>REPO_ROOT_PLACEHOLDER/scripts/autonomous_research_tick.py</string>
   </array>
   <key>WorkingDirectory</key>
   <string>REPO_ROOT_PLACEHOLDER</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONPATH</key>
+    <string>REPO_ROOT_PLACEHOLDER/src</string>
+  </dict>
   <key>StartInterval</key>
   <integer>86400</integer>
   <key>RunAtLoad</key>

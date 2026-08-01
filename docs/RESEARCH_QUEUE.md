@@ -2,7 +2,7 @@
 
 **Updated:** 2026-08-01  
 **Always-on chat:** ON when in session  
-**Mac schedule:** **INSTALLED** (every 4h while awake) — `docs/AUTONOMOUS_SCHEDULE.md`  
+**Mac schedule:** **INSTALLED** (every **24h** while awake) — `docs/AUTONOMOUS_SCHEDULE.md`  
 **Live:** OFF  
 
 ## Scheduler

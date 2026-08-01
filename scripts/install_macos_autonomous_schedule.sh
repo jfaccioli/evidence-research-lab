@@ -18,7 +18,7 @@ launchctl enable "gui/$(id -u)/${LABEL}" 2>/dev/null || true
 launchctl kickstart -k "gui/$(id -u)/${LABEL}" 2>/dev/null || launchctl start "$LABEL" 2>/dev/null || true
 
 echo "Installed: $PLIST_DST"
-echo "Interval: every 4 hours (while Mac awake)"
+echo "Interval: every 24 hours (while Mac awake)"
 echo "Logs: $ROOT/logs/autonomous/"
 echo "Pause: touch $ROOT/research_kb/rd/AUTONOMOUS_PAUSE"
 echo "Status: cat $ROOT/research_kb/rd/AUTONOMOUS_TICK_STATUS.json"

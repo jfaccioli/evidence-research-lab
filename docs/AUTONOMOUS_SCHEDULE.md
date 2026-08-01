@@ -7,7 +7,7 @@
 
 ## What gets scheduled
 
-Each **tick** (default: every **4 hours** while the Mac is awake):
+Each **tick** (default: every **24 hours** while the Mac is awake):
 
 1. Reads `research_kb/rd/autonomous_queue.json`
 2. Runs the **next pending** ticket (whitelist only)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.evidence-research-lab.autonomous</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>REPO_ROOT_PLACEHOLDER/scripts/autonomous_research_tick.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>REPO_ROOT_PLACEHOLDER</string>
+  <key>StartInterval</key>
+  <integer>14400</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>REPO_ROOT_PLACEHOLDER/logs/autonomous/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>REPO_ROOT_PLACEHOLDER/logs/autonomous/launchd.err.log</string>
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

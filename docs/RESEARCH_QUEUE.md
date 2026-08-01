@@ -1,21 +1,27 @@
 # Living research queue
 
 **Updated:** 2026-08-01  
-**Always-on:** ON · **This run:** extended 24h token budget  
-**Live:** OFF · **Hedged research:** yes  
+**Always-on chat:** ON when in session  
+**Mac schedule:** **INSTALLED** (every 4h while awake) — `docs/AUTONOMOUS_SCHEDULE.md`  
+**Live:** OFF  
 
-## Marathon result
+## Scheduler
 
-**0 confirmatory survivors** across many distinct programmes (basis, OI, premium, ETH, 4h, calendar, CB premium, carry variants).
+- Install done: `com.evidence-research-lab.autonomous`  
+- Pause: `touch research_kb/rd/AUTONOMOUS_PAUSE`  
+- Logs: `logs/autonomous/`  
+- Status: `research_kb/rd/AUTONOMOUS_TICK_STATUS.json`  
 
-See `research_kb/rd/MARATHON_2026_08_01_SYNTHESIS.md`.
+## Recent ticket results
 
-## Notable diagnostic (not tradable yet)
+| Ticket | Result |
+|--------|--------|
+| ms_vol_funding_spot_v1 | REJECT |
+| ms_oi_dir_v1 | REJECT (val tease → conf fail) |
+| ms_basis_long_v1 | REJECT (val teases → conf fail) |
 
-Funding harvest with **zero residual risk** looks strong — but **with realistic residual it fails**. Next science should attack the residual problem carefully (pre-registered), not soft-pedal costs.
+Still **no** autotrade survivor.
 
-## You only for
+## Human only
 
-API keys · paid data · real money  
-
-## Next session continues automatically
+Keys · paid data · real money  

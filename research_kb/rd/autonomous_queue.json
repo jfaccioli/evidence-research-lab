@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "updated_at": "2026-08-01",
+  "notes": "Local scheduler tickets only. No live trading. Human can set AUTONOMOUS_PAUSE file to stop.",
+  "tickets": [
+    {
+      "id": "ms_vol_funding_spot_v1",
+      "status": "done",
+      "description": "Long-flat: trend + low vol + funding not extreme (distinct from retired pure vol PCS)",
+      "cmd": "python scripts/run_autonomous_ticket_ms_vol_funding_v1.py",
+      "max_minutes": 30,
+      "started_at": "2026-08-01T09:11:16.665637+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-08-01T09:11:30.069018+00:00",
+      "log": "logs/autonomous/tick_20260801T091116Z.log"
+    },
+    {
+      "id": "ms_oi_funding_dir_v1",
+      "status": "done",
+      "description": "Long-flat: OI falling or not high + mild trend",
+      "cmd": "python scripts/run_autonomous_ticket_ms_oi_dir_v1.py",
+      "max_minutes": 30,
+      "started_at": "2026-08-01T09:11:34.115734+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-08-01T09:11:34.673169+00:00",
+      "log": "logs/autonomous/tick_20260801T091134Z.log"
+    },
+    {
+      "id": "ms_basis_compress_long_v1",
+      "status": "done",
+      "description": "Long when cross-venue basis compressed + trend",
+      "cmd": "python scripts/run_autonomous_ticket_ms_basis_long_v1.py",
+      "max_minutes": 30,
+      "started_at": "2026-08-01T09:11:34.706923+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-08-01T09:11:35.231409+00:00",
+      "log": "logs/autonomous/tick_20260801T091134Z.log"
+    },
+    {
+      "id": "ms_fund_neg_crowding_v1",
+      "status": "pending",
+      "description": "Long when funding not crowded + trend",
+      "cmd": "python scripts/run_autonomous_ticket_ms_fund_neg_crowding_v1.py",
+      "max_minutes": 30
+    }
+  ]
+}

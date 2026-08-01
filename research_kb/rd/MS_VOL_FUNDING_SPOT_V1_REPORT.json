@@ -1,0 +1,41 @@
+{
+  "programme": "ms_vol_funding_spot_v1",
+  "results": [
+    {
+      "id": "trend_quiet_fund_ok",
+      "status": "failed_val",
+      "val_sharpe": 0.9621768000133186,
+      "val_trades": 35,
+      "ci_lo": -0.18473797650386398,
+      "conf": null
+    },
+    {
+      "id": "trend_quiet_fund_neg",
+      "status": "failed_val",
+      "val_sharpe": 0.7796269503347582,
+      "val_trades": 13,
+      "ci_lo": -0.6319038389251806,
+      "conf": null
+    },
+    {
+      "id": "trend_fund_z_low",
+      "status": "failed_val",
+      "val_sharpe": 0.6973073465960139,
+      "val_trades": 47,
+      "ci_lo": -0.5143830576040084,
+      "conf": null
+    },
+    {
+      "id": "sma50_quiet",
+      "status": "failed_val",
+      "val_sharpe": 1.9091681706111,
+      "val_trades": 16,
+      "ci_lo": 0.7494204281588333,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-01T09:11:29.998511+00:00",
+  "live": false
+}

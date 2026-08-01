@@ -34,3 +34,4 @@ journal/RESEARCH_JOURNAL.md
 .coverage
 htmlcov/
 .handoffs/
+logs/

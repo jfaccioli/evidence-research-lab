@@ -1,0 +1,44 @@
+{
+  "programme": "ms_oi_dir_v1",
+  "results": [
+    {
+      "id": "oi_fall_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.8056615085207098,
+      "val_trades": 103,
+      "ci_lo": -0.694998745993398,
+      "conf": null
+    },
+    {
+      "id": "oi_z_low_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.6750808667234235,
+      "val_trades": 43,
+      "ci_lo": -0.584962031904603,
+      "conf": null
+    },
+    {
+      "id": "oi_not_ext_trend",
+      "status": "failed_val",
+      "val_sharpe": 1.5390520964343604,
+      "val_trades": 27,
+      "ci_lo": 0.07977296786078655,
+      "conf": null
+    },
+    {
+      "id": "oi_chg_z_ok",
+      "status": "passed_val",
+      "val_sharpe": 1.4686789001723974,
+      "val_trades": 52,
+      "ci_lo": 0.07488670704968212,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -1.3966716875736969
+      }
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-01T09:11:34.629345+00:00",
+  "live": false
+}

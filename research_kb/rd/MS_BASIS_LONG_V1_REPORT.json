@@ -1,0 +1,53 @@
+{
+  "programme": "ms_basis_long_v1",
+  "results": [
+    {
+      "id": "basis_z_neg_trend",
+      "status": "passed_val",
+      "val_sharpe": 1.9193615203992238,
+      "val_trades": 44,
+      "ci_lo": 0.8962333825294397,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -0.5092319918984075
+      }
+    },
+    {
+      "id": "basis_below_med_trend",
+      "status": "passed_val",
+      "val_sharpe": 1.5997466452373559,
+      "val_trades": 52,
+      "ci_lo": 0.4726887364033509,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -0.696926320183245
+      }
+    },
+    {
+      "id": "basis_not_ext_trend",
+      "status": "passed_val",
+      "val_sharpe": 1.5227112655494803,
+      "val_trades": 37,
+      "ci_lo": 0.44258905387042213,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -0.23925673716764034
+      }
+    },
+    {
+      "id": "basis_neg_sma50",
+      "status": "passed_val",
+      "val_sharpe": 1.5684541339402078,
+      "val_trades": 47,
+      "ci_lo": 0.45765435275637084,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -0.14828812451864287
+      }
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-01T09:11:35.168338+00:00",
+  "live": false
+}

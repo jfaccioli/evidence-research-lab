@@ -63,6 +63,8 @@ def start_marathon() -> int:
     env = os.environ.copy()
     env["PYTHONPATH"] = str(ROOT / "src")
     env["CRL_MARATHON_HOURS"] = env.get("CRL_MARATHON_HOURS", "24")
+    # 0 = no job cap; stop only when time budget ends
+    env["CRL_MARATHON_MAX_JOBS"] = env.get("CRL_MARATHON_MAX_JOBS", "0")
     # detach
     proc = subprocess.Popen(
         [str(py), str(ROOT / "scripts" / "autonomous_marathon.py")],

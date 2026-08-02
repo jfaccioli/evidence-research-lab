@@ -6,7 +6,7 @@
 
 | Mode | Meaning |
 |------|---------|
-| **B** | Keep researching for up to **24 hours** (marathon) |
+| **B** | Keep researching for up to **24 hours** (marathon) — **time limit only** (no job cap) |
 | **C** | Check **often** (every **1 hour**) that the marathon is still alive; restart if it crashed |
 
 ---

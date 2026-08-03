@@ -1,20 +1,19 @@
 # Living research queue
 
 **Updated:** 2026-08-03  
-**Marathon:** restarted with **expanded job catalog** (time-only 24h)
+**Goal:** Autotrading that works **and** is scientifically supported (gates + shadow before live)
 
-## New exploration scripts (better options)
-
-| Script | Angle |
+| System | Status |
 |--------|--------|
-| `ms_funding_chg_v1` | Funding **change** (easing crowding), not level |
-| `ms_btc_eth_rs_v1` | BTC vs ETH relative strength |
-| `ms_vol_compress_break_v1` | Quiet vol → expansion breakout |
-| `ms_dd_reentry_v1` | Re-enter after controlled drawdown |
-| `ms_prem_fund_disagree_v1` | Premium vs funding disagreement |
-| `ms_trend_quality_v2` | Trend stack not overextended |
+| Marathon | **RUNNING** — **48 hours**, no job cap |
+| Ends about | **2026-08-05 ~08:31 UTC** |
+| Watchdog | Hourly health check / restart if crash |
+| Ticket scripts | **14** (expanded) |
+| Live trading | **OFF** until survivor + you |
 
-First smoke run: all **REJECT** (some val teases → conf fail). Marathon will keep cycling them + older scripts.
+## New jobs added this session
+
+- mom + structure, breakout+vol/funding, mean-rev in trend, carry only when residual low  
 
 ## Check
 

@@ -1,0 +1,45 @@
+{
+  "programme": "ms_breakout_volok_v1",
+  "results": [
+    {
+      "id": "donch20_quiet",
+      "status": "failed_val",
+      "val_sharpe": 0.0,
+      "val_trades": 0,
+      "ci_lo": 0.0,
+      "stress": 0.0,
+      "conf": null
+    },
+    {
+      "id": "donch55_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.0,
+      "val_trades": 0,
+      "ci_lo": 0.0,
+      "stress": 0.0,
+      "conf": null
+    },
+    {
+      "id": "donch20_fund_ok",
+      "status": "failed_val",
+      "val_sharpe": 0.0,
+      "val_trades": 0,
+      "ci_lo": 0.0,
+      "stress": 0.0,
+      "conf": null
+    },
+    {
+      "id": "donch55_quiet_fund",
+      "status": "failed_val",
+      "val_sharpe": 0.0,
+      "val_trades": 0,
+      "ci_lo": 0.0,
+      "stress": 0.0,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T08:31:04.401218+00:00",
+  "live": false
+}

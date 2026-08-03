@@ -1,0 +1,45 @@
+{
+  "programme": "ms_meanrev_trend_v1",
+  "results": [
+    {
+      "id": "z_dip_uptrend",
+      "status": "failed_val",
+      "val_sharpe": 0.26142183238653643,
+      "val_trades": 19,
+      "ci_lo": -0.9570263032658508,
+      "stress": -0.0041673631152020114,
+      "conf": null
+    },
+    {
+      "id": "z_mild_dip_sma50",
+      "status": "failed_val",
+      "val_sharpe": 0.7210028291882415,
+      "val_trades": 16,
+      "ci_lo": -0.5531578335950194,
+      "stress": 0.42070547980415846,
+      "conf": null
+    },
+    {
+      "id": "uptrend_not_stretched",
+      "status": "failed_val",
+      "val_sharpe": 0.36313927951118363,
+      "val_trades": 35,
+      "ci_lo": -0.8990938585211655,
+      "stress": 0.13173553183076098,
+      "conf": null
+    },
+    {
+      "id": "deep_dip_recover",
+      "status": "failed_val",
+      "val_sharpe": -0.3889245088093011,
+      "val_trades": 15,
+      "ci_lo": -1.5467453502350907,
+      "stress": -0.7766392927628261,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T08:31:04.940594+00:00",
+  "live": false
+}

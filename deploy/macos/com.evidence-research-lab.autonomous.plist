@@ -16,7 +16,7 @@
     <key>PYTHONPATH</key>
     <string>REPO_ROOT_PLACEHOLDER/src</string>
     <key>CRL_MARATHON_HOURS</key>
-    <string>24</string>
+    <string>48</string>
   </dict>
   <key>StartInterval</key>
   <integer>3600</integer>

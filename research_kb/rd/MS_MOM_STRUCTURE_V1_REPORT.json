@@ -1,0 +1,45 @@
+{
+  "programme": "ms_mom_structure_v1",
+  "results": [
+    {
+      "id": "mom20_trend_fund_ok",
+      "status": "failed_val",
+      "val_sharpe": 1.1099618438511876,
+      "val_trades": 44,
+      "ci_lo": -0.17046876610094963,
+      "stress": 0.8265820716170894,
+      "conf": null
+    },
+    {
+      "id": "mom60_quiet",
+      "status": "failed_val",
+      "val_sharpe": 1.578024589573065,
+      "val_trades": 17,
+      "ci_lo": 0.23068125650473073,
+      "stress": 1.466718340508798,
+      "conf": null
+    },
+    {
+      "id": "mom20_not_crowded",
+      "status": "failed_val",
+      "val_sharpe": 0.10373645112821288,
+      "val_trades": 33,
+      "ci_lo": -1.2567881448416247,
+      "stress": -0.18144665063156687,
+      "conf": null
+    },
+    {
+      "id": "dual_mom_trend",
+      "status": "failed_val",
+      "val_sharpe": 1.8867593541902727,
+      "val_trades": 25,
+      "ci_lo": 0.7642619268766926,
+      "stress": 1.7430093679532337,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T08:31:03.872837+00:00",
+  "live": false
+}

@@ -1,0 +1,42 @@
+{
+  "programme": "ms_carry_low_residual_v1",
+  "results": [
+    {
+      "id": "fund_pos_low_resid",
+      "status": "failed_val",
+      "val_sharpe": -9.076595903164014,
+      "val_trades": 65,
+      "ci_lo": -10.06527450713547,
+      "conf": null
+    },
+    {
+      "id": "fund_pos_resid_p25",
+      "status": "failed_val",
+      "val_sharpe": -7.999140601117412,
+      "val_trades": 50,
+      "ci_lo": -8.824704672573214,
+      "conf": null
+    },
+    {
+      "id": "always_low_resid",
+      "status": "failed_val",
+      "val_sharpe": -5.651566613806816,
+      "val_trades": 28,
+      "ci_lo": -6.509080434087691,
+      "conf": null
+    },
+    {
+      "id": "fund_z_low_resid",
+      "status": "failed_val",
+      "val_sharpe": -9.122780889043598,
+      "val_trades": 64,
+      "ci_lo": -9.957225573907108,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T08:31:05.942270+00:00",
+  "live": false,
+  "note": "Enter carry only when recent |\u0394premium| is low vs funding"
+}

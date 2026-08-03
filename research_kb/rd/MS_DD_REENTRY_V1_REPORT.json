@@ -1,0 +1,55 @@
+{
+  "programme": "ms_dd_reentry_v1",
+  "results": [
+    {
+      "id": "dd_10_20_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.46632410341699915,
+      "val_trades": 15,
+      "ci_lo": -0.7946295710814405,
+      "stress": 0.2583058705967753,
+      "conf": null
+    },
+    {
+      "id": "dd_recover_5d",
+      "status": "passed_val",
+      "val_sharpe": 1.247936877781547,
+      "val_trades": 44,
+      "ci_lo": 0.05565328078157604,
+      "stress": 0.9115788576960485,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -0.86323293447234,
+        "test_trades": 5,
+        "ci_lo": -1.981348546081606
+      }
+    },
+    {
+      "id": "shallow_dd_hold",
+      "status": "failed_val",
+      "val_sharpe": 0.6125871294777642,
+      "val_trades": 12,
+      "ci_lo": -0.6307588063114795,
+      "stress": 0.5226308371427664,
+      "conf": null
+    },
+    {
+      "id": "dd_15_bounce",
+      "status": "passed_val",
+      "val_sharpe": 1.3700952538253475,
+      "val_trades": 45,
+      "ci_lo": 0.12698371314205778,
+      "stress": 0.9547736971735558,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": 0.027632643004566176,
+        "test_trades": 18,
+        "ci_lo": -1.4234874543779152
+      }
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:17.847407+00:00",
+  "live": false
+}

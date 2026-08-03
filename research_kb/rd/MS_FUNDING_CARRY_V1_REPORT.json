@@ -82,38 +82,7 @@
       ]
     }
   ],
-  "ran_at": "2026-07-31T01:57:02.649291+00:00",
+  "ran_at": "2026-08-03T02:12:41.698356+00:00",
   "decision": "REJECT_FAMILY_EXPLORATORY",
-  "live": false,
-  "sensitivity_residual_beta_not_for_promotion": [
-    {
-      "residual_beta": 0.0,
-      "full_sharpe": -3.4755872382242843,
-      "total_return": -0.4721332557746858,
-      "n_trades": 200,
-      "promotional": false
-    },
-    {
-      "residual_beta": 0.01,
-      "full_sharpe": -6.0361039790757784,
-      "total_return": -0.662970174352276,
-      "n_trades": 200,
-      "promotional": false
-    },
-    {
-      "residual_beta": 0.02,
-      "full_sharpe": -8.450962298876902,
-      "total_return": -0.7848607966260481,
-      "n_trades": 200,
-      "promotional": false
-    },
-    {
-      "residual_beta": 0.05,
-      "full_sharpe": -13.451713388642276,
-      "total_return": -0.9441125134612859,
-      "n_trades": 200,
-      "promotional": false
-    }
-  ],
-  "learning": "Pre-reg residual_beta=0.05 \u2192 exploratory null. Sensitivity: residual_beta=0 funding income is large positive; edge dies as residual haircut rises. Next H1 version should model residual with observed basis/premium (not tune beta after the fact)."
+  "live": false
 }

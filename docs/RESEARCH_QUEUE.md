@@ -1,26 +1,24 @@
 # Living research queue
 
-**Updated:** 2026-08-01  
-**Mode B+C:** **ON and started**
+**Updated:** 2026-08-03  
+**Marathon:** restarted with **expanded job catalog** (time-only 24h)
 
-| Piece | Status |
-|-------|--------|
-| **B – 24h marathon** | **RUNNING** now (until ~24h from start) |
-| **C – hourly watchdog** | **ON** (every 1 hour; restarts marathon if crashed) |
-| Live trading | OFF |
+## New exploration scripts (better options)
+
+| Script | Angle |
+|--------|--------|
+| `ms_funding_chg_v1` | Funding **change** (easing crowding), not level |
+| `ms_btc_eth_rs_v1` | BTC vs ETH relative strength |
+| `ms_vol_compress_break_v1` | Quiet vol → expansion breakout |
+| `ms_dd_reentry_v1` | Re-enter after controlled drawdown |
+| `ms_prem_fund_disagree_v1` | Premium vs funding disagreement |
+| `ms_trend_quality_v2` | Trend stack not overextended |
+
+First smoke run: all **REJECT** (some val teases → conf fail). Marathon will keep cycling them + older scripts.
 
 ## Check
 
 ```bash
 cat research_kb/rd/MARATHON_STATE.json
-cat research_kb/rd/WATCHDOG_STATUS.json
 tail -20 logs/autonomous/marathon.log
 ```
-
-## Pause
-
-```bash
-touch research_kb/rd/AUTONOMOUS_PAUSE
-```
-
-Docs: `docs/AUTONOMOUS_SCHEDULE.md`

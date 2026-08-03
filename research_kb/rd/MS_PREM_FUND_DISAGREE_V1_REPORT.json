@@ -1,0 +1,50 @@
+{
+  "programme": "ms_prem_fund_disagree_v1",
+  "results": [
+    {
+      "id": "fund_hi_prem_lo",
+      "status": "failed_val",
+      "val_sharpe": -0.19462488287966234,
+      "val_trades": 18,
+      "ci_lo": -1.4196874838788116,
+      "stress": -0.7614391290508276,
+      "conf": null
+    },
+    {
+      "id": "fund_lo_prem_hi",
+      "status": "failed_val",
+      "val_sharpe": -0.5851089028592403,
+      "val_trades": 17,
+      "ci_lo": -1.8168565017098472,
+      "stress": -0.9789948835984741,
+      "conf": null
+    },
+    {
+      "id": "aligned_bull",
+      "status": "passed_val",
+      "val_sharpe": 1.1332327652157639,
+      "val_trades": 39,
+      "ci_lo": 0.18501543560124578,
+      "stress": 0.8607555948139042,
+      "conf": {
+        "status": "failed_test",
+        "test_sharpe": -1.5481024287443272,
+        "test_trades": 28,
+        "ci_lo": -2.813712923777576
+      }
+    },
+    {
+      "id": "aligned_calm",
+      "status": "failed_val",
+      "val_sharpe": -0.3242705106700067,
+      "val_trades": 39,
+      "ci_lo": -1.6247303347548288,
+      "stress": -0.7346759097991276,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:18.417614+00:00",
+  "live": false
+}

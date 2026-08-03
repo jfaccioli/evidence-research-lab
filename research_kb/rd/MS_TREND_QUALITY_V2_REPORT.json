@@ -1,0 +1,45 @@
+{
+  "programme": "ms_trend_quality_v2",
+  "results": [
+    {
+      "id": "stack_not_ext",
+      "status": "failed_val",
+      "val_sharpe": 0.3899848096715244,
+      "val_trades": 21,
+      "ci_lo": -0.806977568501847,
+      "stress": 0.22801513854407354,
+      "conf": null
+    },
+    {
+      "id": "stack_quiet",
+      "status": "failed_val",
+      "val_sharpe": 0.9904884034993143,
+      "val_trades": 13,
+      "ci_lo": -0.21402368514722905,
+      "stress": 0.9041998712211559,
+      "conf": null
+    },
+    {
+      "id": "sma200_not_ext200",
+      "status": "failed_val",
+      "val_sharpe": 1.1678817576197569,
+      "val_trades": 20,
+      "ci_lo": 0.17789343559786275,
+      "stress": 1.0213902341807455,
+      "conf": null
+    },
+    {
+      "id": "pullback_to_sma50",
+      "status": "failed_val",
+      "val_sharpe": 0.5349490903577077,
+      "val_trades": 13,
+      "ci_lo": -0.8617976390575091,
+      "stress": 0.23188926390148093,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:18.946560+00:00",
+  "live": false
+}

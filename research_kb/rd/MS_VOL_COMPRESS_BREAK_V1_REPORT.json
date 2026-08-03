@@ -1,0 +1,45 @@
+{
+  "programme": "ms_vol_compress_break_v1",
+  "results": [
+    {
+      "id": "quiet_then_expand_trend",
+      "status": "failed_val",
+      "val_sharpe": 1.7159679219021569,
+      "val_trades": 14,
+      "ci_lo": 0.6148914457868442,
+      "stress": 1.553838394681207,
+      "conf": null
+    },
+    {
+      "id": "compress_only_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.4987549683680129,
+      "val_trades": 15,
+      "ci_lo": -0.7829156510827548,
+      "stress": 0.3589813050089668,
+      "conf": null
+    },
+    {
+      "id": "expand_from_quiet_mom",
+      "status": "failed_val",
+      "val_sharpe": 1.4439288316561079,
+      "val_trades": 14,
+      "ci_lo": 0.34571862477719306,
+      "stress": 1.2771679189813763,
+      "conf": null
+    },
+    {
+      "id": "not_high_vol_trend",
+      "status": "failed_val",
+      "val_sharpe": 1.6835941086058344,
+      "val_trades": 17,
+      "ci_lo": 0.5579458044924086,
+      "stress": 1.5819614645906,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:17.315144+00:00",
+  "live": false
+}

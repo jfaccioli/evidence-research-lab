@@ -1,0 +1,45 @@
+{
+  "programme": "ms_btc_eth_rs_v1",
+  "results": [
+    {
+      "id": "btc_leads_eth_trend",
+      "status": "failed_val",
+      "val_sharpe": 1.508638414946804,
+      "val_trades": 25,
+      "ci_lo": 0.32441015504554516,
+      "stress": 1.350112275836135,
+      "conf": null
+    },
+    {
+      "id": "btc_rs_z_pos",
+      "status": "failed_val",
+      "val_sharpe": 1.5974340284934465,
+      "val_trades": 28,
+      "ci_lo": 0.5201598563221848,
+      "stress": 1.4082946676137036,
+      "conf": null
+    },
+    {
+      "id": "btc_leads_strong",
+      "status": "failed_val",
+      "val_sharpe": 1.537324205522885,
+      "val_trades": 27,
+      "ci_lo": 0.4145327166577157,
+      "stress": 1.3283127943341535,
+      "conf": null
+    },
+    {
+      "id": "btc_lags_catchup",
+      "status": "failed_val",
+      "val_sharpe": 0.712673575596718,
+      "val_trades": 27,
+      "ci_lo": -0.47595316851707187,
+      "stress": 0.502142867537921,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:16.749561+00:00",
+  "live": false
+}

@@ -1,0 +1,41 @@
+{
+  "programme": "ms_fund_neg_crowding_v1",
+  "results": [
+    {
+      "id": "z_neg_sma200",
+      "status": "failed_val",
+      "val_sharpe": 0.6973073465960139,
+      "val_trades": 47,
+      "ci_lo": -0.5143830576040084,
+      "conf": null
+    },
+    {
+      "id": "z_lt1_sma50",
+      "status": "failed_val",
+      "val_sharpe": 1.1205676999975793,
+      "val_trades": 42,
+      "ci_lo": -0.07402070062599281,
+      "conf": null
+    },
+    {
+      "id": "fund_neg_sma50",
+      "status": "failed_val",
+      "val_sharpe": 0.28422659918609683,
+      "val_trades": 14,
+      "ci_lo": -1.299507228103709,
+      "conf": null
+    },
+    {
+      "id": "z_lt0_sma50",
+      "status": "failed_val",
+      "val_sharpe": -0.027827777153349293,
+      "val_trades": 44,
+      "ci_lo": -1.3702233321850232,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:11:07.425692+00:00",
+  "live": false
+}

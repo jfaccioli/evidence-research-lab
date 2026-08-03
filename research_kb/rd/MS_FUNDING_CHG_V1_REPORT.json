@@ -1,0 +1,45 @@
+{
+  "programme": "ms_funding_chg_v1",
+  "results": [
+    {
+      "id": "fund_falling_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.10139293128760818,
+      "val_trades": 85,
+      "ci_lo": -1.1625895973099254,
+      "stress": -0.72573165585839,
+      "conf": null
+    },
+    {
+      "id": "fund_chg_z_neg_trend",
+      "status": "failed_val",
+      "val_sharpe": 0.5155245937014409,
+      "val_trades": 113,
+      "ci_lo": -0.6570111052740808,
+      "stress": -0.20210133304813177,
+      "conf": null
+    },
+    {
+      "id": "trend_unless_fund_accel",
+      "status": "failed_val",
+      "val_sharpe": 1.0798378017329284,
+      "val_trades": 49,
+      "ci_lo": -0.09666084277425867,
+      "stress": 0.8274000795116263,
+      "conf": null
+    },
+    {
+      "id": "fund_falling_while_pos",
+      "status": "failed_val",
+      "val_sharpe": 0.23009051578703482,
+      "val_trades": 76,
+      "ci_lo": -1.0712750338449122,
+      "stress": -0.5527719050807551,
+      "conf": null
+    }
+  ],
+  "survivors": [],
+  "decision": "REJECT",
+  "ran_at": "2026-08-03T02:14:16.128563+00:00",
+  "live": false
+}
